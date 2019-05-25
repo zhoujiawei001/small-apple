@@ -1,17 +1,15 @@
 $fontColorTheme = #3EA0EA // 主题色
-imgUrl($url) {
+imgUrl($url)
   background url($url) no-repeat center
   background-size cover
-}
 
-imgUrl2($url) {
+
+imgUrl2($url)
   background url($url) no-repeat center
   background-size 100%
-}
 
-setBorder($borderwidth = 1px) {
+setBorder($borderwidth = 1px)
   border $borderwidth solid red
-}
 
 /*设置宽高*/
 setWH($width = 100%, $height = 100%)
@@ -97,16 +95,16 @@ setPosUseFlexInit($direction = initial, $justifyCont = initial, $align-items = i
   flex-wrap $wrap
 
 /* 设置字体单行文字溢出显示省略号 */
-setEllipsisOne() {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+setEllipsisOne()
+  overflow hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
 
 /* 设置字体多行文字溢出显示省略号 */
-setEllipsisMore($count = 2) {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: $count;
-  overflow: hidden;
-}
+setEllipsisMore($count = 2)
+  display -webkit-box
+  -webkit-box-orient vertical
+  -webkit-line-clamp $count
+  overflow hidden
+
