@@ -1,0 +1,220 @@
+1. 主页面，获取云端已添加遥控列表:
+   应用接口: window.hilink.getDeviceExtendData('deviceList', 'getDeviceExtendDataCallback')
+   返回结果: 已添加的全部设备遥控器（res.data.list）
+   注意: 如果空调遥控器个数超过两个就需要提示，最多10个遥控器数
+
+2. 设备类型页面，获取设备类型
+   应用接口:
+     let reqParams = {
+       domain: 'http://hwh5.yaokantv.com',
+       path: '/huawei/l.php',
+       method: 'GET',
+       param: {
+         m: 'live',
+         c: 'be_rc_type'
+       }
+     }
+     window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCTypeResultCallback')
+   返回结果: 所有设备类型，注意: 我们只取 1-电视机顶盒，2-电视机，6-风扇，7-空调，8-灯泡，10-电视盒子
+
+3. 设备品牌页面，获取设备品牌:
+   应用接口:
+     let reqParams = {
+       domain: 'http://hwh5.yaokantv.com',
+       path: `/huawei/l.php?m=live&c=fname_list&rc_type=${tid}`,
+       method: 'POST',
+       param: {
+         m: 'live',
+         c: 'fname_list',
+         rc_type: tid
+       }
+     } 注意: tid 为设备类型id
+     window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
+   返回结果: 所有设备品牌
+
+4. 匹配页面，注册/添加设备遥控器
+   ①获取设备型号列表:
+      应用接口: 
+	let reqParams = {
+          domain: 'http://hwh5.yaokantv.com',
+          path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${tid}&zip=${zip}`,
+          method: 'POST',
+          param: {
+            m: 'live',
+            c: 'area_fname',
+            bid: bid,
+            rc_type: tid,
+            zip: zip (zip一般为1)
+          }
+        } 注意: bid 为设备品牌id
+      window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
+      返回结果: 设备型号返回列表，每一种型号包含一个开机码
+   ②获取当前型号的设备遥控器的基本信息
+	应用接口: 
+	  let reqParams = {
+            domain: 'http://hwh5.yaokantv.com',
+            path: `/huawei/l.php?m=live&c=remote_details&rid=${rid}&zip=${zip}`,
+            method: 'POST',
+            param: {
+              m: 'live',
+              c: 'remote_details',
+              rid: rid,
+              zip: zip (zip一般为1)
+            }
+          } 注意: rid 为设备型号的id
+        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')
+        返回结果: 当前型号的设备遥控器基本信息和码库
+   ③发送服务器地址，路径，参数给小苹果
+        应用接口:
+	  let body = {
+            batch: {
+              deviceList: {
+                list: [rc]
+              },
+              cmdList: {
+                url: {
+                  domain: 'http://hwh5.yaokantv.com',
+                  path: '/huawei/l.php',
+                  param: {
+                    m: 'live',
+                    c: 'remote_details',
+                    rid: rc.rid,
+                    zip: rc.zip
+                  }
+                }
+              }
+            }
+          } 注意: rc 当前型号的设备遥控器基本信息
+         window.hilink.setDeviceInfo('0', JSON.stringify(body), 'setDeviceInfoCallback')
+       返回结果: 如果LoadRes服务中的isFinish为1，表示下载成功
+   ④注册虚拟设备
+	 应用接口:
+	   let body ={
+                  devInfo: {
+                    sn: rc.hid,
+                    model: rc.name,
+                    devType: '06C',
+                    manu: '092',
+                    prodId: this.selectRightProdId(rc.tid),
+                    hiv: '1.0',
+                    mac: '',
+                    fwv: '1.0',
+                    hwv: '1.0',
+                    swv: '1.0'
+                  }
+	       } 注意: rc 当前型号的设备遥控器基本信息
+	   window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+	 返回结果: 已注册设备的devId
+
+	export class RC {
+  	  constructor (rid, name, beRmodel, rmodel, bid, brand, tid, type, zip = '1', ui = 0, encode = 0) {
+    	    this.hname = '' // 自定义别名
+    	    this.hid = assembleTS() // 自定义ID
+    	    this.rid = rid + ''
+            this.name = name
+            this.beRmodel = beRmodel
+            this.rmodel = rmodel
+            this.bid = bid
+            this.brand = brand
+            this.tid = tid
+            this.type = type
+            this.ui = ui
+            this.zip = zip
+          }
+        }
+   ⑤云端上传遥控设备
+        应用接口: 
+	   let body= {
+             type: 'VirtRemoteInfo',
+             data: {
+               gID: 'devId', // 小苹果的设备id
+               dUID: {
+        	 deviceList: {
+          	   list: [rc]
+        	 }
+      	       }
+             }
+           }
+	window.hilink.postDeviceExtendDataById(devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback') // 已虚拟遥控的devId
+   ⑥上传已添加设备遥控至云端
+	  应用接口:
+	    let body = {
+    		type: 'deviceList',
+   		data: {
+      		  list: arr
+    	    	}
+  	    } 注意: arr 为已添加设备遥控列表
+	  window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
+
+5. 设置页面，修改设备遥控器名称和删除已添加的遥控器
+      ①修改名称
+	应用接口:
+	  window.hilink.modifyDeviceNameByDevId(devId, 'devName', 'modifyDeviceNameByDevIdCallback')
+      ②删除遥控器
+	步骤一，先删除云端保存的遥控器列表
+	步骤二，再删除已注册
+		window.hilink.deleteInfraredHubDevice(devId, 'deleteInfraredHubDeviceCallback')
+	步骤三，如果删除已注册的失败要先恢复第一步删除云端的。
+
+6. 各个设备的控制页面，发码通过小苹果控制对应的设备
+     获取当前型号的设备遥控器的基本信息和码库
+	应用接口: 
+	  let reqParams = {
+            domain: 'http://hwh5.yaokantv.com',
+            path: `/huawei/l.php?m=live&c=remote_details&rid=${rid}&zip=${zip}`,
+            method: 'POST',
+            param: {
+              m: 'live',
+              c: 'remote_details',
+              rid: rid,
+              zip: zip (zip一般为1)
+            }
+          } 注意: rid 为设备型号的id
+          window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')
+        返回结果: 当前型号的设备遥控器基本信息和码库
+	 
+7. 控制手机虚拟机返回的接口
+    window.hilink.overrideBackPressed(bool, 'matchVirtualKeyCallback')
+
+    ** 监听手机虚拟按键返回事件 **/
+    export function watchVirtualKey (bool) {
+      return new Promise(resolve => {
+        window.hilink.overrideBackPressed(bool, 'matchVirtualKeyCallback')
+        window.matchVirtualKeyCallback = res => {
+          console.log(res)
+          resolve(bool)
+        }
+      })
+    }
+
+    watchVirtualKey(true).then(bool => {
+      if (bool) {
+        window.goBack = () => {
+          if (this.isLoading) {
+            this.message = '正在匹配中,请稍等!'
+            this.isShowMessageBox = true
+          } else {
+            this.$router.go(-1)
+          }
+        }
+      }
+    })
+
+8.进入原生设置页面
+    window.hilink.jumpTo(
+      'com.huawei.smarthome.deviceSettingActivity',
+      callback
+    )
+
+9.处理设备端返回数据方法
+  export function parseHilinkData (resData) {
+    try {
+      return JSON.parse(resData)
+    } catch (error) {
+      let dataStr = resData.replace(/:"{/g, ':{')
+      dataStr = dataStr.replace(/}",/g, '},')
+      dataStr = dataStr.replace(/}"/g, '}')
+      dataStr = dataStr.replace(/\\/g, '')
+      return JSON.parse(dataStr)
+    }
+  }
