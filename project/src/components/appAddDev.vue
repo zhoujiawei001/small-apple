@@ -1,6 +1,6 @@
 <template>
   <div class="appAddDev">
-    <img src="../assets/add.png" alt="">
+    <img src="../assets/add.png" alt="" @click="$router.push('/type')">
     <span>遥控器 6 个</span>
   </div>
 </template>
