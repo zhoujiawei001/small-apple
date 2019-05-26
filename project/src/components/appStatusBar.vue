@@ -20,16 +20,22 @@ export default {
     height 7.6rem
     padding 0 1.6rem
     imgUrl('../assets/appStatus_on.png')
-    display: flex
-    justify-content: space-between;
-    align-items: center
+    position relative
     .right
       width 5.4rem
       height 5.4rem
       imgUrl2('../assets/switch.png')
+      position absolute
+      top 50%
+      right 1.6rem
+      transform translateY(-50%)
     .left
       color #fff
       letter-spacing: 1px
+      position absolute
+      top 50%
+      left 1.6rem
+      transform translateY(-50%)
       span
         font-size 1.4rem
       p
