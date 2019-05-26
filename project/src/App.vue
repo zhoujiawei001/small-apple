@@ -10,7 +10,11 @@ export default {
     this.$store.dispatch('initFun')
   },
   mounted () {
-    window.hilink.setTitleVisible(false, 'app.setTitleCallback')
+    try {
+      window.hilink.setTitleVisible(false, 'app.setTitleCallback')
+    } catch (e) {
+      console.warn(e);
+    }
   }
 }
 </script>
