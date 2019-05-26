@@ -1,12 +1,12 @@
 <template>
-  <div class="dev-STB">
-    机顶盒
+  <div class="dev-light">
+    灯泡
   </div>
 </template>
 
 <script>
 export default {
-  name: 'device1'
+  name: 'device8'
 }
 </script>
 
