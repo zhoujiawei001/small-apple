@@ -97,7 +97,6 @@ export default {
       this.bgImgHg = document.getElementById('app-bg').clientHeight
       this.limitHg = this.bgImgHg - this.headerHg
       const wd = document.body.clientWidth
-      console.log('wd', wd, this.screenRem)
       this.$store.commit('setScreenWd', wd)
     })
   },
@@ -109,7 +108,7 @@ export default {
         click: true,
         bounce: {
           top: false,
-          bottom: false
+          bottom: true
         }
       })
       scroll.on('scroll', pos => {
@@ -124,6 +123,7 @@ export default {
   @import "../style/mixin.styl"
   .home
     height 100%
+    background-color #F2F2F2
     main
       padding 1.2rem 1.6rem
       background-color #F2F2F2

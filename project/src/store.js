@@ -13,7 +13,7 @@ export default new Vuex.Store({
       let h = state.screenWd
       console.log('h', h)
       if (h <= 320) {
-        return 9
+        return 10
       } else if (h <= 360) {
         return 10
       } else if (h <= 375) {
