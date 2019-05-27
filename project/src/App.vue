@@ -13,7 +13,7 @@ export default {
     try {
       window.hilink.setTitleVisible(false, 'app.setTitleCallback')
     } catch (e) {
-      console.warn(e);
+      console.warn(e)
     }
   }
 }
