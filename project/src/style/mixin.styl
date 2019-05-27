@@ -118,7 +118,16 @@ setBgImgAndText($defult-img, $active-img)
   &:active
     color #ffffff
     background-color $fontColorTheme
+
     .img-box
       imgUrl($active-img)
 
 
+setIcon($defult-img, $active-img, $wh1=4rem, $wh2=3rem)
+  setWH($wh1, $wh1)
+  border-radius 50%
+  background #fff url($defult-img) no-repeat center
+  background-size $wh2 $wh2
+  &:active
+    background-color $fontColorTheme
+    background-image url($active-img)
