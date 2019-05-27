@@ -108,3 +108,17 @@ setEllipsisMore($count = 2)
   -webkit-line-clamp $count
   overflow hidden
 
+setBgImgAndText($defult-img, $active-img)
+  setPosUseFlex()
+  setFont(1.5rem, $fontColorTheme, center)
+  padding 1rem
+  .img-box
+    setWH(4rem, 4rem)
+    imgUrl($defult-img)
+  &:active
+    color #ffffff
+    background-color $fontColorTheme
+    .img-box
+      imgUrl($active-img)
+
+
