@@ -1,5 +1,6 @@
 <template>
   <div class="dev-STB">
+    <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
     <div class="top flex">
       <div class="stb-switch">
         <span class="img-box"></span>
@@ -29,9 +30,6 @@
         <span class="text">音量</span>
         <span class="down btn">-</span>
       </div>
-    </div>
-    <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
-    <div class="top flex">
     </div>
   </div>
 </template>
