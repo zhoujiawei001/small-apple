@@ -86,7 +86,6 @@
 <style scoped lang="stylus">
   @import "../../style/mixin.styl"
   .dev-TV
-    setWH()
     background #F2F2F2
     .top
       padding 1rem 2rem
@@ -164,7 +163,7 @@
       .item
         setFont(2.5rem, $fontColorTheme, center)
         margin-bottom 1rem
-        setWH(6rem, 6rem)
-        line-height 6rem
+        setWH(6.5rem, 6.5rem)
+        line-height 6.5rem
         border-radius 50%
 </style>

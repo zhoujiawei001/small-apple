@@ -91,7 +91,6 @@
 <style scoped lang="stylus">
   @import "../../style/mixin.styl"
   .dev-STB
-    setWH()
     background #F2F2F2
     .top
       padding 1rem 2rem
