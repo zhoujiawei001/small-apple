@@ -2,8 +2,8 @@
   <div class="dev-tp">
     <appHeader style="background-color: #f2f2f2"></appHeader>
     <main :style="styObj" class="wrapper">
-      <ul class="content">
-        <li v-for="i in 15" :key="i">
+      <ul class="content" @click="$router.push('/brands')">
+        <li v-for="i in 10" :key="i" :class="{removeRgBd: i%3 === 0}">
           <img src="../assets/stb.png" alt="">
           <p>电视机顶盒</p>
         </li>
@@ -37,8 +37,10 @@ export default {
       }
     }
   },
+  created () {
+    this.$store.dispatch('getDevTypeList')
+  },
   mounted () {
-    console.log(this.screenRem)
     this.$nextTick(() => {
       this.scrollFun()
     })
@@ -87,4 +89,6 @@ export default {
             width 4.2rem
           p
             margin-top 1.8rem
+        .removeRgBd
+          border-right none
 </style>

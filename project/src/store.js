@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import $http from './utils/requset'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     statusBarHg: 20, // 手机状态栏高度
-    screenWd: 0 // 获取屏幕宽度
+    screenWd: 0, // 获取屏幕宽度
+    tid: 1, // 设备类型ID
+    bid: null // 设备品牌ID
   },
   getters: {
     screenRem (state) {
@@ -33,6 +36,12 @@ export default new Vuex.Store({
     },
     setScreenWd (state, payload) {
       state.screenWd = payload
+    },
+    setTid (state, payload) {
+      state.tid = payload
+    },
+    setBid (state, payload) {
+      state.bid = payload
     }
   },
   actions: {
@@ -42,6 +51,21 @@ export default new Vuex.Store({
           console.log(res)
         }
       }
+    },
+    getDevTypeList ({ commit }) {
+      $http.get('/huawei/l.php', {
+        params: {
+          m: 'live',
+          c: 'be_rc_type'
+        }
+      }).then(res => {
+        console.log('getDevTypeList', res)
+      })
+    },
+    getDevBrandList ({ commit, state }) {
+      $http.get(`/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`).then(res => {
+        console.log('getDevBrandList', res)
+      })
     }
   }
 })

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Type from './views/Type.vue'
+import Brands from './views/Brands'
 const Name = name => () => import(`@/views/devices/${name}`)
 
 Vue.use(Router)
@@ -19,6 +20,11 @@ export default new Router({
       path: '/type',
       name: 'type',
       component: Type
+    },
+    {
+      path: '/brands',
+      name: 'brands',
+      component: Brands
     },
     {
       path: '/device1',
