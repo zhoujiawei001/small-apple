@@ -8,8 +8,8 @@ imgUrl2($url)
   background url($url) no-repeat center
   background-size 100%
 
-setBorder($borderwidth = 1px)
-  border $borderwidth solid red
+setBorder($color = $fontColorTheme, $borderwidth = 1px)
+  border $borderwidth solid $color
 
 /*设置宽高*/
 setWH($width = 100%, $height = 100%)
@@ -123,7 +123,7 @@ setBgImgAndText($defult-img, $active-img)
       imgUrl($active-img)
 
 
-setIcon($defult-img, $active-img, $wh1=4rem, $wh2=3rem)
+setIcon($defult-img, $active-img, $wh1 = 4rem, $wh2 = 3rem)
   setWH($wh1, $wh1)
   border-radius 50%
   background #fff url($defult-img) no-repeat center
