@@ -6,7 +6,20 @@
       <img src="../../assets/fan.png" alt="fan.png">
     </div>
     <div class="container">
-
+      <div>
+        <span>摇头</span>
+        <span>风类</span>
+        <span>定时</span>
+      </div>
+      <div class="power">
+        <span></span>
+        <span></span>
+      </div>
+      <div class="extend">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   </div>
 </template>
@@ -21,7 +34,8 @@
     },
     data () {
       return {
-        title: '电风扇'
+        title: '电风扇',
+        extendsList: ['睡眠', '', '']
       }
     },
   }
