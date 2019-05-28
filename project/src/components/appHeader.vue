@@ -41,6 +41,7 @@ export default {
   left: 0
   width calc(100% - 3.2rem)
   z-index: 9;
+  box-sizing initial
   span
     height 2rem
     width 2rem
