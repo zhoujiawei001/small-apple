@@ -53,7 +53,7 @@
     },
     data () {
       return {
-        title: '电风扇',
+        title: '美的空调',
         temperature: 25
       }
     },
@@ -124,12 +124,12 @@
           border-radius 1rem
           .img-box
             setWH(3rem, 3rem)
-            imgUrl('../../assets/fan-switch-off.png')
+            imgUrl('../../assets/blue/fan-switch.png')
           &:active
             color #ffffff
             background-color $fontColorTheme
             .img-box
-              imgUrl('../../assets/fan-switch-off.png')
+              imgUrl('../../assets/white/fan-switch.png')
         .timer-on, .timer
           color $fontColorTheme
           setPosUseFlex()

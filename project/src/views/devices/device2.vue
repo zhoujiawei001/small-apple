@@ -18,18 +18,18 @@
     </div>
     <div class="channel-voice flex">
       <div class="channel">
-        <span class="up btn">+</span>
+        <span class="up btn">＋</span>
         <span class="text">频道</span>
-        <span class="down btn">-</span>
+        <span class="down btn">—</span>
       </div>
       <div class="function">
         <span class="quiet"></span>
         <span class="back btn">退出</span>
       </div>
       <div class="voice">
-        <span class="up btn">+</span>
+        <span class="up btn">＋</span>
         <span class="text">音量</span>
-        <span class="down btn">-</span>
+        <span class="down btn">—</span>
       </div>
     </div>
     <div class="flex function">
@@ -38,7 +38,7 @@
         <span class="back btn">退出</span>
       </div>
       <div class="mid">
-        <div class="ok border-1px btn">ok</div>
+        <div class="ok border-1px btn">OK</div>
         <span class="top-circle btn">○</span>
         <span class="bottom-circle btn">○</span>
         <span class="left-circle btn">○</span>
@@ -92,8 +92,12 @@
     background #F2F2F2
     .top
       padding 1rem 2rem
-      .tv-switch, .input-choose, .home
-        setBgImgAndText('../../assets/home.png', '../../assets/back.png')
+      .tv-switch
+        setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
+      .input-choose
+        setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
+      .home
+        setBgImgAndText('../../assets/blue/home.png', '../../assets/white/home.png')
     .channel-voice
       padding 1rem 6rem
       .channel, .voice
@@ -112,7 +116,7 @@
         setWH(5rem, 15rem)
         setPosUseFlex(column, space-between)
         .quiet
-          setIcon('../../assets/quiet.png', '../../assets/home.png')
+          setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
         .back
           setWH(4rem, 4rem)
           line-height 4rem
@@ -142,14 +146,14 @@
             bottom 0
         .ok
           setWH(8rem, 8rem)
-          setFont(4rem, $fontColorTheme, center)
+          setFont(3rem, $fontColorTheme, center)
           line-height 8rem
           border-radius 50%
       .left
         setWH(5rem, 18rem)
         setPosUseFlex(column, space-between)
         .menu
-          setIcon('../../assets/menu.png', '../../assets/menu.png')
+          setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
         .back
           setWH(4rem, 4rem)
           line-height 4rem
@@ -158,7 +162,7 @@
         setWH(5rem, 18rem)
         setPosUseFlex(column, space-between)
         .return
-          setIcon('../../assets/return.png', '../../assets/return.png')
+          setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
 
     .tel-number
       padding 1rem 6rem

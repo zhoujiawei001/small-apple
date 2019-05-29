@@ -3,7 +3,7 @@
   <div class="dev-light">
     <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
     <div class="banner">
-      <img src="../../assets/fan.png" alt="fan.png">
+      <img src="../../assets/blue/light.png" alt="light.png">
     </div>
     <div class="container">
       <div>
@@ -11,7 +11,7 @@
         <span class="switch-off">关</span>
       </div>
       <div class="power-box">
-        <span class="power btn"></span>
+        <span class="power"></span>
       </div>
     </div>
   </div>
@@ -69,5 +69,5 @@
         justify-content center
         margin-top 2rem
         .power
-          setIcon('../../assets/fan-switch-off.png', '../../assets/fan-switch-off.png', 8rem, 4rem)
+          setIcon('../../assets/blue/fan-switch.png', '../../assets/white/fan-switch.png', 8rem, 4rem)
 </style>

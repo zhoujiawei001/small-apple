@@ -18,18 +18,18 @@
     </div>
     <div class="channel-voice flex">
       <div class="channel">
-        <span class="up btn">+</span>
+        <span class="up btn">＋</span>
         <span class="text">频道</span>
-        <span class="down btn">-</span>
+        <span class="down btn">—</span>
       </div>
       <div class="function">
         <span class="quiet"></span>
         <span class="home"></span>
       </div>
       <div class="voice">
-        <span class="up btn">+</span>
+        <span class="up btn">＋</span>
         <span class="text">音量</span>
-        <span class="down btn">-</span>
+        <span class="down btn">—</span>
       </div>
     </div>
     <div class="flex function">
@@ -38,7 +38,7 @@
         <span class="back btn">退出</span>
       </div>
       <div class="mid">
-        <div class="ok border-1px btn">ok</div>
+        <div class="ok border-1px btn">OK</div>
         <span class="top-circle btn">○</span>
         <span class="bottom-circle btn">○</span>
         <span class="left-circle btn">○</span>
@@ -97,8 +97,10 @@
     background #F2F2F2
     .top
       padding 1rem 2rem
-      .stb-switch, .tv-switch, .input-choose
-        setBgImgAndText('../../assets/switch_off.png', '../../assets/back.png')
+      .stb-switch, .tv-switch
+        setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
+      .input-choose
+        setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
     .channel-voice
       padding 1rem 6rem
       .channel, .voice
@@ -117,9 +119,9 @@
         setWH(5rem, 15rem)
         setPosUseFlex(column, space-between)
         .quiet
-          setIcon('../../assets/quiet.png', '../../assets/home.png')
+          setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
         .home
-          setIcon('../../assets/home.png', '../../assets/quiet.png')
+          setIcon('../../assets/blue/home.png', '../../assets/white/home.png')
 
     .function
       padding 1rem 2rem
@@ -146,14 +148,14 @@
             bottom 0
         .ok
           setWH(8rem, 8rem)
-          setFont(4rem, $fontColorTheme, center)
+          setFont(3rem, $fontColorTheme, center)
           line-height 8rem
           border-radius 50%
       .left
         setWH(5rem, 18rem)
         setPosUseFlex(column, space-between)
         .menu
-          setIcon('../../assets/menu.png', '../../assets/menu.png')
+          setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
         .back
           setWH(4rem, 4rem)
           line-height 4rem
@@ -162,18 +164,18 @@
         setWH(5rem, 18rem)
         setPosUseFlex(column, space-between)
         .return
-          setIcon('../../assets/return.png', '../../assets/return.png')
+          setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
 
     .btn-forward-back-off
       padding 1rem 2rem
       .forward
-        setIcon('../../assets/forward.png', '../../assets/forward.png', 5rem)
+        setIcon('../../assets/blue/forward.png', '../../assets/white/forward.png', 5rem)
       .pause
-        setIcon('../../assets/pause.png', '../../assets/pause.png')
+        setIcon('../../assets/blue/pause.png', '../../assets/white/pause.png')
         setWH(12rem, 4rem)
         border-radius 2.5rem
       .back-off
-        setIcon('../../assets/back-off.png', '../../assets/back-off.png', 5rem)
+        setIcon('../../assets/blue/back-off.png', '../../assets/white/back-off.png', 5rem)
     .tel-number
       padding 1rem 6rem
       setPosUseFlexInit(row, space-between, center, wrap)

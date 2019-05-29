@@ -3,7 +3,7 @@
   <div class="dev-fan">
     <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
     <div class="banner">
-      <img src="../../assets/fan.png" alt="fan.png">
+      <img src="../../assets/blue/fan.png" alt="fan.png">
     </div>
     <div class="container">
       <div class="btn-fun flex">
@@ -99,12 +99,12 @@
           border-radius 1rem
           .img-box
             setWH(3rem, 3rem)
-            imgUrl('../../assets/fan-switch-off.png')
+            imgUrl('../../assets/blue/fan-switch.png')
           &:active
             color #ffffff
             background-color $fontColorTheme
             .img-box
-              imgUrl('../../assets/fan-switch-off.png')
+              imgUrl('../../assets/white/fan-switch.png')
       .fan-wind-speed
         setPosUseFlex()
         background #fff
@@ -113,10 +113,10 @@
         border-radius 1rem
         .img-box
           setWH(3rem, 3rem)
-          imgUrl('../../assets/fan.png')
+          imgUrl('../../assets/blue/fan.png')
         &:active
           color #ffffff
           background-color $fontColorTheme
           .img-box
-            imgUrl('../../assets/fan.png')
+            imgUrl('../../assets/white/fan.png')
 </style>
