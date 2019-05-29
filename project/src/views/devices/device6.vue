@@ -24,6 +24,7 @@
       <div class="extend flex">
         <span class="btn"
               v-for="(item, idx) in extendsList"
+              :key="item"
               @click="onclickExtendBtn(idx)">{{item}}</span>
       </div>
     </div>

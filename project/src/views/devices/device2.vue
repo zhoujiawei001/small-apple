@@ -49,7 +49,10 @@
       </div>
     </div>
     <div class="tel-number">
-      <span class="item btn" v-for="(item, idx) of telNumber" @click="onClickTel(idx)">{{item}}</span>
+      <span class="item btn"
+            v-for="(item, idx) of telNumber"
+            :key="item"
+            @click="onClickTel(idx)">{{item}}</span>
     </div>
   </div>
 </template>
