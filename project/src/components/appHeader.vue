@@ -1,7 +1,7 @@
 <template>
   <div class="appHeader" :style="styObj">
     <span class="back" @click="back"></span>
-    <span class="more"></span>
+    <span class="more" @click="set"></span>
   </div>
 </template>
 
@@ -23,6 +23,9 @@ export default {
   methods: {
     back () {
       window.hilink.finishDeviceActivity()
+    },
+    set() {
+      this.$emit('set')
     }
   }
 }

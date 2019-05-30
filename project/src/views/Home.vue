@@ -16,7 +16,7 @@
       </main>
     </div>
     <div class="shade-bar" :style="styObjBar"></div>
-    <appHeader id="app-hd" :style="styObjHd" ></appHeader>
+    <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
   </div>
 </template>
@@ -114,6 +114,10 @@ export default {
       scroll.on('scroll', pos => {
         this.scrollHg = -pos.y
       })
+    },
+    // 跳转至设置页面
+    jumpToSetting() {
+      this.$router.push('/setting')
     }
   }
 }

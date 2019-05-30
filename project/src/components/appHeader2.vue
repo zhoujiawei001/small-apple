@@ -27,12 +27,7 @@
       return {}
     },
     computed: {
-      ...mapState(['statusBarHg']),
-      styObj () {
-        return {
-          paddingTop: this.statusBarHg + 'px'
-        }
-      }
+      ...mapState(['statusBarHg'])
     },
     methods: {
       backTo() {

@@ -5,6 +5,8 @@ import Type from './views/Type.vue'
 import Brands from './views/Brands'
 const Name = name => () => import(`@/views/devices/${name}`)
 
+const Setting = () => import('@/views/Setting.vue')
+
 Vue.use(Router)
 
 export default new Router({
@@ -55,6 +57,11 @@ export default new Router({
       path: '/device10',
       name: 'device10',
       component: Name('device10')
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: Setting
     }
   ]
 })
