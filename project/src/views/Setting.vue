@@ -21,7 +21,9 @@
           <input ref="input"
                  type="text"
                  placeholder="请输入设备名称"
-                 :value="devName">
+                 v-model="inputValue"
+                 @input="handleInput()">
+          <div class="warn" v-show="warnFlag">请输入1-64个字符</div>
         </div>
         <div class="btn-groups">
           <span @click="modifyFlag=false">取消</span>
@@ -29,7 +31,18 @@
         </div>
       </div>
     </div>
-    <div class="del-dev"></div>
+    <div class="del-dev" v-show="delFlag">
+      <div class="container">
+        <div class="title">删除设备</div>
+        <div class="info">
+          此操作会清楚手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，许重新添加。
+        </div>
+        <div class="btn-groups">
+          <span @click="delFlag=false">取消</span>
+          <span @click="confirmDel()">删除</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,26 +54,41 @@
     data () {
       return {
         devName: '格力空调',
+        inputValue: '',
         modifyFlag: false,
-        delFlag: false
+        delFlag: false,
+        warnFlag: false
       }
+    },
+    created () {
+      this.inputValue = this.devName
     },
     computed: {
       ...mapState(['statusBarHg'])
     },
     methods: {
-      confirmModify() {
+      // 确定改名
+      confirmModify () {
+        !this.warnFlag && (this.$emit('modifyDevName', this.inputValue))
+      },
+      handleInput () {
+        const val = this.$refs.input.value.trim()
+        this.warnFlag = val.length === 0 || val.length > 64
+      },
+      // 确定删除
+      confirmDel () {
 
       },
-      showInput() {
-        this.modifyFlag = true;
+      showInput () {
+        this.modifyFlag = true
         setTimeout(() => {
           this.$refs.input.focus()
-        }, 50)
+        }, 500)
       }
     }
   }
 </script>
+
 
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
@@ -71,23 +99,30 @@
       padding 0 1rem
       border-bottom 2px solid #ddd
       display flex
+
       .img-box
         setWH(2.8rem, 2.8rem)
         margin-right 1rem
+
         img
           setWH()
+
       .text
         setFont(1.8rem)
+
     .name, .delete
       position relative
       margin 0 1rem
       border-bottom 1px solid #ddd
       setHeight(4.8rem)
+
       .left
         setFont(1.5rem)
+
       .right
         setFont(1.3rem, rgba(0, 0, 0, .5))
         margin-right 1.3rem
+
       .arrow-right
         border 1px solid #c8c8cd
         border-bottom-width 0
@@ -99,11 +134,13 @@
         width 1rem
         height 1rem
         transform rotate(45deg)
-    .modify-devName
-      position absolute
+
+    .modify-devName,
+    position absolute
       background rgba(0, 0, 0, .3)
       setWH()
       top 0
+
       .container
         position absolute
         background #fff
@@ -114,25 +151,71 @@
         left 50%
         transform translateX(-50%)
         padding 1rem 2rem
+
         .title
           setFont(1.5rem, black, left, 600)
+
         .input-box
           margin 2rem 0 1.5rem 0
+
           input
             setWH(100%, 3.2rem)
-            border-radius .8rem
-            background-color rgba(0, 0, 0, 0.08)
-            padding-left .8rem
+            background-color #fff
             border none
-            setFont(1.33rem)
+            border-bottom 1px solid #000
+            setFont(1.33rem, black, left, 500)
+            caret-color rgb(0, 91, 186)
+
             &:focus
               outline-color transparent
+
+          .warn
+            margin-top .2rem
+            setFont(1rem, red, left, 600)
+
         .btn-groups
           setPosUseFlexInit(row, space-between, center)
+
           span
             setWH(48%, 3.6rem)
             line-height 3.6rem
-            setFont(1.5rem, rgb(0,91,186), center)
+            setFont(1.5rem, rgb(0, 91, 186), center)
+
+            &:first-child
+              border-right 1px solid #ddd
+
+    .del-dev
+      position absolute
+      background rgba(0, 0, 0, .3)
+      setWH()
+      top 0
+
+      .container
+        position absolute
+        background #fff
+        border-radius .8rem
+        animation fadeIn .3s linear
+        setWH(98vw, auto)
+        bottom .5rem
+        left 50%
+        transform translateX(-50%)
+        padding 1rem 2rem
+
+        .title
+          setFont(1.5rem, black, left, 600)
+
+        .info
+          setFont(1.5rem, black, left)
+          padding 1.5rem 0
+
+        .btn-groups
+          setPosUseFlexInit(row, space-between, center)
+
+          span
+            setWH(48%, 3.6rem)
+            line-height 3.6rem
+            setFont(1.5rem, rgb(0, 91, 186), center)
+
             &:first-child
               border-right 1px solid #ddd
 
