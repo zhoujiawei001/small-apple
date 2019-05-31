@@ -1,4 +1,6 @@
 $fontColorTheme = #3EA0EA // 主题色
+$bgColorTheme = #f2f2f2 // 背景主色
+$bdColorTheme = #ddd // 边框主题色
 imgUrl($url)
   background url($url) no-repeat center
   background-size cover
@@ -8,8 +10,11 @@ imgUrl2($url)
   background url($url) no-repeat center
   background-size 100%
 
-setBorder($color = $fontColorTheme, $borderwidth = 1px)
+setBorder($color = $bdColorTheme, $borderwidth = 1px)
   border $borderwidth solid $color
+
+setBorderBot($color = $bdColorTheme, $borderwidth = 1px)
+  border-bottom $borderwidth solid $color
 
 /*设置宽高*/
 setWH($width = 100%, $height = 100%)
