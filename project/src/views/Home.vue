@@ -15,7 +15,7 @@
         <appDevItem></appDevItem>
       </main>
     </div>
-    <div class="shade-bar" :style="styObjBar"></div>
+    <!--<div class="shade-bar" :style="styObjBar"></div>-->
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
   </div>
@@ -44,7 +44,7 @@ export default {
     styObjStatus () {
       return {
         position: 'fixed',
-        top: this.headerHg + 1.2 * this.screenRem + 'px',
+        top: this.headerHg + 'px',
         left: '1.6rem',
         width: 'calc(100% - 6.4rem)'
       }
@@ -67,7 +67,7 @@ export default {
     },
     styObjHd () {
       return {
-        backgroundColor: this.scrollHg > this.limitHg ? '#fff' : ''
+        backgroundColor: this.scrollHg > this.limitHg ? '#f2f2f2' : ''
       }
     },
     clsObjStatusDown () {
@@ -95,7 +95,7 @@ export default {
       this.scrollFun()
       this.headerHg = document.getElementById('app-hd').clientHeight
       this.bgImgHg = document.getElementById('app-bg').clientHeight
-      this.limitHg = this.bgImgHg - this.headerHg
+      this.limitHg = this.bgImgHg - this.headerHg + 1.2 * this.screenRem
       const wd = document.body.clientWidth
       this.$store.commit('setScreenWd', wd)
     })

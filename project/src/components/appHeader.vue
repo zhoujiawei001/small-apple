@@ -1,7 +1,8 @@
 <template>
   <div class="appHeader" :style="styObj">
     <span class="back" @click="back"></span>
-    <span class="more" @click="set"></span>
+    <span class="title">{{title}}</span>
+    <span class="more" :class="{hiddenEle: hiddenMore}"></span>
   </div>
 </template>
 
@@ -9,6 +10,16 @@
 import { mapState } from 'vuex'
 export default {
   name: 'appHeader',
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    hiddenMore: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {}
   },
@@ -22,10 +33,11 @@ export default {
   },
   methods: {
     back () {
-      window.hilink.finishDeviceActivity()
-    },
-    set() {
-      this.$emit('set')
+      if (this.$route.path !== '/') {
+        this.$router.go(-1)
+      } else {
+        window.hilink.finishDeviceActivity()
+      }
     }
   }
 }
@@ -45,11 +57,16 @@ export default {
   width calc(100% - 3.2rem)
   z-index: 9;
   box-sizing initial
-  span
+  .back
     height 2rem
     width 2rem
-  .back
     imgUrl('../assets/back.png')
+  .title
+    font-size 1.6rem
   .more
+    height 2rem
+    width 2rem
     imgUrl('../assets/more.png')
+  .hiddenEle
+    visibility: hidden
 </style>

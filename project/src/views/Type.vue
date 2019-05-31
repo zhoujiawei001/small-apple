@@ -1,11 +1,18 @@
 <template>
   <div class="dev-tp">
-    <appHeader style="background-color: #f2f2f2"></appHeader>
+    <appHeader
+      style="background-color: #f2f2f2"
+      title="选择遥控设备类型"
+      :hiddenMore="true"></appHeader>
     <main :style="styObj" class="wrapper">
-      <ul class="content" @click="$router.push('/brands')">
-        <li v-for="i in 10" :key="i" :class="{removeRgBd: i%3 === 0}">
-          <img src="../assets/stb.png" alt="">
-          <p>电视机顶盒</p>
+      <ul class="content">
+        <li
+          v-for="(item, i) in typeList"
+          :key="i"
+          :class="{removeRgBd: (i + 1)%3 === 0}"
+          @click="handleItem(item.tid)">
+          <img :src="require(`../assets/devIcon/${item.tid}.png`)" alt="">
+          <p>{{item.name}}</p>
         </li>
       </ul>
     </main>
@@ -26,7 +33,7 @@ export default {
   },
   computed: {
     ...mapState(['statusBarHg']),
-    ...mapGetters(['screenRem']),
+    ...mapGetters(['screenRem', 'typeList']),
     styObj () {
       return {
         position: 'absolute',
@@ -57,6 +64,10 @@ export default {
         }
       })
       scroll.on('scroll', pos => {})
+    },
+    handleItem (tid) {
+      this.$store.commit('setTid', tid)
+      this.$router.push('/brands')
     }
   }
 }

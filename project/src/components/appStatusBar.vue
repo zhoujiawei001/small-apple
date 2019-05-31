@@ -21,6 +21,7 @@ export default {
     padding 0 1.6rem
     imgUrl('../assets/appStatus_on.png')
     position relative
+    box-sizing initial
     .right
       width 5.4rem
       height 5.4rem

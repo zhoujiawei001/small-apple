@@ -9,12 +9,12 @@ export default new Vuex.Store({
     statusBarHg: 20, // 手机状态栏高度
     screenWd: 0, // 获取屏幕宽度
     tid: 1, // 设备类型ID
-    bid: null // 设备品牌ID
+    bid: null, // 设备品牌ID
+    typeData: [] // 设备类型数据
   },
   getters: {
     screenRem (state) {
       let h = state.screenWd
-      console.log('h', h)
       if (h <= 320) {
         return 10
       } else if (h <= 360) {
@@ -28,6 +28,10 @@ export default new Vuex.Store({
       } else {
         return 12
       }
+    },
+    typeList (state) {
+      const arr = [1, 2, 6, 7, 8, 10]
+      return state.typeData.filter(item => arr.includes(item.tid))
     }
   },
   mutations: {
@@ -42,6 +46,9 @@ export default new Vuex.Store({
     },
     setBid (state, payload) {
       state.bid = payload
+    },
+    setTypeData (state, payload) {
+      state.typeData = payload
     }
   },
   actions: {
@@ -52,19 +59,26 @@ export default new Vuex.Store({
         }
       }
     },
-    getDevTypeList ({ commit }) {
+    getDevTypeList ({ commit, getters}) {
+      if (getters.typeList.length > 0) return
       $http.get('/huawei/l.php', {
         params: {
           m: 'live',
           c: 'be_rc_type'
         }
       }).then(res => {
-        console.log('getDevTypeList', res)
+        console.log('getDevTypeList', res.data.result)
+        commit('setTypeData', res.data.result)
       })
     },
     getDevBrandList ({ commit, state }) {
-      $http.get(`/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`).then(res => {
-        console.log('getDevBrandList', res)
+      return new Promise(resolve => {
+        $http.get(
+          `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`
+        ).then(res => {
+          console.log('getDevBrandList', res.data.result)
+          resolve(res.data.result)
+        })
       })
     }
   }
