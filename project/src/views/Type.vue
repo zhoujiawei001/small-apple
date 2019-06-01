@@ -96,6 +96,7 @@ export default {
           align-items: center
           justify-content center
           flex-direction column
+          font-size 1.2rem
           img
             width 4.2rem
           p

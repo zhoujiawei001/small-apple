@@ -24,33 +24,7 @@ export default {
   data () {
     return {
       listData: {
-        com: [],
-        // A: [],
-        // B: [],
-        // C: [],
-        // D: [],
-        // E: [],
-        // F: [],
-        // G: [],
-        // H: [],
-        // I: [],
-        // J: [],
-        // K: [],
-        // L: [],
-        // M: [],
-        // N: [],
-        // O: [],
-        // P: [],
-        // Q: [],
-        // R: [],
-        // S: [],
-        // T: [],
-        // U: [],
-        // V: [],
-        // W: [],
-        // X: [],
-        // Y: [],
-        // Z: []
+        com: []
       },
       letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       containLetters: [],
@@ -78,10 +52,6 @@ export default {
       })
   },
   mounted () {
-    this.getDevBrandList()
-      .then(data => {
-        this.dataFormatting(data)
-      })
     this.scrollFun()
   },
   methods: {

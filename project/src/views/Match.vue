@@ -36,10 +36,17 @@
 
 <script>
 import appHeader from '@/components/appHeader'
+import {mapActions} from 'vuex'
 export default {
   name: 'Match',
   components: {
     appHeader
+  },
+  created () {
+    this.getDevModeList(this.$route.query.bid)
+  },
+  methods: {
+    ...mapActions(['getDevModeList'])
   }
 }
 </script>

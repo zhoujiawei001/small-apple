@@ -13,7 +13,6 @@ export default {
   props: ['title', 'itemArr'],
   methods: {
     goToMatch (bid) {
-      console.log('bid', bid)
       this.$router.push({
         path: '/match',
         query: {

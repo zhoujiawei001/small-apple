@@ -80,6 +80,16 @@ export default new Vuex.Store({
           resolve(res.data.result)
         })
       })
+    },
+    getDevModeList ({commit, state}, bid) {
+      return new Promise(resolve => {
+        $http.get(
+          `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`
+        ).then(res => {
+          console.log('getDevModeList', res.data.result)
+          resolve(res.data.result)
+        })
+      })
     }
   }
 })
