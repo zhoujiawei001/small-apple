@@ -24,9 +24,9 @@
           <img src="../assets/match_reduce.png" alt="">
         </div>
         <div class="text">
-          正在匹配请勿离开
+          <span v-if="tips">正在匹配请勿离开</span>
         </div>
-        <div class="btn-next" @click="nextFun">
+        <div class="btn-next" :class="{'btn-disable': currentNum === 0 || tips}" @click="nextFun">
           下一步
         </div>
       </div>
@@ -37,7 +37,7 @@
 <script>
 import appHeader from '@/components/appHeader'
 import {mapState, mapActions} from 'vuex'
-import { sendBodyToDev, RC, numArr, getExtendToServe, parseHilinkData, postExtendToServe } from '../utils/pub'
+import { sendBodyToDev, RC, numArr, getExtendToServe, parseHilinkData, postExtendToServe, assembleTS } from '../utils/pub'
 export default {
   name: 'Match',
   data () {
@@ -46,7 +46,8 @@ export default {
       modeList: [],
       currentNum: 0,
       rc: {},
-      allowIndexArr: [] // 可选index集合
+      allowIndexArr: [], // 可选index集合
+      tips: false
     }
   },
   components: {
@@ -100,13 +101,11 @@ export default {
       })
     getExtendToServe().then(data => {
       let arr = data.map(item => item.index)
-      console.log('jjjj', arr)
       if (this.tid !== 7) {
         this.allowIndexArr = this._.difference(numArr(28), arr)
       } else {
         this.allowIndexArr = this._.difference([29, 30], arr)
       }
-      console.log('allowIndexArr', this.allowIndexArr)
     })
   },
   mounted () {
@@ -121,6 +120,11 @@ export default {
             console.log('第二个RC', this.rc)
             this.postYkDevToServe().then(data2 => {
               postExtendToServe(this.rc).then(data3 => {
+                if (data3.errcode === 0) {
+                  this.$router.push('/')
+                } else {
+                  alert('postExtendToServe失败')
+                }
               })
             })
           })
@@ -160,10 +164,21 @@ export default {
       sendBodyToDev(body)
     },
     nextFun () {
+      this.tips = true
       this.getDevCodeLibAndInfo(this.currentRid)
         .then(data => {
-          this.rc = new RC(data.rid, data.name, data.be_rmodel, data.rmodel, data.bid, +data.be_rc_type)
-          this.rc.index = this.allowIndexArr[0]
+          this.rc = new RC(
+            data.rid,
+            data.name,
+            this.allowIndexArr[0],
+            this.currentCode,
+            data.be_rmodel,
+            data.rmodel,
+            data.bid,
+            +data.be_rc_type,
+            '',
+            assembleTS())
+          // this.rc.index = this.allowIndexArr[0]
           console.log('第一个RC', this.rc)
           this.setUrlDomainToDev(this.rc)
         })
@@ -257,6 +272,9 @@ export default {
         window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
       })
     }
+  },
+  beforeDestroy () {
+    window.deviceEventCallback = null
   }
 }
 </script>
@@ -284,7 +302,9 @@ export default {
       img
         width 5rem
       .text
+        width 25rem
         color $fontColorTheme
+        text-align center
     .dec
       width 100%
       position absolute
@@ -317,6 +337,8 @@ export default {
         background-color: #fff;
         border-radius 1.2rem
         position relative
+        &:active
+          background-color rgba(0,0,0,.1)
         img
           setCenterUsePosition2()
           width 5.4rem
@@ -326,6 +348,9 @@ export default {
         margin 2.4rem 0
         color $fontColorTheme
         font-weight bold
+        height 1.6rem
+        span
+          animation fadeInOut 3s infinite
       .btn-next
         width 10.2rem
         height 3.6rem
@@ -333,4 +358,6 @@ export default {
         line-height 3.6rem
         text-align center
         background-color: #fff;
+        &:active
+          background-color rgba(0,0,0,.1)
 </style>

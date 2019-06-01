@@ -20,17 +20,20 @@ export function sendBodyToDev (body) {
 }
 
 export class RC {
-  constructor (rid, name, beRmodel, rmodel, bid, tid, zip = '1', ui = 0, encode = 0) {
-    this.hname = '' // 自定义别名
-    this.hid = assembleTS() // 自定义ID
+  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip = '1', ui = 0, encode = 0) {
     this.rid = rid + ''
     this.name = name
+    this.index = index
+    this.src = src
     this.beRmodel = beRmodel
     this.rmodel = rmodel
     this.bid = bid
     this.tid = tid
-    this.ui = ui
+    this.hname = hname // 自定义别名
+    this.hid = hid // 自定义ID
     this.zip = zip
+    this.ui = ui
+    this.encode = encode
   }
 }
 

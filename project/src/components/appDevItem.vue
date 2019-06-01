@@ -1,10 +1,12 @@
 <template>
   <div class="appDevItem">
     <div class="left">
-      <img src="../assets/air_conditioner.png" alt="">
+      <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
       <div class="info">
-        <span>大金空调</span>
-        <p>开启(默认房间)</p>
+        <div class="info-txt">
+          {{item.name}}
+        </div>
+        <p>{{typeName(item.tid)}}</p>
       </div>
     </div>
     <img class="right" src="../assets/switch_on.png" alt="">
@@ -14,7 +16,22 @@
 <script>
 export default {
   name: 'appDevItem',
-  props: ['item']
+  props: ['item'],
+  computed: {
+    typeName () {
+      return val => {
+        let obj = {
+          1: '电视机顶盒',
+          2: '电视机',
+          6: '风扇',
+          7: '空调',
+          8: '灯泡',
+          10: '电视盒子'
+        }
+        return obj[val]
+      }
+    }
+  }
 }
 </script>
 
@@ -30,15 +47,18 @@ export default {
   border-radius 4px
   padding 0 1.6rem
   .left
-    width 60%
+    width 68%
     display flex
     justify-content space-between
     align-items: center
     img
-      width 42%
+      width 36%
     .info
-      span
+      width 64%
+      padding-left 1.6rem
+      .info-txt
         font-size 1.4rem
+        setEllipsisOne()
       p
         margin-top .4rem
         font-size 1.2rem

@@ -92,3 +92,27 @@ a {
     font-size: 11.50px
   }
 }
+
+/** 禁止点击加置灰 **/
+.btn-disable
+  opacity: .4
+  pointer-events none
+
+/** vue动画：淡入淡出 **/
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+/** 手写谈入淡出 **/
+@keyframes fadeInOut
+  0%
+    opacity 1
+  25%
+    opacity 0
+  50%
+    opacity 1
+  75%
+    opacity 0
