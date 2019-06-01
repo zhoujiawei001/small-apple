@@ -56,6 +56,9 @@ export default new Vuex.Store({
       window.app = {
         setTitleCallback (res) {
           console.log(res)
+        },
+        setDeviceInfoCallback (res) {
+          console.log('setDeviceInfoCallback', res)
         }
       }
     },

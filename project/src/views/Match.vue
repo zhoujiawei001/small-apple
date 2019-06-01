@@ -5,28 +5,28 @@
       :hiddenMore="true"></appHeader>
     <div class="mt-section_1">
       <div class="icon-text">
-        <img src="../assets/devIcon/1.png" alt="">
-        <p class="text">同州 Coship 电视机顶盒</p>
+        <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">
+        <p class="text">{{$route.query.zh}} {{$route.query.en}} {{typeName}}</p>
       </div>
       <div class="dec">
-        <p>匹配前，请将机顶盒电源打开</p>
-        <p>如果电视上出现音量调整图标</p>
+        <p>匹配前，请将{{typeName}}电源打开</p>
+        <p>{{typeDec}}</p>
         <p>表示匹配成功， 点击 “下一步”</p>
       </div>
     </div>
     <div class="mt-section_2">
       <div class="container">
-        <span class="number">1/27</span>
-        <div class="btn-plus">
+        <span class="number">{{currentNum}}/{{total}}</span>
+        <div class="btn-plus" @click="sendCode('plus')">
           <img src="../assets/match_plus.png" alt="">
         </div>
-        <div class="btn-reduce">
+        <div class="btn-reduce" @click="sendCode('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
         <div class="text">
           正在匹配请勿离开
         </div>
-        <div class="btn-next">
+        <div class="btn-next" @click="nextFun">
           下一步
         </div>
       </div>
@@ -36,17 +36,105 @@
 
 <script>
 import appHeader from '@/components/appHeader'
-import {mapActions} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   name: 'Match',
+  data () {
+    return {
+      total: '--',
+      modeList: [],
+      currentNum: 0
+    }
+  },
   components: {
     appHeader
   },
+  computed: {
+    ...mapState(['tid']),
+    typeName () {
+      let obj = {
+        1: '电视机顶盒',
+        2: '电视机',
+        6: '风扇',
+        7: '空调',
+        8: '灯泡',
+        10: '电视盒子'
+      }
+      return obj[this.tid]
+    },
+    typeDec () {
+      let obj = {
+        1: '如果电视上出现音量调节图标',
+        2: '如果电视机打开或着关闭',
+        6: '如果风扇打开或关闭',
+        7: '如果空调“滴”的一声响',
+        8: '如果灯泡打开或关闭',
+        10: '如果盒子打开或关闭'
+      }
+      return obj[this.tid]
+    },
+    currentCmd () {
+      return this.modeList[this.currentNum - 1]['rc_command']
+    },
+    currentCmdKeyArr () {
+      return Object.keys(this.currentCmd)
+    },
+    currentCode () {
+      return this.currentCmd[this.currentCmdKeyArr[0]].src
+    },
+    currentZip () {
+      return this.modeList[this.currentNum - 1].zip
+    }
+  },
   created () {
     this.getDevModeList(this.$route.query.bid)
+      .then(data => {
+        this.total = data.length
+        this.modeList = data
+      })
   },
   methods: {
-    ...mapActions(['getDevModeList'])
+    ...mapActions(['getDevModeList']),
+    sendCode (val) {
+      if (val === 'plus') {
+        this.currentNum ++
+        if (this.currentNum > this.total) {
+          this.currentNum = 1
+        }
+      } else {
+        this.currentNum --
+        if (this.currentNum < 1) {
+          this.currentNum = this.total
+        }
+      }
+      console.log('currentNum', this.currentNum)
+      console.log('currentCmd', this.currentCmd)
+      console.log('currentCmdKeyArr', this.currentCmdKeyArr)
+      console.log('currentCode', this.currentCode)
+      console.log('currentZip', this.currentZip)
+      let body = {
+        batch: {
+          controlKey: {
+            controlKey: this.currentCode
+          },
+          deviceList: {
+            list: [
+              {
+                zip: this.currentZip + ''
+              }
+            ]
+          }
+        }
+      }
+      console.log(body)
+      try {
+        window.hilink.setDeviceInfo('0', JSON.stringify(body), 'app.setDeviceInfoCallback')
+      } catch (e) {
+        console.warn('无setDeviceInfo接口')
+      }
+    },
+    nextFun () {
+    }
   }
 }
 </script>

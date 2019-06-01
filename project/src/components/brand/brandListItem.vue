@@ -2,7 +2,7 @@
   <div class="brandListItem">
     <span class="title">{{title === 'com' ? '常用品牌' : title}}</span>
     <ul>
-      <li v-for="(item, i) in itemArr" :key="i" @click="goToMatch(item.bid)">{{item.zh}}  {{item.en}}</li>
+      <li v-for="(item, i) in itemArr" :key="i" @click="goToMatch(item)">{{item.zh}}  {{item.en}}</li>
     </ul>
   </div>
 </template>
@@ -12,11 +12,13 @@ export default {
   name: 'brandListItem',
   props: ['title', 'itemArr'],
   methods: {
-    goToMatch (bid) {
+    goToMatch (item) {
       this.$router.push({
         path: '/match',
         query: {
-          bid: bid
+          bid: item.bid,
+          zh: item.zh,
+          en: item.en
         }
       })
     }
