@@ -2,7 +2,7 @@
   <div class="appHeader" :style="styObj">
     <span class="back" @click="back"></span>
     <span class="title">{{title}}</span>
-    <span class="more" :class="{hiddenEle: hiddenMore}"></span>
+    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore}"></span>
   </div>
 </template>
 
@@ -38,6 +38,9 @@ export default {
       } else {
         window.hilink.finishDeviceActivity()
       }
+    },
+    handleMore () {
+      this.$emit('set')
     }
   }
 }

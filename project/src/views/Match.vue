@@ -37,20 +37,23 @@
 <script>
 import appHeader from '@/components/appHeader'
 import {mapState, mapActions} from 'vuex'
+import { sendBodyToDev, RC, numArr, getExtendToServe, parseHilinkData, postExtendToServe } from '../utils/pub'
 export default {
   name: 'Match',
   data () {
     return {
       total: '--',
       modeList: [],
-      currentNum: 0
+      currentNum: 0,
+      rc: {},
+      allowIndexArr: [] // 可选index集合
     }
   },
   components: {
     appHeader
   },
   computed: {
-    ...mapState(['tid']),
+    ...mapState(['tid','appDevId']),
     typeName () {
       let obj = {
         1: '电视机顶盒',
@@ -84,6 +87,9 @@ export default {
     },
     currentZip () {
       return this.modeList[this.currentNum - 1].zip
+    },
+    currentRid () {
+      return this.modeList[this.currentNum - 1].rid
     }
   },
   created () {
@@ -92,9 +98,38 @@ export default {
         this.total = data.length
         this.modeList = data
       })
+    getExtendToServe().then(data => {
+      let arr = data.map(item => item.index)
+      console.log('jjjj', arr)
+      if (this.tid !== 7) {
+        this.allowIndexArr = this._.difference(numArr(28), arr)
+      } else {
+        this.allowIndexArr = this._.difference([29, 30], arr)
+      }
+      console.log('allowIndexArr', this.allowIndexArr)
+    })
+  },
+  mounted () {
+    window.deviceEventCallback = res => {
+      let loadResObj = parseHilinkData(res)
+      console.log('loadRes', loadResObj)
+      if (loadResObj.sid === 'loadRes') {
+        let obj = loadResObj.data.loadRes
+        if (obj.isFinish === 1) {
+          this.registerVirtualDev().then(data => {
+            this.rc.devId = data.devId
+            console.log('第二个RC', this.rc)
+            this.postYkDevToServe().then(data2 => {
+              postExtendToServe(this.rc).then(data3 => {
+              })
+            })
+          })
+        }
+      }
+    }
   },
   methods: {
-    ...mapActions(['getDevModeList']),
+    ...mapActions(['getDevModeList', 'getDevCodeLibAndInfo']),
     sendCode (val) {
       if (val === 'plus') {
         this.currentNum ++
@@ -107,11 +142,6 @@ export default {
           this.currentNum = this.total
         }
       }
-      console.log('currentNum', this.currentNum)
-      console.log('currentCmd', this.currentCmd)
-      console.log('currentCmdKeyArr', this.currentCmdKeyArr)
-      console.log('currentCode', this.currentCode)
-      console.log('currentZip', this.currentZip)
       let body = {
         batch: {
           controlKey: {
@@ -127,13 +157,105 @@ export default {
         }
       }
       console.log(body)
-      try {
-        window.hilink.setDeviceInfo('0', JSON.stringify(body), 'app.setDeviceInfoCallback')
-      } catch (e) {
-        console.warn('无setDeviceInfo接口')
-      }
+      sendBodyToDev(body)
     },
     nextFun () {
+      this.getDevCodeLibAndInfo(this.currentRid)
+        .then(data => {
+          this.rc = new RC(data.rid, data.name, data.be_rmodel, data.rmodel, data.bid, +data.be_rc_type)
+          this.rc.index = this.allowIndexArr[0]
+          console.log('第一个RC', this.rc)
+          this.setUrlDomainToDev(this.rc)
+        })
+    },
+    /** 下发参数给设备下载码库 **/
+    setUrlDomainToDev (rc) {
+      let body = {
+        batch: {
+          deviceList: {
+            list: [rc]
+          },
+          cmdList: {
+            url: {
+              domain: 'http://hwh5.yaokantv.com',
+              path: '/huawei/l.php',
+              param: {
+                m: 'live',
+                c: 'remote_details',
+                rid: rc.rid,
+                zip: rc.zip
+              }
+            }
+          }
+        }
+      }
+      sendBodyToDev(body)
+    },
+    /** 注册虚拟设备到九宫格 **/
+    registerVirtualDev () {
+      return new Promise(resolve => {
+        let body = {
+          devInfo: {
+            sn: this.rc.hid,
+            model: this.rc.name,
+            devType: '06C',
+            manu: '092',
+            prodId: this.selectRightProdId(this.rc.tid),
+            hiv: '1.0',
+            mac: '',
+            fwv: '1.0',
+            hwv: '1.0',
+            swv: '1.0'
+          }
+        }
+        window.registerCallback = res => {
+          console.log('registerCallback', res)
+          let r_data = parseHilinkData(res)
+          if (r_data.errcode === 0) {
+            resolve(r_data)
+          } else {
+            console.log('注册失败')
+          }
+        }
+        window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+      })
+    },
+    selectRightProdId (tid) {
+      let obj = {
+        1: '113Y',
+        2: '113X',
+        6: '114B',
+        7: '113Z',
+        8: '114C',
+        10: '114A'
+      }
+      return obj[tid]
+    },
+    /**云端上传遥控设备**/
+    postYkDevToServe () {
+      return new Promise(resolve => {
+        let body = {
+          type: 'VirtRemoteInfo',
+          data: {
+            gID: this.appDevId, // 小苹果的设备id
+            dUID: {
+              deviceList: {
+                list: [this.rc]
+              }
+            }
+          }
+        }
+        window.postDeviceExtendDataByIdCallback = res => {
+          console.log('postDeviceExtendDataByIdCallback', parseHilinkData(res))
+          let data = parseHilinkData(res)
+          if (data.errcode === 0) {
+            resolve(data)
+          } else {
+            console.log('上传遥控设备失败')
+          }
+        }
+        window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
+      })
     }
   }
 }

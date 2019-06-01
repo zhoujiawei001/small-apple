@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import $http from './utils/requset'
+import { parseHilinkData } from './utils/pub'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    appDevId: '',
     statusBarHg: 20, // 手机状态栏高度
     screenWd: 0, // 获取屏幕宽度
     tid: 1, // 设备类型ID
@@ -53,7 +55,15 @@ export default new Vuex.Store({
   },
   actions: {
     initFun ({ commit, state }) {
+      window.onResume = () =>{
+        console.log('343')
+      }
       window.app = {
+        getDevInfoAllCallback (res) {
+          let data = parseHilinkData(res)
+          console.log(data)
+          state.appDevId = data.devId
+        },
         setTitleCallback (res) {
           console.log(res)
         },
@@ -91,6 +101,17 @@ export default new Vuex.Store({
         ).then(res => {
           console.log('getDevModeList', res.data.result)
           resolve(res.data.result)
+        })
+      })
+    },
+    /** 获取设备码库和基本信息 **/
+    getDevCodeLibAndInfo ({commit, state}, rid) {
+      return new Promise(resolve => {
+        $http.get(
+          `/huawei/l.php?m=live&c=remote_details&rid=${rid}&zip=1`
+        ).then(res => {
+          console.log('getDevCodeLibAndInfo', res.data)
+          resolve(res.data)
         })
       })
     }

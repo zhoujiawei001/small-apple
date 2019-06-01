@@ -12,6 +12,7 @@ export default {
   mounted () {
     try {
       window.hilink.setTitleVisible(false, 'app.setTitleCallback')
+      window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
     } catch (e) {
       console.warn(e)
     }

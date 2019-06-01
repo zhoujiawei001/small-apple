@@ -13,7 +13,8 @@
 
 <script>
 export default {
-  name: 'appDevItem'
+  name: 'appDevItem',
+  props: ['item']
 }
 </script>
 

@@ -5,17 +5,9 @@
       <main>
         <appStatusBar :class="clsObjStatusDown"></appStatusBar>
         <appAddDev></appAddDev>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
-        <appDevItem></appDevItem>
+        <appDevItem :item="item" v-for="(item, i) in list" :key="i"></appDevItem>
       </main>
     </div>
-    <!--<div class="shade-bar" :style="styObjBar"></div>-->
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
   </div>
@@ -30,6 +22,7 @@ import appAddDev from '@/components/appAddDev'
 import appDevItem from '@/components/appDevItem'
 import BScroll from 'better-scroll'
 import { mapGetters } from 'vuex'
+import { getExtendToServe } from '../utils/pub'
 export default {
   name: 'home',
   components: {
@@ -47,17 +40,6 @@ export default {
         top: this.headerHg + 'px',
         left: '1.6rem',
         width: 'calc(100% - 6.4rem)'
-      }
-    },
-    styObjBar () {
-      return {
-        position: 'fixed',
-        top: this.headerHg + 'px',
-        left: 0,
-        width: '100%',
-        height: '1.2rem',
-        display: this.scrollHg >= this.limitHg ? 'block' : 'none',
-        backgroundColor: '#f2f2f2'
       }
     },
     styObjBg () {
@@ -87,8 +69,14 @@ export default {
       headerHg: 0,
       bgImgHg: 0,
       scrollHg: 0,
-      limitHg: 0
+      limitHg: 0,
+      list: []
     }
+  },
+  created () {
+    getExtendToServe().then(data => {
+      this.list = data
+    })
   },
   mounted () {
     this.$nextTick(() => {
@@ -117,7 +105,13 @@ export default {
     },
     // 跳转至设置页面
     jumpToSetting() {
-      this.$router.push('/setting')
+      window.jumpToCallback = res => {
+        console.log(res)
+      }
+      window.hilink.jumpTo(
+        'com.huawei.smarthome.deviceSettingActivity',
+        'jumpToCallback'
+      )
     }
   }
 }
