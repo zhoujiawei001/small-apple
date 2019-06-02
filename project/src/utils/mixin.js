@@ -1,23 +1,26 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { sendBodyToDev } from './pub'
 
 export const viewsMixin = {
   data () {
     return {
       cmds: {},
-      rc: this.$route.query.rc,
+      rc: JSON.parse(this.$route.query.rc),
     }
   },
   created () {
-    // console.log('rid', this.$route.query.rid)
-    this.getDevCodeLibAndInfo(this.$route.query.rc.rid).then(data => {
-      console.log('device2', data)
+    this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
       this.cmds = data.rc_command
     })
   },
   computed: {
+    ...mapState(['addedDevList']),
     cmdsKey () {
       return Object.keys(this.cmds)
+    },
+    title () {
+      let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
+      return arr[0].hname || arr[0].name
     }
   },
   methods: {

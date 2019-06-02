@@ -37,7 +37,7 @@
         this.$router.push({
           path: `/device${item.tid}`,
           query: {
-            rc: item
+            rc: JSON.stringify(item)
           }
         })
       }

@@ -109,7 +109,6 @@
     },
     data () {
       return {
-        title: '电视机',
         telNumber: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         tempCmds: {
           '0': 1,
@@ -169,7 +168,14 @@
         console.log('back')
       },
       moreSet () {
-        this.$router.push('/setting')
+        this.$router.push({
+          path: '/setting',
+          query: {
+            name: this.title,
+            hid: this.rc.hid,
+            devId: this.rc.devId
+          }
+        })
       },
     }
   }

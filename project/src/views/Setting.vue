@@ -2,7 +2,7 @@
   <div class="setting">
     <div :style="{height: statusBarHg + 'px'}"></div>
     <header>
-      <div class="img-box" @click="$router.go(-1)"><img src="../assets/arrow-left.svg"></div>
+      <div class="img-box" @click="goBack()"><img src="../assets/arrow-left.svg"></div>
       <div class="text">设置</div>
     </header>
     <div class="name flex" @click="showInput()">
@@ -14,7 +14,7 @@
       <span class="left">删除设备</span>
       <span class="arrow-right"></span>
     </div>
-    <div class="modify-devName" v-show="modifyFlag">
+    <div class="modify-devName" v-if="modifyFlag">
       <div class="container">
         <div class="title">设备名称</div>
         <div class="input-box">
@@ -26,7 +26,7 @@
           <div class="warn" v-show="warnFlag">请输入1-64个字符</div>
         </div>
         <div class="btn-groups">
-          <span @click="modifyFlag=false">取消</span>
+          <span @click="cancelModify()">取消</span>
           <span @click="confirmModify()">确定</span>
         </div>
       </div>
@@ -48,20 +48,52 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { modifyDevName, getExtendToServe, delAddedDev } from '@/utils/pub'
 
   export default {
     name: 'Setting',
     data () {
       return {
-        devName: '格力空调',
+        devName: '',
         inputValue: '',
         modifyFlag: false,
         delFlag: false,
-        warnFlag: false
+        warnFlag: false,
+        devId: this.$route.query.devId,
+        hid: this.$route.query.hid
       }
     },
     created () {
-      this.inputValue = this.devName
+      this.devName = this.inputValue = this.$route.query.name
+      window.modifyDeviceNameByDevIdCallback = (res) => {
+        const _res = JSON.parse(res)
+        if (!_res.errcode) {
+          modifyDevName(this.hid, this.inputValue).then((data) => {
+            if (data.errcode === 0) {
+              getExtendToServe().then(data => {
+                console.log('修改成功', data)
+                this.modifyFlag = false
+                this.devName = this.inputValue
+                this.$store.commit('setAddedDevList', data)
+              })
+            }
+          })
+        }
+      }
+      window.deleteInfraredHubDeviceCallback = (res) => {
+        const _res = JSON.parse(res)
+        if (!_res.errcode) {
+          delAddedDev(this.hid).then(data => {
+            if (data.errcode === 0) {
+              getExtendToServe().then(data => {
+                console.log('删除成功', data)
+                this.$store.commit('setAddedDevList', data)
+                this.$router.push('/')
+              })
+            }
+          })
+        }
+      }
     },
     computed: {
       ...mapState(['statusBarHg'])
@@ -69,7 +101,14 @@
     methods: {
       // 确定改名
       confirmModify () {
-        !this.warnFlag && (this.$emit('modifyDevName', this.inputValue))
+        // !this.warnFlag && (this.$emit('modifyDevName', this.inputValue))
+        if (!this.warnFlag) {
+          window.hilink.modifyDeviceNameByDevId(
+            this.devId,
+            this.inputValue,
+            'modifyDeviceNameByDevIdCallback'
+          )
+        }
       },
       handleInput () {
         const val = this.$refs.input.value.trim()
@@ -77,14 +116,29 @@
       },
       // 确定删除
       confirmDel () {
-
+        window.hilink.deleteInfraredHubDevice(
+          this.devId,
+          'deleteInfraredHubDeviceCallback'
+        )
+      },
+      // 取消删除
+      cancelModify () {
+        this.inputValue = this.devName
+        this.modifyFlag = false
+        this.warnFlag = false
       },
       showInput () {
         this.modifyFlag = true
         setTimeout(() => {
           this.$refs.input.focus()
         }, 500)
+      },
+      goBack () {
+        this.$router.go(-1)
       }
+    },
+    destroyed () {
+      window.modifyDeviceNameByDevIdCallback = null
     }
   }
 </script>
