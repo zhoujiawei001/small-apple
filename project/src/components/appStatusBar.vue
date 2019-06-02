@@ -4,13 +4,18 @@
       <span>夜灯开启</span>
       <p>遥控大师小苹果</p>
     </div>
-    <div class="right"></div>
+    <div class="right" @click="clickSwitch"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'appStatusBar'
+  name: 'appStatusBar',
+  methods: {
+    clickSwitch () {
+      this.$emit('handle-icon')
+    }
+  }
 }
 </script>
 

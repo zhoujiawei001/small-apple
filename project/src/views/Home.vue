@@ -4,12 +4,15 @@
       <appBgImg id="app-bg" :style="styObjBg"></appBgImg>
       <main>
         <appStatusBar :class="clsObjStatusDown"></appStatusBar>
-        <appAddDev :devNum="addedDevList.length"></appAddDev>
+        <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
         <appDevItem :item="item" v-for="(item, i) in addedDevList" :key="i"></appDevItem>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
+    <transition name="fade">
+      <appTipsBox v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
@@ -20,6 +23,7 @@ import appBgImg from '@/components/appBgImg'
 import appStatusBar from '@/components/appStatusBar'
 import appAddDev from '@/components/appAddDev'
 import appDevItem from '@/components/appDevItem'
+import appTipsBox from '@/components/appTipsBox'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
 export default {
@@ -29,7 +33,8 @@ export default {
     appBgImg,
     appStatusBar,
     appAddDev,
-    appDevItem
+    appDevItem,
+    appTipsBox
   },
   computed: {
     ...mapState(['addedDevList']),
@@ -69,7 +74,8 @@ export default {
       headerHg: 0,
       bgImgHg: 0,
       scrollHg: 0,
-      limitHg: 0
+      limitHg: 0,
+      tipsBox: false
     }
   },
   created () {

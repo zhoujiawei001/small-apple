@@ -14,7 +14,7 @@
 import appHeader from '@/components/appHeader'
 import brandList from '@/components/brand/brandList'
 import { mapState, mapGetters, mapActions } from 'vuex'
-import BScroll from 'better-scroll'
+
 export default {
   name: 'Brands',
   components: {
@@ -51,9 +51,6 @@ export default {
         this.dataFormatting(data)
       })
   },
-  mounted () {
-    this.scrollFun()
-  },
   methods: {
     ...mapActions(['getDevBrandList']),
     dataFormatting (originalData) {
@@ -67,21 +64,6 @@ export default {
           delete this.listData[key]
         }
       }
-      console.log('listData', this.listData)
-    },
-    scrollFun () {
-      // const wrapper = document.querySelector('.wrapper')
-      // const scroll = new BScroll('.wrapper', {
-      //   probeType: 3,
-      //   click: true,
-      //   bounce: {
-      //     top: true,
-      //     bottom: true
-      //   }
-      // })
-      // scroll.on('scroll', pos => {
-      //   // console.log(-pos.y)
-      // })
     }
   }
 }

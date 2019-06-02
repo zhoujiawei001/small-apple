@@ -1,6 +1,6 @@
 <template>
   <div class="appAddDev">
-    <img src="../assets/add.png" alt="" @click="$router.push('/type')">
+    <img src="../assets/add.png" alt="" @click="clickAdd">
     <span>遥控器 {{devNum}} 个</span>
   </div>
 </template>
@@ -8,7 +8,16 @@
 <script>
 export default {
   name: 'appAddDev',
-  props: ['devNum']
+  props: ['devNum'],
+  methods: {
+    clickAdd () {
+      if (this.devNum >= 15) {
+        this.$emit('handle-icon')
+      } else {
+        this.$router.push('./type')
+      }
+    }
+  }
 }
 </script>
 

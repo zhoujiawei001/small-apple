@@ -17,10 +17,10 @@
     <div class="mt-section_2">
       <div class="container">
         <span class="number">{{currentNum}}/{{total}}</span>
-        <div class="btn-plus" :class="{'btn-disable': tips}" @click="sendCode('plus')">
+        <div class="btn-plus" :class="{'btn-disable': tips || total === '--'}" @click="sendCode('plus')">
           <img src="../assets/match_plus.png" alt="">
         </div>
-        <div class="btn-reduce" :class="{'btn-disable': tips}" @click="sendCode('reduce')">
+        <div class="btn-reduce" :class="{'btn-disable': tips || total === '--'}" @click="sendCode('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
         <div class="text">
@@ -99,46 +99,56 @@ export default {
         this.total = data.length
         this.modeList = data
       })
-    getExtendToServe().then(data => {
-      let arr = data.map(item => item.index)
-      if (this.tid !== 7) {
-        this.allowIndexArr = this._.difference(numArr(28), arr)
-      } else {
-        this.allowIndexArr = this._.difference([29, 30], arr)
-      }
-    })
+    this.initSomeData()
   },
   mounted () {
     window.deviceEventCallback = res => {
       let loadResObj = parseHilinkData(res)
-      console.log('loadRes', loadResObj)
+      console.log('loadRes', parseHilinkData(res))
       if (loadResObj.sid === 'loadRes') {
         let obj = loadResObj.data.loadRes
         if (obj.isFinish === 1) {
           this.registerVirtualDev().then(data => {
-            this.rc.devId = data.devId
-            console.log('第二个RC', this.rc)
-            this.postYkDevToServe().then(data2 => {
-              postExtendToServe(this.rc).then(data3 => {
-                if (data3.errcode === 0) {
-                  console.log('addedDevList', this.addedDevList)
-                  console.log('rc', this.rc)
-                  let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
-                  cloneList.push(this.rc)
-                  this.$store.commit('setAddedDevList', cloneList)
-                  this.$router.push('/')
+            if (data.errcode === 0) {
+              this.rc.devId = data.devId
+              console.log('第二个RC', this.rc)
+              this.postYkDevToServe().then(data2 => {
+                if (data2.errcode === 0) {
+                  postExtendToServe(this.rc).then(data3 => {
+                    if (data3.errcode === 0) {
+                      let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
+                      cloneList.push(this.rc)
+                      this.$store.commit('setAddedDevList', cloneList)
+                      this.$router.push('/')
+                    } else {
+                      alert('postExtendToServe失败')
+                    }
+                  })
                 } else {
-                  alert('postExtendToServe失败')
+                  alert('云端上传虚拟遥控设备失败')
                 }
               })
-            })
+            } else {
+              alert('注册虚拟设备失败')
+            }
           })
+        } else {
+          alert('设备端下载码库失败')
         }
       }
     }
   },
   methods: {
     ...mapActions(['getDevModeList', 'getDevCodeLibAndInfo']),
+    /** 初始化一些数据 **/
+    initSomeData () {
+      let arr = this.addedDevList.map(item => item.index)
+      if (this.tid !== 7) {
+        this.allowIndexArr = this._.difference(numArr(28), arr)
+      } else {
+        this.allowIndexArr = this._.difference([29, 30], arr)
+      }
+    },
     sendCode (val) {
       if (val === 'plus') {
         this.currentNum ++
@@ -183,7 +193,6 @@ export default {
             +data.be_rc_type,
             '',
             assembleTS())
-          // this.rc.index = this.allowIndexArr[0]
           console.log('第一个RC', this.rc)
           this.setUrlDomainToDev(this.rc)
         })
@@ -229,13 +238,8 @@ export default {
           }
         }
         window.registerCallback = res => {
-          console.log('registerCallback', res)
-          let r_data = parseHilinkData(res)
-          if (r_data.errcode === 0) {
-            resolve(r_data)
-          } else {
-            console.log('注册失败')
-          }
+          console.log('registerCallback', parseHilinkData(res))
+          resolve(parseHilinkData(res))
         }
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
       })
@@ -251,7 +255,7 @@ export default {
       }
       return obj[tid]
     },
-    /**云端上传遥控设备**/
+    /**云端上传虚拟遥控设备**/
     postYkDevToServe () {
       return new Promise(resolve => {
         let body = {
@@ -267,12 +271,7 @@ export default {
         }
         window.postDeviceExtendDataByIdCallback = res => {
           console.log('postDeviceExtendDataByIdCallback', parseHilinkData(res))
-          let data = parseHilinkData(res)
-          if (data.errcode === 0) {
-            resolve(data)
-          } else {
-            console.log('上传遥控设备失败')
-          }
+          resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
       })
