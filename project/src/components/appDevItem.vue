@@ -4,7 +4,7 @@
       <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
       <div class="info">
         <div class="info-txt">
-          {{item.name}}
+          {{ item.hname || item.name}}
         </div>
         <p>{{typeName(item.tid)}}</p>
       </div>

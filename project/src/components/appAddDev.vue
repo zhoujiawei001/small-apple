@@ -1,13 +1,14 @@
 <template>
   <div class="appAddDev">
     <img src="../assets/add.png" alt="" @click="$router.push('/type')">
-    <span>遥控器 6 个</span>
+    <span>遥控器 {{devNum}} 个</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'appAddDev'
+  name: 'appAddDev',
+  props: ['devNum']
 }
 </script>
 

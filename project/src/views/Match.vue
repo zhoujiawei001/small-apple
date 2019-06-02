@@ -17,10 +17,10 @@
     <div class="mt-section_2">
       <div class="container">
         <span class="number">{{currentNum}}/{{total}}</span>
-        <div class="btn-plus" @click="sendCode('plus')">
+        <div class="btn-plus" :class="{'btn-disable': tips}" @click="sendCode('plus')">
           <img src="../assets/match_plus.png" alt="">
         </div>
-        <div class="btn-reduce" @click="sendCode('reduce')">
+        <div class="btn-reduce" :class="{'btn-disable': tips}" @click="sendCode('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
         <div class="text">
@@ -54,7 +54,7 @@ export default {
     appHeader
   },
   computed: {
-    ...mapState(['tid','appDevId']),
+    ...mapState(['tid','appDevId', 'addedDevList']),
     typeName () {
       let obj = {
         1: '电视机顶盒',
@@ -121,6 +121,11 @@ export default {
             this.postYkDevToServe().then(data2 => {
               postExtendToServe(this.rc).then(data3 => {
                 if (data3.errcode === 0) {
+                  console.log('addedDevList', this.addedDevList)
+                  console.log('rc', this.rc)
+                  let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
+                  cloneList.push(this.rc)
+                  this.$store.commit('setAddedDevList', cloneList)
                   this.$router.push('/')
                 } else {
                   alert('postExtendToServe失败')

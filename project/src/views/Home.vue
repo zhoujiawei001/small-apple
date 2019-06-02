@@ -4,8 +4,8 @@
       <appBgImg id="app-bg" :style="styObjBg"></appBgImg>
       <main>
         <appStatusBar :class="clsObjStatusDown"></appStatusBar>
-        <appAddDev></appAddDev>
-        <appDevItem :item="item" v-for="(item, i) in list" :key="i"></appDevItem>
+        <appAddDev :devNum="addedDevList.length"></appAddDev>
+        <appDevItem :item="item" v-for="(item, i) in addedDevList" :key="i"></appDevItem>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
@@ -21,8 +21,7 @@ import appStatusBar from '@/components/appStatusBar'
 import appAddDev from '@/components/appAddDev'
 import appDevItem from '@/components/appDevItem'
 import BScroll from 'better-scroll'
-import { mapGetters } from 'vuex'
-import { getExtendToServe } from '../utils/pub'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'home',
   components: {
@@ -33,6 +32,7 @@ export default {
     appDevItem
   },
   computed: {
+    ...mapState(['addedDevList']),
     ...mapGetters(['screenRem']),
     styObjStatus () {
       return {
@@ -69,14 +69,10 @@ export default {
       headerHg: 0,
       bgImgHg: 0,
       scrollHg: 0,
-      limitHg: 0,
-      list: []
+      limitHg: 0
     }
   },
   created () {
-    getExtendToServe().then(data => {
-      this.list = data
-    })
   },
   mounted () {
     this.$nextTick(() => {

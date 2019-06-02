@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import $http from './utils/requset'
-import { parseHilinkData } from './utils/pub'
+import { parseHilinkData, getExtendToServe } from './utils/pub'
 
 Vue.use(Vuex)
 
@@ -12,7 +12,8 @@ export default new Vuex.Store({
     screenWd: 0, // 获取屏幕宽度
     tid: 1, // 设备类型ID
     bid: null, // 设备品牌ID
-    typeData: [] // 设备类型数据
+    typeData: [], // 设备类型数据
+    addedDevList: [] // 已经添加的遥控设备
   },
   getters: {
     screenRem (state) {
@@ -51,6 +52,9 @@ export default new Vuex.Store({
     },
     setTypeData (state, payload) {
       state.typeData = payload
+    },
+    setAddedDevList (state, payload) {
+      state.addedDevList = payload
     }
   },
   actions: {

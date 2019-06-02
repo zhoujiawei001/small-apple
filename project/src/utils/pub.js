@@ -108,3 +108,58 @@ export function postExtendToServe(rc) {
     })
   })
 }
+
+/** 编辑遥控设备名称根据hid **/
+export function modifyDevName(hid, newName) {
+  return new Promise(resolve => {
+    getExtendToServe().then(data => {
+      let newList = data.map(item => {
+        if (item.hid === hid) {
+          item.hname = newName
+          return item
+        } else {
+          return item
+        }
+      })
+      let body = {
+        type: 'deviceList',
+        data: {
+          list: newList
+        }
+      }
+      try {
+        window.postDeviceExtendDataCallback = res => {
+          console.log('postDeviceExtendDataCallback', parseHilinkData(res))
+          resolve(parseHilinkData(res))
+        }
+        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
+      } catch (e) {
+        console.warn('无上报接口')
+      }
+    })
+  })
+}
+
+/** 删除设备遥控器 **/
+export function delAddedDev(hid) {
+  return new Promise(resolve => {
+    getExtendToServe().then(data => {
+      let newList = data.filter(item => item.hid !== hid)
+      let body = {
+        type: 'deviceList',
+        data: {
+          list: newList
+        }
+      }
+      try {
+        window.postDeviceExtendDataCallback = res => {
+          console.log('postDeviceExtendDataCallback', parseHilinkData(res))
+          resolve(parseHilinkData(res))
+        }
+        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
+      } catch (e) {
+        console.warn('无上报接口')
+      }
+    })
+  })
+}

@@ -4,10 +4,14 @@
   </div>
 </template>
 <script>
+import { getExtendToServe } from './utils/pub'
 export default {
   name: 'app',
   created () {
     this.$store.dispatch('initFun')
+    getExtendToServe().then(data => {
+      this.$store.commit('setAddedDevList', data)
+    })
   },
   mounted () {
     try {
