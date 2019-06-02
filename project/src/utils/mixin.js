@@ -16,6 +16,7 @@ export const viewsMixin = {
   computed: {
     ...mapState(['addedDevList']),
     cmdsKey () {
+      console.log('keys', Object.keys(this.cmds))
       return Object.keys(this.cmds)
     },
     title () {
@@ -38,6 +39,16 @@ export const viewsMixin = {
         }
       }
       sendBodyToDev(body)
+    },
+    moreSet () {
+      this.$router.push({
+        path: '/setting',
+        query: {
+          name: this.title,
+          hid: this.rc.hid,
+          devId: this.rc.devId
+        }
+      })
     }
   }
 }

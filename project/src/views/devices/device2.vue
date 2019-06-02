@@ -2,7 +2,6 @@
   <!--电视机-->
   <div class="dev-TV">
     <appHeader2 :title="title"
-                @backTo="backTo()"
                 @moreSet="moreSet()"></appHeader2>
     <div class="container">
       <div class="top flex">
@@ -87,11 +86,20 @@
         </div>
       </div>
       <div class="tel-number">
-      <span class="item btn"
-            v-for="(item, idx) of telNumber"
-            :key="item"
-            :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
-            @click="sendBody(item)">{{item}}</span>
+        <span class="item btn"
+              v-for="(item, idx) of telNumber"
+              :key="item"
+              :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
+              @click="sendBody(item)">{{item}}</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('-/--')}"
+              @click="sendBody('-/--')">-/--</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('1')}"
+              @click="sendBody('1')">0</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('#')}"
+              @click="sendBody('#')">#</span>
       </div>
     </div>
   </div>
@@ -103,7 +111,7 @@
 
   export default {
     name: 'device2',
-    mixins:[viewsMixin],
+    mixins: [viewsMixin],
     components: {
       appHeader2,
     },
@@ -163,21 +171,7 @@
         }
       }
     },
-    methods: {
-      backTo () {
-        console.log('back')
-      },
-      moreSet () {
-        this.$router.push({
-          path: '/setting',
-          query: {
-            name: this.title,
-            hid: this.rc.hid,
-            devId: this.rc.devId
-          }
-        })
-      },
-    }
+    methods: {}
   }
 </script>
 

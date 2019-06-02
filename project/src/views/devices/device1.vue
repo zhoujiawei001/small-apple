@@ -1,93 +1,179 @@
 <template>
   <!--机顶盒-->
   <div class="dev-STB">
-    <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
-    <div class="top flex">
-      <div class="stb-switch">
-        <span class="img-box"></span>
-        <span class="text">机顶盒开关</span>
+    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
+    <div class="container">
+      <div class="top flex">
+        <div class="stb-switch"
+             @click="sendBody('power')"
+             :class="{'btn-disable2': !cmdsKey.includes('power')}">
+          <span class="img-box"></span>
+          <span class="text">机顶盒开关</span>
+        </div>
+        <div class="tv-switch">
+          <span class="img-box"></span>
+          <span class="text">电视机开关</span>
+        </div>
+        <div class="input-choose">
+          <span class="img-box"></span>
+          <span class="text">输入选择</span>
+        </div>
       </div>
-      <div class="tv-switch">
-        <span class="img-box"></span>
-        <span class="text">电视机开关</span>
+      <div class="channel-voice flex">
+        <div class="channel">
+        <span class="up btn"
+              @click="sendBody('ch+')"
+              :class="{'btn-disable2': !cmdsKey.includes('ch+')}">＋</span>
+          <span class="text">频道</span>
+          <span class="down btn"
+                @click="sendBody('ch-')"
+                :class="{'btn-disable2': !cmdsKey.includes('ch-')}">—</span>
+        </div>
+        <div class="function">
+        <span class="quiet"
+              @click="sendBody('mute')"
+              :class="{'btn-disable2': !cmdsKey.includes('mute')}"></span>
+          <span class="home"
+                @click="sendBody('boot')"
+                :class="{'btn-disable2': !cmdsKey.includes('boot')}"></span>
+        </div>
+        <div class="voice">
+        <span class="up btn"
+              @click="sendBody('vol+')"
+              :class="{'btn-disable2': !cmdsKey.includes('vol+')}">＋</span>
+          <span class="text">音量</span>
+          <span class="down btn"
+                @click="sendBody('vol-')"
+                :class="{'btn-disable2': !cmdsKey.includes('vol-')}">—</span>
+        </div>
       </div>
-      <div class="input-choose">
-        <span class="img-box"></span>
-        <span class="text">输入选择</span>
+      <div class="flex function">
+        <div class="left">
+        <span class="menu"
+              @click="sendBody('menu')"
+              :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
+          <span class="back btn"
+                @click="sendBody('exit')"
+                :class="{'btn-disable2': !cmdsKey.includes('exit')}">退出</span>
+        </div>
+        <div class="mid">
+          <div class="ok border-1px btn"
+               @click="sendBody('ok')"
+               :class="{'btn-disable2': !cmdsKey.includes('ok')}">OK</div>
+          <span class="top-circle btn"
+                @click="sendBody('up')"
+                :class="{'btn-disable2': !cmdsKey.includes('up')}">○</span>
+          <span class="bottom-circle btn"
+                @click="sendBody('down')"
+                :class="{'btn-disable2': !cmdsKey.includes('down')}">○</span>
+          <span class="left-circle btn"
+                @click="sendBody('left')"
+                :class="{'btn-disable2': !cmdsKey.includes('left')}">○</span>
+          <span class="right-circle btn"
+                @click="sendBody('right')"
+                :class="{'btn-disable2': !cmdsKey.includes('right')}">○</span>
+        </div>
+        <div class="right">
+        <span class="return"
+              @click="sendBody('back')"
+              :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
+        </div>
       </div>
-    </div>
-    <div class="channel-voice flex">
-      <div class="channel">
-        <span class="up btn">＋</span>
-        <span class="text">频道</span>
-        <span class="down btn">—</span>
+      <div class="btn-forward-back-off flex">
+      <span class="back-off"
+            @click="sendBody('rew')"
+            :class="{'btn-disable2': !cmdsKey.includes('rew')}"></span>
+        <span class="pause"
+              @click="sendBody('pause')"
+              :class="{'btn-disable2': !cmdsKey.includes('pause')}"></span>
+        <span class="forward"
+              @click="sendBody('ff')"
+              :class="{'btn-disable2': !cmdsKey.includes('ff')}"></span>
       </div>
-      <div class="function">
-        <span class="quiet"></span>
-        <span class="home"></span>
-      </div>
-      <div class="voice">
-        <span class="up btn">＋</span>
-        <span class="text">音量</span>
-        <span class="down btn">—</span>
-      </div>
-    </div>
-    <div class="flex function">
-      <div class="left">
-        <span class="menu"></span>
-        <span class="back btn">退出</span>
-      </div>
-      <div class="mid">
-        <div class="ok border-1px btn">OK</div>
-        <span class="top-circle btn">○</span>
-        <span class="bottom-circle btn">○</span>
-        <span class="left-circle btn">○</span>
-        <span class="right-circle btn">○</span>
-      </div>
-      <div class="right">
-        <span class="return"></span>
-      </div>
-    </div>
-    <div class="btn-forward-back-off flex">
-      <span class="back-off"></span>
-      <span class="pause"></span>
-      <span class="forward"></span>
-    </div>
-    <div class="tel-number">
+      <div class="tel-number">
       <span class="item btn"
             v-for="(item, idx) of telNumber"
             :key="item"
-            @click="onClickTel(idx)">{{item}}</span>
+            :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
+            @click="sendBody(item)">{{item}}</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('-/--')}"
+              @click="sendBody('-/--')">-/--</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('1')}"
+              @click="sendBody('1')">0</span>
+        <span class="item btn"
+              :class="{'btn-disable2': !cmdsKey.includes('#')}"
+              @click="sendBody('#')">#</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import appHeader2 from '@/components/appHeader2'
+  import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device1',
+    mixins: [viewsMixin],
     components: {
       appHeader2,
     },
     data () {
       return {
-        title: '电视机顶盒',
-        telNumber: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        telNumber: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        tempCmds: {
+          '0': 1,
+          '1': 2,
+          '2': 3,
+          '3': 4,
+          '4': 5,
+          '5': 6,
+          '6': 7,
+          '7': 8,
+          '8': 9,
+          '9': 10,
+          '#': 11,
+          '*': 12,
+          'back': 13,
+          'boot': 14,
+          'ch+': 15,
+          'ch-': 16,
+          'down': 17,
+          'exit': 18,
+          'left': 19,
+          'menu': 20,
+          'mute': 21,
+          'ok': 22,
+          'pause': 23,
+          'play': 24,
+          'power': 25,
+          'right': 26,
+          'stop': 27,
+          'up': 28,
+          'vol+': 29,
+          'vol-': 30,
+          'blue': 31,
+          'vv': 32,
+          'yellow': 33,
+          'epg': 34,
+          'ff': 35,
+          'green': 36,
+          'guide': 37,
+          'help': 38,
+          'info': 39,
+          'itv': 40,
+          'next': 41,
+          'previous': 42,
+          'rec': 43,
+          'red': 44,
+          'rew': 45,
+          'search': 46
+        }
       }
     },
-    methods: {
-      backTo() {
-        console.log('back')
-      },
-      moreSet() {
-        console.log('set')
-      },
-      onClickTel(idx) {
-        const num = idx + 1
-        console.log(num)
-      }
-    }
+    methods: {}
   }
 </script>
 
@@ -95,6 +181,15 @@
   @import "../../style/mixin.styl"
   .dev-STB
     background #F2F2F2
+    setPosUseFlexInit(column)
+    setWH()
+    .header
+      position fixed
+      width 100%
+    .container
+      flex 1
+      margin-top 6.8rem
+      overflow auto
     .top
       padding 1rem 2rem
       .stb-switch, .tv-switch
