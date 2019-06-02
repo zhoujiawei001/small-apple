@@ -169,7 +169,7 @@
         console.log('back')
       },
       moreSet () {
-        console.log('set')
+        this.$router.push('/setting')
       },
     }
   }

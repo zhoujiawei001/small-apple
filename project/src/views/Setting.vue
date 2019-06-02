@@ -135,8 +135,8 @@
         height 1rem
         transform rotate(45deg)
 
-    .modify-devName,
-    position absolute
+    .modify-devName
+      position absolute
       background rgba(0, 0, 0, .3)
       setWH()
       top 0
