@@ -31,7 +31,8 @@
     },
     methods: {
       backTo() {
-        this.$emit('backTo')
+        // this.$emit('backTo')
+        this.$router.go(-1)
       },
       moreSet() {
         this.$emit('moreSet')
