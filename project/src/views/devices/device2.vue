@@ -99,32 +99,18 @@
 
 <script>
   import appHeader2 from '@/components/appHeader2'
-  import { sendBodyToDev } from '../../utils/pub'
-  import { mapActions } from 'vuex'
+  import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device2',
+    mixins:[viewsMixin],
     components: {
       appHeader2,
-    },
-    computed: {
-      cmdsKey () {
-        return Object.keys(this.cmds)
-      }
-    },
-    created () {
-      // console.log('rid', this.$route.query.rid)
-      this.getDevCodeLibAndInfo(this.$route.query.rc.rid).then(data => {
-        console.log('device2', data)
-        this.cmds = data.rc_command
-      })
     },
     data () {
       return {
         title: '电视机',
         telNumber: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        rc: this.$route.query.rc,
-        cmds: {},
         tempCmds: {
           '0': 1,
           '1': 2,
@@ -179,31 +165,12 @@
       }
     },
     methods: {
-      ...mapActions(['getDevCodeLibAndInfo']),
       backTo () {
         console.log('back')
       },
       moreSet () {
         console.log('set')
       },
-      // onClickTel (idx) {
-      //   const num = idx + 1
-      //   console.log(num)
-      // },
-      /** 下发指令 **/
-      sendBody (val) {
-        let body = {
-          batch: {
-            controlKey: {
-              controlKey: this.tempCmds[val] + ''
-            },
-            deviceList: {
-              list: [this.rc]
-            }
-          }
-        }
-        sendBodyToDev(body)
-      }
     }
   }
 </script>
