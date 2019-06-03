@@ -54,7 +54,8 @@
     },
     data () {
       return {
-        extendsList: ['睡眠', '灯光', '负离子'],
+        // extendsList: ['睡眠', '灯光', '负离子'],
+        extendsList: [],
         tempCmds: {
           "fanspeed": 1,
           "mode": 2,
