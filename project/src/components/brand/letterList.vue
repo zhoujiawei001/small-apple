@@ -1,15 +1,57 @@
 <template>
   <div class="letterList">
-    letterList
+    <ul @touchmove.stop.prevent="moveItems">
+      <li
+        @touchstart.stop.prevent="handleItem(idx)"
+        @touchend.stop.prevent="handleItemEnd"
+        v-for="(item, idx) in letterArr"
+        :key="idx">
+        <span :class="{active: letterIdx === idx}">{{item === 'com'? '↑' : item}}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'letterList'
+  name: 'letterList',
+  props: ['letterArr', 'letterIdx'],
+  methods: {
+    handleItem (idx) {
+      this.$emit('touchStart-letter', idx)
+    },
+    handleItemEnd () {
+      this.$emit('touchEnd-letter')
+    },
+    moveItems (e) {
+      this.$emit('touchMove-letter', e)
+    }
+  }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="stylus">
+@import "../../style/mixin.styl"
+.letterList
+  position fixed
+  top 12rem
+  right .6rem
+  ul
+    li
+      padding .1rem
+      span
+        display: inline-block;
+        height 1.6rem
+        width 1.6rem
+        text-align center
+        line-height 1.6rem
+        font-size 1.2rem
+        border-radius 50%
+        color $fontColorTheme
+        &:active
+          background-color: $fontColorTheme;
+          color #fff
+      .active
+        background-color $fontColorTheme
+        color: #fff
 </style>
