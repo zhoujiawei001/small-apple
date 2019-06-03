@@ -75,6 +75,7 @@
                 this.modifyFlag = false
                 this.devName = this.inputValue
                 this.$store.commit('setAddedDevList', data)
+                window.hilink.toast('2', '修改成功')
               })
             }
           })
@@ -87,8 +88,11 @@
             if (data.errcode === 0) {
               getExtendToServe().then(data => {
                 console.log('删除成功', data)
+                window.hilink.toast('2', '删除成功')
                 this.$store.commit('setAddedDevList', data)
-                this.$router.push('/')
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 2000)
               })
             }
           })

@@ -1,26 +1,37 @@
 <template>
   <!--风扇-->
   <div class="dev-fan">
-    <appHeader2 :title="title" @backTo="backTo()" @moreSet="moreSet()"></appHeader2>
+    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
     <div class="banner">
       <img src="../../assets/blue/fan.png" alt="fan.png">
     </div>
     <div class="container">
       <div class="btn-fun flex">
-        <span class="shaking-head btn">摇头</span>
-        <span class="wind-kind btn">风类</span>
-        <span class="timer btn">定时</span>
+        <span class="shaking-head btn"
+              @click="sendBody('oscillation')"
+              :class="{'btn-disable2': !cmdsKey.includes('oscillation')}">摇头</span>
+        <span class="wind-kind btn"
+              @click="sendBody('mode')"
+              :class="{'btn-disable2': !cmdsKey.includes('mode')}">风类</span>
+        <span class="timer btn"
+              @click="sendBody('timer')"
+              :class="{'btn-disable2': !cmdsKey.includes('timer')}">定时</span>
       </div>
       <div class="power flex">
         <div class="fan-switch">
           <span class="img-box"></span>
-          <span class="text">电源</span>
+          <span class="text"
+                @click="sendBody('power')"
+                :class="{'btn-disable2': !cmdsKey.includes('power')}">电源</span>
         </div>
         <div class="fan-wind-speed">
           <span class="img-box"></span>
-          <span class="text">风速</span>
+          <span class="text"
+                @click="sendBody('fanspeed')"
+                :class="{'btn-disable2': !cmdsKey.includes('fanspeed')}">风速</span>
         </div>
       </div>
+      <!--？？？？？-->
       <div class="extend flex">
         <span class="btn"
               v-for="(item, idx) in extendsList"
@@ -33,16 +44,26 @@
 
 <script>
   import appHeader2 from '@/components/appHeader2'
+  import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device6',
+    mixins: [viewsMixin],
     components: {
       appHeader2,
     },
     data () {
       return {
-        title: '电风扇',
-        extendsList: ['睡眠', '灯光', '负离子','睡眠', '灯光', '负离子']
+        extendsList: ['睡眠', '灯光', '负离子'],
+        tempCmds: {
+          "fanspeed": 1,
+          "mode": 2,
+          "mute": 3,
+          "oscillation": 4,
+          "power": 5,
+          "poweroff": 6,
+          "timer": 7
+        }
       }
     },
     methods: {
