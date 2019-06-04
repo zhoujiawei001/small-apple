@@ -45,7 +45,7 @@
 
 <script>
   import appHeader2 from '@/components/appHeader2'
-
+  import { sendBodyToDev } from '../../utils/pub'
   export default {
     name: 'device7',
     components: {
@@ -54,9 +54,77 @@
     data () {
       return {
         title: '美的空调',
-        temperature: 25
+        temperature: 25,
+        currentState: 'r_s0_26_u1_l1_p0' // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
       }
     },
+    methods: {
+      /** 改变模式 **/
+      changeMode () {
+        let arr = this.currentState.split('_')
+        switch (arr[0]) {
+          case 'r': // 切自动
+            arr[0] = 'a'
+            this.currentState = arr.join('_') // a_s0_26_u1_l1_p0
+            arr[2] = '16' // arr: [a, s0, 16, u1, l1, p0] 自动下无温度
+            this.sendBody(arr)
+            break
+          case 'a': // 切除湿
+            arr[0] = 'd'
+            arr[1] = 's1' // 除湿模式风速挡只能位1挡
+            this.currentState = arr.join('_') // d_s1_26_u1_l1_p0
+            arr[2] = '16' // 除湿下无温度
+            this.sendBody(arr)
+            break
+          case 'd': // 切送风
+            arr[0] = 'w'
+            if (arr[1] === 's0') {
+              arr[1] = 's1'
+            }
+            this.currentState = arr.join('_')
+            this.sendBody(arr)
+        }
+      },
+      /** 发送指令 **/
+      sendBody (arr) {
+        let objModes = {
+          a: 0,
+          d: 1,
+          w: 2,
+          h: 3,
+          r: 4
+        }
+        let objWinds = {
+          s0: 0,
+          s1: 1,
+          s2: 2,
+          s3: 3
+        }
+        let objUp = {
+          u0: 0,
+          u1: 1
+        }
+        let objLf = {
+          l0: 0,
+          l1: 1
+        }
+        let body = {
+          batch: {
+            airKey: {
+              mode: objModes[arr[0]],
+              wind: objWinds[arr[1]],
+              temp: +arr[2],
+              up: objUp[arr[3]],
+              left: objLf[arr[4]]
+            },
+            deviceList: {
+              list: [this.rc]
+            }
+          }
+        }
+        sendBodyToDev(body)
+      }
+    }
   }
 </script>
 
