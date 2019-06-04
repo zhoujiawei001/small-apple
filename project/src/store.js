@@ -14,7 +14,8 @@ export default new Vuex.Store({
     bid: null, // 设备品牌ID
     typeData: [], // 设备类型数据
     addedDevList: [], // 已经添加的遥控设备
-    brandScrollPos: null // brand页面滚动的距离
+    brandScrollPos: null, // brand页面滚动的距离
+    cmdList: {}, //码库
   },
   getters: {
     screenRem (state) {
@@ -59,6 +60,9 @@ export default new Vuex.Store({
     },
     setBrandScrollPos (state, payload) {
       state.brandScrollPos = payload
+    },
+    updateCmdList(state, payload) {
+      Object.assign(state.cmdList, payload)
     }
   },
   actions: {

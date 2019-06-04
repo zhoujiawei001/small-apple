@@ -15,11 +15,11 @@
               @click="sendBody('poweroff')"
               :class="{'btn-disable2': !cmdsKey.includes('poweroff')}">关</span>
       </div>
-      <div class="power-box"
+      <!--<div class="power-box"
            @click="sendBody('power')"
            :class="{'btn-disable2': !cmdsKey.includes('power')}">
         <span class="power"></span>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>

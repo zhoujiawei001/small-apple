@@ -9,12 +9,19 @@ export const viewsMixin = {
     }
   },
   created () {
-    this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
-      this.cmds = data.rc_command
-    })
+    if (this.cmdList.hasOwnProperty(this.rc.rid)) {
+      this.cmds = this.cmdList[this.rc.rid]
+    } else {
+      this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
+        this.cmds = data.rc_command
+        this.$store.commit('updateCmdList', {
+          [this.rc.rid]: data.rc_command
+        })
+      })
+    }
   },
   computed: {
-    ...mapState(['addedDevList']),
+    ...mapState(['addedDevList', 'cmdList']),
     cmdsKey () {
       console.log('keys', Object.keys(this.cmds))
       return Object.keys(this.cmds)
@@ -28,6 +35,9 @@ export const viewsMixin = {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
+      if (this.$isVibrate) {
+        navigator.vibrate(100)
+      }
       let body = {
         batch: {
           controlKey: {

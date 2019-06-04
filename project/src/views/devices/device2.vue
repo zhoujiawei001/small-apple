@@ -195,12 +195,15 @@
       padding 1rem 2rem
 
       .tv-switch
+        width 33%
         setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
 
       .input-choose
+        width 33%
         setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
 
       .home
+        width 33%
         setBgImgAndText('../../assets/blue/home.png', '../../assets/white/home.png')
 
     .channel-voice

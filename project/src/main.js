@@ -6,8 +6,12 @@ import './registerServiceWorker'
 import './style/index.styl'
 import lodash from 'lodash'
 
+import { vibration } from './utils/vibreate'
+
+Vue.prototype.$isVibrate = vibration()
+
 Vue.config.productionTip = false
-Object.defineProperty(Vue.prototype, '_', {value: lodash})
+Object.defineProperty(Vue.prototype, '_', { value: lodash })
 new Vue({
   router,
   store,

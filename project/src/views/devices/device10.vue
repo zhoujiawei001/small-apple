@@ -9,11 +9,11 @@
         <span class="img-box"></span>
         <span class="text">机顶盒开关</span>
       </div>
-      <div class="tv-switch">
+      <div class="tv-switch btn-disable2">
         <span class="img-box"></span>
         <span class="text">电视机开关</span>
       </div>
-      <div class="input-choose">
+      <div class="input-choose btn-disable2">
         <span class="img-box"></span>
         <span class="text">输入选择</span>
       </div>
@@ -109,9 +109,11 @@
       padding 1rem 2rem
 
       .stb-switch, .tv-switch
+        width 33%
         setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
 
       .input-choose
+        width 33%
         setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
 
     .function
