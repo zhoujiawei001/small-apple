@@ -81,6 +81,11 @@ export default new Vuex.Store({
         },
         setDeviceInfoCallback (res) {
           console.log('setDeviceInfoCallback', res)
+        },
+        getBarCallback (res) {
+          console.log(JSON.parse(res))
+          let data = JSON.parse(res)
+          commit('setStatusBarHg', data.statusBarHeight)
         }
       }
     },

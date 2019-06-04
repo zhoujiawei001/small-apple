@@ -17,6 +17,7 @@ export default {
     try {
       window.hilink.setTitleVisible(false, 'app.setTitleCallback')
       window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
+      window.hilink.getStatusBarHeight('app.getBarCallback')
     } catch (e) {
       console.warn(e)
     }

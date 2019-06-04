@@ -2,7 +2,8 @@
   <div class="dev-match">
     <appHeader
       title="逐个匹配"
-      :hiddenMore="true"></appHeader>
+      :hiddenMore="true"
+      @back-icon="$router.go(-1)"></appHeader>
     <div class="mt-section_1">
       <div class="icon-text">
         <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">

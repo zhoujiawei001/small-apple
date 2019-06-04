@@ -5,6 +5,8 @@ import store from './store'
 import './registerServiceWorker'
 import './style/index.styl'
 import lodash from 'lodash'
+import FastClick from 'fastclick'
+FastClick.attach(document.body)
 
 import { vibration } from './utils/vibreate'
 

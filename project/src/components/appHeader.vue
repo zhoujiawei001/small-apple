@@ -34,7 +34,7 @@ export default {
   methods: {
     back () {
       if (this.$route.path !== '/') {
-        this.$router.go(-1)
+        this.$emit('back-icon')
       } else {
         window.hilink.finishDeviceActivity()
       }

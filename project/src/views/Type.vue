@@ -3,7 +3,8 @@
     <appHeader
       style="background-color: #f2f2f2"
       title="选择遥控设备类型"
-      :hiddenMore="true"></appHeader>
+      :hiddenMore="true"
+      @back-icon="$router.go(-1)"></appHeader>
     <main :style="styObj" class="wrapper">
       <ul class="content">
         <li
