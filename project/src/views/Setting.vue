@@ -87,11 +87,8 @@
           delAddedDev(this.hid).then(data => {
             if (data.errcode === 0) {
               getExtendToServe().then(data => {
-                window.hilink.toast('2', '删除成功')
                 this.$store.commit('setAddedDevList', data)
-                setTimeout(() => {
-                  this.$router.push('/')
-                }, 2000)
+                this.$router.push('/')
               })
             }
           })

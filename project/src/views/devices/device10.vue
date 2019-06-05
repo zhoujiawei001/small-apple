@@ -42,7 +42,7 @@
         <div class="mid">
           <div class="ok border-1px btn"
                @click="sendBody('ok')"
-               :class="{'btn-disable2': !cmdsKey.includes('ok')}">ok
+               :class="{'btn-disable2': !cmdsKey.includes('ok')}">OK
           </div>
           <span class="top-circle btn"
                 @click="sendBody('up')"
@@ -139,7 +139,7 @@
           display inline-block
           setWH(5rem, 5rem)
           line-height 5rem
-          setFont(2rem, $fontColorTheme, center)
+          setFont(1rem, $fontColorTheme, center, 800)
           border-radius 50%
 
           &.top-circle
@@ -156,7 +156,7 @@
 
         .ok
           setWH(8rem, 8rem)
-          setFont(4rem, $fontColorTheme, center)
+          setFont(3rem, $fontColorTheme, center, 300)
           line-height 8rem
           border-radius 50%
 
