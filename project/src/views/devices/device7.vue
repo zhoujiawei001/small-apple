@@ -4,13 +4,15 @@
     <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
     <div class="banner">
       <div class="temperature">
-        {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
+        <div class="temp-box">
+          {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
+        </div>
       </div>
       <div class="ac-icon flex">
-        <span class="cold"></span>
-        <span class="auto"></span>
-        <span class="up-down"></span>
-        <span class="left-right"></span>
+        <img src="../../assets/mode-cold.png">
+        <img src="../../assets/mode-auto.png">
+        <img src="../../assets/dir-top-bottom.png">
+        <img src="../../assets/dir-left-right.png">
       </div>
     </div>
     <div class="container">
@@ -411,22 +413,19 @@
       setPosUseFlex(column, flex-end)
       imgUrl("../../assets/background.png")
       .temperature
+        flex 1
+        position relative
         setFont(8rem, $fontColorTheme, center, 100)
+        .temp-box
+          padding-top 7rem
+          setCenterUsePosition2()
         .circle
           font-size 8rem
       .ac-icon
         width 100%
-        padding 2rem
-        span
+        padding 0 3rem 2rem 3rem
+        img
           setWH(3rem, 3rem)
-          &.cold
-            imgUrl('../../assets/mode-cold.png')
-          &.auto
-            imgUrl('../../assets/mode-auto.png')
-          &.up-down
-            imgUrl('../../assets/dir-top-bottom.png')
-          &.left-right
-            imgUrl('../../assets/dir-left-right.png')
 
     .container
       flex 1
