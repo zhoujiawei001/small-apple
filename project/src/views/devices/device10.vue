@@ -186,12 +186,12 @@
 
       .box
         setPosUseFlex(column, space-between)
-        setWH(5rem, 12rem)
+        setWH(5rem, 15rem)
         background #fff
         border-radius 3rem
 
         .text
-          setFont(1rem, $fontColorTheme, center)
+          setFont(1.5rem, $fontColorTheme, center)
 
         .add, .sub
           border-radius 50%
