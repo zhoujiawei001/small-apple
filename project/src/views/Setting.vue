@@ -265,7 +265,7 @@
         padding 1rem 2rem
 
         .title
-          setFont(1.5rem, black, left, 600)
+          setFont(1.7rem, black, left, 600)
 
         .info
           setFont(1.5rem, black, left)
