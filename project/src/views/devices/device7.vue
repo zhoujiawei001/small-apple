@@ -9,10 +9,10 @@
         </div>
       </div>
       <div class="ac-icon flex">
-        <img src="../../assets/mode-cold.png">
-        <img src="../../assets/mode-auto.png">
-        <img src="../../assets/dir-top-bottom.png">
-        <img src="../../assets/dir-left-right.png">
+        <img :src="imgMode">
+        <img :src="imgWind">
+        <img :src="imgUpDown">
+        <img :src="imgLeftRight">
       </div>
     </div>
     <div class="container">
@@ -28,7 +28,7 @@
         <span class="btn" @click="changeTemp('+')">＋</span>
       </div>
       <div class="timer-switch flex">
-        <div class="timer-on">
+        <div class="timer-on btn-disable">
           <span class="text">定时开机</span>
           <span class="detail">01:30</span>
         </div>
@@ -36,7 +36,7 @@
           <span class="img-box"></span>
           <span class="text" @click="clickSwitch">电源</span>
         </div>
-        <div class="timer">
+        <div class="timer btn-disable">
           <span class="text">开机时长</span>
           <span class="detail">01:30</span>
         </div>
@@ -48,7 +48,7 @@
 <script>
   import appHeader2 from '@/components/appHeader2'
   import {sendBodyToDev} from '../../utils/pub'
-  import {mapState} from 'vuex'
+  import {mapState, mapActions} from 'vuex'
   export default {
     name: 'device7',
     components: {
@@ -58,20 +58,62 @@
       return {
         switch: 'on',
         rc: JSON.parse(this.$route.query.rc),
-        currentTemp: 25,
+        currentTemp: 26,
         currentState: 'r_s0_26_u1_l1_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
         isHasStar: false, // 判断码库是否包含星星
-        isOpenAirTemp: false
+        isOpenAirTemp: false,
+        cmdskeys: [] // 码库Key键集合
+      }
+    },
+    created () {
+      if (this.cmdList.hasOwnProperty(this.rc.rid)) {
+        this.cmdskeys = this.cmdList[this.rc.rid]
+        console.log('空调码库-缓存cmds', this.cmdskeys)
+        for (let i = 0; i < this.cmdskeys.length; i++) {
+          if (this.cmdskeys[i].indexOf('*') !== -1) {
+            this.isHasStar = true
+            break
+          }
+        }
+        console.log('isHasStar-for', this.isHasStar)
+      } else {
+        this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
+          this.cmdskeys = Object.keys(data.rc_command)
+          console.log('空调码库-云端cmds', this.cmdskeys)
+          for (let i = 0; i < this.cmdskeys.length; i++) {
+            if (this.cmdskeys[i].indexOf('*') !== -1) {
+              this.isHasStar = true
+              break
+            }
+          }
+          console.log('isHasStar-for', this.isHasStar)
+          this.$store.commit('updateCmdList', {
+            [this.rc.rid]: Object.keys(data.rc_command)
+          })
+        })
       }
     },
     computed: {
-      ...mapState(['addedDevList']),
+      ...mapState(['addedDevList', 'cmdList']),
       title () {
         let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
         return arr[0].hname || arr[0].name
+      },
+      imgMode () {
+        return require(`../../assets/airIcon/mode_${this.currentState.split('_')[0]}.png`)
+      },
+      imgWind () {
+        return require(`../../assets/airIcon/wind_${this.currentState.split('_')[1]}.png`)
+      },
+      imgUpDown () {
+        return require(`../../assets/airIcon/upDown_${this.currentState.split('_')[3]}.png`)
+      },
+      imgLeftRight () {
+        return require(`../../assets/airIcon/leftRight_${this.currentState.split('_')[4]}.png`)
       }
     },
     methods: {
+      ...mapActions(['getDevCodeLibAndInfo']),
       /** 页面跳转 **/
       moreSet () {
         this.$router.push({
@@ -260,6 +302,7 @@
       },
       /** 温度改变 **/
       changeTemp(val) { // true 代表+ false 代表-
+        console.log('changeTemp', val)
         if (!this.isOpenAirTemp) {
           this.isOpenAirTemp = true
           setTimeout(() => {
@@ -381,6 +424,7 @@
           sendBodyToDev(body)
         } else {
           this.switch = 'on'
+          this.currentState = 'r_s0_26_u0_l0_p0'
           let body = {
             batch: {
               airKey: {

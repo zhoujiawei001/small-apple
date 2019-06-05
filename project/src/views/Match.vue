@@ -53,7 +53,9 @@ export default {
       rc: {},
       allowIndexArr: [], // 可选index集合
       tips: false, // 小提示显示隐藏
-      tipsBox: false // 提示框显示隐藏
+      tipsBox: false, // 提示框显示隐藏
+      count: 0, // 下发匹配时间单位s
+      timer: null // 计算超时定时器
     }
   },
   components: {
@@ -204,6 +206,7 @@ export default {
     },
     nextFun () {
       this.tips = true
+      this.handleMatchTimeout()
       this.getDevCodeLibAndInfo(this.currentRid)
         .then(data => {
           this.rc = new RC(
@@ -310,6 +313,7 @@ export default {
       console.log('body', body)
       return new Promise(resolve => {
         window.setDeviceInfoCallbackInMatch = res => {
+          console.log('setDeviceInfoCallbackInMatch', JSON.parse(res))
           resolve(JSON.parse(res))
         }
         window.hilink.setDeviceInfo('0', JSON.stringify(body), 'setDeviceInfoCallbackInMatch')
@@ -322,10 +326,24 @@ export default {
       } else {
         this.$router.go(-1)
       }
+    },
+    /** 匹配超时处理 **/
+    handleMatchTimeout () {
+      this.timer = setInterval(() => {
+        this.count++
+        if (this.count > 30) {
+          clearInterval(this.timer)
+          window.hilink.toast('2', '匹配超时')
+          this.tips = false
+          this.count = 0
+        }
+        console.log('time', this.count)
+      }, 1000)
     }
   },
   beforeDestroy () {
     window.deviceEventCallback = null
+    clearInterval(this.timer)
     watchVirtualKey(false)
   }
 }

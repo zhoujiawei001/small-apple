@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="extend flex">
-        <span class="btn"
+        <span class="btn btn-disable2"
               v-for="(item, idx) in extendsList"
               :key="item"
               @click="onclickExtendBtn(idx)">{{item}}</span>

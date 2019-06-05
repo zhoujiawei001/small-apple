@@ -57,9 +57,9 @@
           <span class="menu"
                 @click="sendBody('menu')"
                 :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
-          <span class="back btn"
-                @click="sendBody('exit')"
-                :class="{'btn-disable2': !cmdsKey.includes('exit')}">退出</span>
+          <!--<span class="back btn"-->
+                <!--@click="sendBody('exit')"-->
+                <!--:class="{'btn-disable2': !cmdsKey.includes('exit')}">退出</span>-->
         </div>
         <div class="mid">
           <div class="ok border-1px btn"
