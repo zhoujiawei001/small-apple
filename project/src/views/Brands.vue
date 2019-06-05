@@ -58,12 +58,10 @@ export default {
   created () {
     if (window.sessionStorage.getItem(`appBrands-${this.tid}`)) {
       let data = JSON.parse(window.sessionStorage.getItem(`appBrands-${this.tid}`))
-      console.log('缓存', data)
       this.dataFormatting(data)
     } else {
       this.getDevBrandList()
         .then(data => {
-          console.log('云端', data)
           this.dataFormatting(data)
           window.sessionStorage.setItem(`appBrands-${this.tid}`, JSON.stringify(data))
         })
@@ -77,17 +75,18 @@ export default {
     addEventFun () {
       this.$refs['brand_list'].scrollTop = this.brandScrollPos
       this.scrollAreaArr.forEach((item, index) => {
-        if (this.brandScrollPos > item[0] && this.brandScrollPos < item[1]) {
+        if (this.brandScrollPos >= item[0] && this.brandScrollPos <= item[1]) {
           this.letterIdx = index
         }
       })
+      console.log('ft', this.letterIdx)
       this.$refs['brand_list'].addEventListener('scroll', this.getBrandScroll)
     },
     getBrandScroll () {
       let $scroll = this.$refs['brand_list'].scrollTop
       this.$store.commit('setBrandScrollPos', $scroll)
       this.scrollAreaArr.forEach((item, index) => {
-        if ($scroll > item[0] && $scroll < item[1]) {
+        if ($scroll >= item[0] && $scroll <= item[1]) {
           this.letterIdx = index
         }
       })
@@ -144,9 +143,9 @@ export default {
     },
     /** 选中字母发生事件点击或手指移动公共方法 **/
     selectedLetter (idx) {
-      this.$refs['brand_list'].setAttribute('style', '-webkit-overflow-scrolling: auto')
+      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: auto; top: ${4.8 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${4.8 * this.screenRem + this.statusBarHg}px)`)
       this.$refs['brand_list'].scrollTop = this.scrollAreaArr[idx][0]
-      this.$refs['brand_list'].setAttribute('style', '-webkit-overflow-scrolling: touch')
+      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: touch; top: ${4.8 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${4.8 * this.screenRem + this.statusBarHg}px)`)
       this.$store.commit('setBrandScrollPos', this.scrollAreaArr[idx][0])
     },
     backFn () {
@@ -170,4 +169,5 @@ export default {
     width 100%
     height calc(100% - 6.8rem)
     overflow scroll
+    -webkit-overflow-scrolling: touch
 </style>

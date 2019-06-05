@@ -3,7 +3,7 @@
     <appHeader
       title="逐个匹配"
       :hiddenMore="true"
-      @back-icon="$router.go(-1)"></appHeader>
+      @back-icon="onClickBack"></appHeader>
     <div class="mt-section_1">
       <div class="icon-text">
         <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">
@@ -32,13 +32,17 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <appTipsBox hintText="正在匹配，请勿离开!" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
 <script>
 import appHeader from '@/components/appHeader'
+import appTipsBox from '@/components/appTipsBox'
 import {mapState, mapActions} from 'vuex'
-import { sendBodyToDev, RC, numArr, getExtendToServe, parseHilinkData, postExtendToServe, assembleTS } from '../utils/pub'
+import { sendBodyToDev, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
 export default {
   name: 'Match',
   data () {
@@ -48,11 +52,13 @@ export default {
       currentNum: 0,
       rc: {},
       allowIndexArr: [], // 可选index集合
-      tips: false
+      tips: false, // 小提示显示隐藏
+      tipsBox: false // 提示框显示隐藏
     }
   },
   components: {
-    appHeader
+    appHeader,
+    appTipsBox
   },
   computed: {
     ...mapState(['tid','appDevId', 'addedDevList']),
@@ -101,6 +107,17 @@ export default {
         this.modeList = data
       })
     this.initSomeData()
+    watchVirtualKey(true).then(bool => {
+      if (bool) {
+        window.goBack = () => {
+          if (this.tips) {
+            this.tipsBox = true
+          } else {
+            this.$router.go(-1)
+          }
+        }
+      }
+    })
   },
   mounted () {
     window.deviceEventCallback = res => {
@@ -120,21 +137,28 @@ export default {
                       let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
                       cloneList.push(this.rc)
                       this.$store.commit('setAddedDevList', cloneList)
+                      this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
                     } else {
-                      alert('postExtendToServe失败')
+                      window.hilink.toast('2', '添加遥控失败')
+                      removeRegisteredVirtualDevYk(this.rc.devId)
+                      this.tips = false
                     }
                   })
                 } else {
-                  alert('云端上传虚拟遥控设备失败')
+                  window.hilink.toast('2', '添加遥控失败')
+                  removeRegisteredVirtualDevYk(this.rc.devId)
+                  this.tips = false
                 }
               })
             } else {
-              alert('注册虚拟设备失败')
+              window.hilink.toast('2', '添加遥控失败')
+              this.tips = false
             }
           })
         } else {
-          alert('设备端下载码库失败')
+          window.hilink.toast('2', '下载码库失败')
+          this.tips = false
         }
       }
     }
@@ -219,7 +243,11 @@ export default {
           }
         }
       }
-      sendBodyToDev(body)
+      this.sendBodyInMatch(body).then(data => {
+        if (data.errcode) {
+          this.tips = false
+        }
+      })
     },
     /** 注册虚拟设备到九宫格 **/
     registerVirtualDev () {
@@ -276,10 +304,29 @@ export default {
         }
         window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
       })
+    },
+    /** match页面的下发数据 **/
+    sendBodyInMatch (body) {
+      console.log('body', body)
+      return new Promise(resolve => {
+        window.setDeviceInfoCallbackInMatch = res => {
+          resolve(JSON.parse(res))
+        }
+        window.hilink.setDeviceInfo('0', JSON.stringify(body), 'setDeviceInfoCallbackInMatch')
+      })
+    },
+    /** 点击返回 **/
+    onClickBack () {
+      if (this.tips) {
+        this.tipsBox = true
+      } else {
+        this.$router.go(-1)
+      }
     }
   },
   beforeDestroy () {
     window.deviceEventCallback = null
+    watchVirtualKey(false)
   }
 }
 </script>

@@ -141,7 +141,7 @@ export function modifyDevName(hid, newName) {
   })
 }
 
-/** 删除设备遥控器 **/
+/** 删除设备遥控器从云端 **/
 export function delAddedDev(hid) {
   return new Promise(resolve => {
     getExtendToServe().then(data => {
@@ -162,5 +162,27 @@ export function delAddedDev(hid) {
         console.warn('无上报接口')
       }
     })
+  })
+}
+
+/** 删除已注册的虚拟遥控器 **/
+export function removeRegisteredVirtualDevYk(devId) {
+  return new Promise(resolve => {
+    window.delInfraredHubDeviceCallback = res => {
+      console.log('删除已注册的虚拟遥控器', JSON.parse(res))
+      resolve(JSON.parse(res))
+    }
+    window.hilink.deleteInfraredHubDevice(devId, 'delInfraredHubDeviceCallback')
+  })
+}
+
+/** 监听手机虚拟按键返回事件 **/
+export function watchVirtualKey (bool) {
+  return new Promise(resolve => {
+    window.hilink.overrideBackPressed(bool, 'matchVirtualKeyCallback')
+    window.matchVirtualKeyCallback = res => {
+      console.log(res)
+      resolve(bool)
+    }
   })
 }
