@@ -43,15 +43,20 @@
         </div>
       </div>
     </div>
+    <appLoading v-show="loadingFlag"></appLoading>
   </div>
 </template>
 
 <script>
+  import appLoading from '@/components/appLoading'
   import { mapState } from 'vuex'
   import { modifyDevName, getExtendToServe, delAddedDev } from '@/utils/pub'
 
   export default {
     name: 'Setting',
+    components: {
+      appLoading,
+    },
     data () {
       return {
         devName: '',
@@ -59,6 +64,7 @@
         modifyFlag: false,
         delFlag: false,
         warnFlag: false,
+        loadingFlag: false,
         devId: this.$route.query.devId,
         hid: this.$route.query.hid
       }
@@ -82,6 +88,7 @@
         }
       }
       window.deleteInfraredHubDeviceCallback = (res) => {
+        this.loadingFlag = false
         const _res = JSON.parse(res)
         if (!_res.errcode) {
           delAddedDev(this.hid).then(data => {
@@ -116,6 +123,8 @@
       },
       // 确定删除
       confirmDel () {
+        this.loadingFlag = true
+        this.delFlag = false
         window.hilink.deleteInfraredHubDevice(
           this.devId,
           'deleteInfraredHubDeviceCallback'
@@ -156,7 +165,7 @@
 
       .img-box
         setWH(2rem, 2rem)
-        margin-right 1rem
+        margin-right 1.2rem
 
         img
           setWH()
