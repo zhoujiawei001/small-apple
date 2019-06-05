@@ -23,7 +23,6 @@ export const viewsMixin = {
   computed: {
     ...mapState(['addedDevList', 'cmdList']),
     cmdsKey () {
-      console.log('keys', Object.keys(this.cmds))
       return Object.keys(this.cmds)
     },
     title () {

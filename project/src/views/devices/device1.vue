@@ -93,7 +93,7 @@
       <div class="tel-number">
       <span class="item btn"
             v-for="(item, idx) of telNumber"
-            :key="item"
+            :key="idx"
             :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
             @click="sendBody(item)">{{item}}</span>
         <span class="item btn"

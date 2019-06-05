@@ -67,13 +67,10 @@ export default new Vuex.Store({
   },
   actions: {
     initFun ({ commit, state }) {
-      window.onResume = () =>{
-        console.log('343')
-      }
+      window.onResume = () =>{}
       window.app = {
         getDevInfoAllCallback (res) {
           let data = parseHilinkData(res)
-          console.log(data)
           state.appDevId = data.devId
         },
         setTitleCallback (res) {
@@ -90,7 +87,7 @@ export default new Vuex.Store({
         /** 获取设备类型返回函数 **/
         getRCTypeResultCallback (res) {
           let data = parseHilinkData(res)
-          console.log('获取设备类型返回函数', data)
+          // console.log('获取设备类型返回函数', data)
           commit('setTypeData', data.result)
         }
       }
@@ -139,7 +136,7 @@ export default new Vuex.Store({
         }
         window.getBrandResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备品牌数据', data)
+          // console.log('获取设备品牌数据', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
@@ -168,7 +165,7 @@ export default new Vuex.Store({
         }
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备型号数据', data)
+          // console.log('获取设备型号数据', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
@@ -196,7 +193,7 @@ export default new Vuex.Store({
         }
         window.getRCResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备码库和基本信息', data)
+          // console.log('获取设备码库和基本信息', data)
           resolve(data)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')

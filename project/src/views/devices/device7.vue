@@ -68,7 +68,6 @@
     created () {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmdskeys = this.cmdList[this.rc.rid]
-        console.log('空调码库-缓存cmds', this.cmdskeys)
         for (let i = 0; i < this.cmdskeys.length; i++) {
           if (this.cmdskeys[i].indexOf('*') !== -1) {
             this.isHasStar = true
@@ -79,7 +78,6 @@
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmdskeys = Object.keys(data.rc_command)
-          console.log('空调码库-云端cmds', this.cmdskeys)
           for (let i = 0; i < this.cmdskeys.length; i++) {
             if (this.cmdskeys[i].indexOf('*') !== -1) {
               this.isHasStar = true
