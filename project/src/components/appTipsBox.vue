@@ -2,7 +2,7 @@
   <div class="appTipsBox">
     <div class="content">
       <h5>提示</h5>
-      <p>最多添加15个设备</p>
+      <p>{{hintText}}</p>
       <div class="sure" @click="clickSure">
         确定
       </div>
@@ -14,6 +14,7 @@
 <script>
 export default {
   name: 'appTipsBox',
+  props: ['hintText'],
   methods: {
     clickSure () {
       this.$emit('handle-sure')
@@ -30,21 +31,21 @@ export default {
   position fixed
   top: 0
   left 0
+  z-index 11
   .content
-    width 60%
+    width 84%
     setCenterUsePosition2()
     z-index: 10
     background-color: #fff;
     border-radius .8rem
     h5
-      font-size 1.6rem
+      font-size 1.8rem
       text-align center
       height 4.6rem
       line-height 4.6rem
-      border-bottom 1px solid $bdColorTheme
     p
-      padding 1.6rem
-      font-size 1.4rem
+      padding 0 1.6rem 1.6rem 1.6rem
+      font-size 1.6rem
       text-align center
     .sure
       height 4.6rem

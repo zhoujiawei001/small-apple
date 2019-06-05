@@ -1,5 +1,5 @@
 <template>
-  <div class="appDevItem" @click="onclickItem(item)">
+  <div class="appDevItem" @click="onclickItem">
     <div class="left">
       <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
       <div class="info">
@@ -9,11 +9,12 @@
         <p>{{typeName(item.tid)}}</p>
       </div>
     </div>
-    <img class="right" src="../assets/switch_on.png" alt="">
+    <img class="right" src="../assets/switch_on.png" alt="" @click.stop.prevent="handleSwitch">
   </div>
 </template>
 
 <script>
+  import { sendBodyToDev } from '../utils/pub'
   export default {
     name: 'appDevItem',
     props: ['item'],
@@ -33,13 +34,30 @@
       }
     },
     methods: {
-      onclickItem (item) {
+      onclickItem () {
         this.$router.push({
-          path: `/device${item.tid}`,
+          path: `/device${this.item.tid}`,
           query: {
-            rc: JSON.stringify(item)
+            rc: JSON.stringify(this.item)
           }
         })
+      },
+      handleSwitch () {
+        let body = {
+          batch: {
+            controlKey: {
+              controlKey: this.item.src
+            },
+            deviceList: {
+              list: [
+                {
+                  zip: this.item.zip2 + ''
+                }
+              ]
+            }
+          }
+        }
+        sendBodyToDev(body)
       }
     }
   }

@@ -1,13 +1,14 @@
 <template>
   <div class="appBgImg">
-    <img class="app_img" src="../assets/apple_on.png" alt="">
+    <img class="app_img" :src="imgUrl" alt="">
     <img class="app_logo" src="../assets/logo.png" alt="">
   </div>
 </template>
 
 <script>
 export default {
-  name: 'appBgImg'
+  name: 'appBgImg',
+  props: ['imgUrl']
 }
 </script>
 

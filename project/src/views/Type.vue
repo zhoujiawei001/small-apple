@@ -17,23 +17,30 @@
         </li>
       </ul>
     </main>
+    <transition name="fade">
+      <appTipsBox hintText="添加的空调设备不能超过2个" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
 <script>
 import appHeader from '@/components/appHeader'
+import appTipsBox from '@/components/appTipsBox'
 import { mapState, mapGetters } from 'vuex'
 import BScroll from 'better-scroll'
 export default {
   name: 'type',
   components: {
-    appHeader
+    appHeader,
+    appTipsBox
   },
   data () {
-    return {}
+    return {
+      tipsBox: false
+    }
   },
   computed: {
-    ...mapState(['statusBarHg']),
+    ...mapState(['statusBarHg', 'addedDevList']),
     ...mapGetters(['screenRem', 'typeList']),
     styObj () {
       return {
@@ -43,6 +50,9 @@ export default {
         width: '100%',
         height: `calc(100% - ${4.8 * this.screenRem + this.statusBarHg + 'px'})`
       }
+    },
+    airIndexArr () {
+      return this.addedDevList.filter(item => item.index > 28)
     }
   },
   created () {
@@ -67,8 +77,12 @@ export default {
       scroll.on('scroll', pos => {})
     },
     handleItem (tid) {
-      this.$store.commit('setTid', tid)
-      this.$router.push('/brands')
+      if (tid === 7 && this.airIndexArr.length >= 2) {
+        this.tipsBox = true
+      } else {
+        this.$store.commit('setTid', tid)
+        this.$router.push('/brands')
+      }
     }
   }
 }

@@ -18,6 +18,8 @@ export default {
       window.hilink.setTitleVisible(false, 'app.setTitleCallback')
       window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
       window.hilink.getStatusBarHeight('app.getBarCallback')
+      const wd = document.body.clientWidth
+      this.$store.commit('setScreenWd', wd)
     } catch (e) {
       console.warn(e)
     }

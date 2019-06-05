@@ -176,7 +176,6 @@ export default {
           }
         }
       }
-      console.log(body)
       sendBodyToDev(body)
     },
     nextFun () {
@@ -193,7 +192,8 @@ export default {
             data.bid,
             +data.be_rc_type,
             '',
-            assembleTS())
+            assembleTS(),
+            this.currentZip)
           console.log('第一个RC', this.rc)
           this.setUrlDomainToDev(this.rc)
         })

@@ -1,17 +1,24 @@
 <template>
   <div class="home wrapper">
     <div class="content">
-      <appBgImg id="app-bg" :style="styObjBg"></appBgImg>
+      <appBgImg
+        id="app-bg"
+        :imgUrl="appIcon"
+        :style="styObjBg"></appBgImg>
       <main>
-        <appStatusBar :class="clsObjStatusDown"></appStatusBar>
+        <appStatusBar :class="clsObjStatusDown" @handle-icon="clickSwitchIcon"></appStatusBar>
         <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
         <appDevItem :item="item" v-for="(item, i) in addedDevList" :key="i"></appDevItem>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
+    <div class="mask-line" :class="clsObjStatusUp" :style="objMaskLine"></div>
     <transition name="fade">
-      <appTipsBox v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox
+        v-if="tipsBox"
+        @handle-sure="tipsBox = false"
+        hintText="最多添加15个遥控设备"></appTipsBox>
     </transition>
   </div>
 </template>
@@ -26,6 +33,7 @@ import appDevItem from '@/components/appDevItem'
 import appTipsBox from '@/components/appTipsBox'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
+import { sendBodyToDev } from '../utils/pub'
 export default {
   name: 'home',
   components: {
@@ -37,12 +45,21 @@ export default {
     appTipsBox
   },
   computed: {
-    ...mapState(['addedDevList']),
+    ...mapState(['addedDevList', 'statusBarHg']),
     ...mapGetters(['screenRem']),
+    headerHg () {
+      return 4.8 * this.screenRem + this.statusBarHg
+    },
+    bgImgHg () {
+      return 22.8 * this.screenRem
+    },
+    limitHg () {
+      return this.bgImgHg - this.headerHg + 1.2 * this.screenRem - 2
+    },
     styObjStatus () {
       return {
         position: 'fixed',
-        top: this.headerHg + 'px',
+        top: this.headerHg + 2 + 'px',
         left: '1.6rem',
         width: 'calc(100% - 6.4rem)'
       }
@@ -57,6 +74,11 @@ export default {
         backgroundColor: this.scrollHg > this.limitHg ? '#f2f2f2' : ''
       }
     },
+    objMaskLine () {
+      return {
+        top: this.headerHg + 'px'
+      }
+    },
     clsObjStatusDown () {
       return {
         'hidden-ele1': this.scrollHg > this.limitHg
@@ -67,15 +89,16 @@ export default {
         'hidden-ele2': this.scrollHg <= this.limitHg,
         'show-ele': this.scrollHg > this.limitHg
       }
+    },
+    appIcon () {
+      return require(`../assets/apple_${this.switch}.png`)
     }
   },
   data () {
     return {
-      headerHg: 0,
-      bgImgHg: 0,
       scrollHg: 0,
-      limitHg: 0,
-      tipsBox: false
+      tipsBox: false,
+      switch: 'on'
     }
   },
   created () {
@@ -83,11 +106,6 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.scrollFun()
-      this.headerHg = document.getElementById('app-hd').clientHeight
-      this.bgImgHg = document.getElementById('app-bg').clientHeight
-      this.limitHg = this.bgImgHg - this.headerHg + 1.2 * this.screenRem
-      const wd = document.body.clientWidth
-      this.$store.commit('setScreenWd', wd)
     })
   },
   methods: {
@@ -114,6 +132,19 @@ export default {
         'com.huawei.smarthome.deviceSettingActivity',
         'jumpToCallback'
       )
+    },
+    clickSwitchIcon () {
+      if (this.switch === 'on') {
+        this.switch = 'off'
+      } else {
+        this.switch = 'on'
+      }
+      let body = {
+        ledOnoff: {
+          ledOnoff: this.switch === 'on'? 1 : 0
+        }
+      }
+      sendBodyToDev(body)
     }
   }
 }
@@ -134,4 +165,11 @@ export default {
       visibility: hidden
     .hidden-ele2
       display: none
+    .mask-line
+      position fixed
+      top 6.8rem
+      left 0
+      height 2px
+      width 100%
+      background-color: #f2f2f2;
 </style>

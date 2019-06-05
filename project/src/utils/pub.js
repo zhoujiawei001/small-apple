@@ -20,7 +20,7 @@ export function sendBodyToDev (body) {
 }
 
 export class RC {
-  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip = '1', ui = 0, encode = 0) {
+  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip2, zip = '1', ui = 0, encode = 0) {
     this.rid = rid + ''
     this.name = name
     this.index = index
@@ -32,6 +32,7 @@ export class RC {
     this.hname = hname // 自定义别名
     this.hid = hid // 自定义ID
     this.zip = zip
+    this.zip2 = zip2
     this.ui = ui
     this.encode = encode
   }
