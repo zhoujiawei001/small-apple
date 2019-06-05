@@ -406,12 +406,6 @@
     setWH()
     setPosUseFlexInit(column)
     background #F2F2F2
-
-    .header
-      position fixed
-      top 0
-      width 100%
-
     .banner
       setWH(100%, 28rem)
       setPosUseFlex(column, flex-end)
