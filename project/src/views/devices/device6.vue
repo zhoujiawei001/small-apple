@@ -18,17 +18,17 @@
               :class="{'btn-disable2': !cmdsKey.includes('timer')}">定时</span>
       </div>
       <div class="power flex">
-        <div class="fan-switch">
+        <div class="fan-switch"
+             @click="sendBody('power')"
+             :class="{'btn-disable2': !cmdsKey.includes('power')}">
           <span class="img-box"></span>
-          <span class="text"
-                @click="sendBody('power')"
-                :class="{'btn-disable2': !cmdsKey.includes('power')}">电源</span>
+          <span class="text">电源</span>
         </div>
-        <div class="fan-wind-speed">
+        <div class="fan-wind-speed"
+             @click="sendBody('fanspeed')"
+             :class="{'btn-disable2': !cmdsKey.includes('fanspeed')}">
           <span class="img-box"></span>
-          <span class="text"
-                @click="sendBody('fanspeed')"
-                :class="{'btn-disable2': !cmdsKey.includes('fanspeed')}">风速</span>
+          <span class="text">风速</span>
         </div>
       </div>
       <div class="extend flex">
