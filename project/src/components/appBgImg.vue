@@ -16,7 +16,7 @@ export default {
 @import "../style/mixin.styl"
 .appBgImg
   width 100%
-  height 22.8rem
+  height 24rem
   imgUrl("../assets/background.png")
   position: relative
   .app_img
@@ -24,7 +24,7 @@ export default {
     top 50%
     left 50%
     margin-left -6.4rem
-    margin-top -6.4rem
+    margin-top -5rem
     width 12.8rem
     height 12.8rem
   .app_logo

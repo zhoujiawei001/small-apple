@@ -18,20 +18,20 @@ export default new Vuex.Store({
     cmdList: {}, //码库
   },
   getters: {
-    screenRem (state) {
+    screenRem (state) { // 当前手机屏幕下1rem为多少px
       let h = state.screenWd
-      if (h <= 320) {
-        return 10
-      } else if (h <= 360) {
-        return 10
-      } else if (h <= 375) {
-        return 10.42
-      } else if (h <= 400) {
+      if (h >= 750) {
+        return 20.83
+      } else if (h >= 480) {
+        return 13.33
+      } else if (h >= 414) {
+        return 11.5
+      } else if (h >= 400) {
         return 11.11
-      } else if (h <= 414) {
-        return 11.50
+      } else if (h >= 375) {
+        return 10.42
       } else {
-        return 12
+        return 10
       }
     },
     typeList (state) {

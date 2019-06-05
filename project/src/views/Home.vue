@@ -51,7 +51,7 @@ export default {
       return 4.8 * this.screenRem + this.statusBarHg
     },
     bgImgHg () {
-      return 22.8 * this.screenRem
+      return 24 * this.screenRem
     },
     limitHg () {
       return this.bgImgHg - this.headerHg + 1.2 * this.screenRem - 2
