@@ -31,7 +31,6 @@
                 :class="{'btn-disable2': !cmdsKey.includes('fanspeed')}">风速</span>
         </div>
       </div>
-      <!--？？？？？-->
       <div class="extend flex">
         <span class="btn"
               v-for="(item, idx) in extendsList"
@@ -54,8 +53,7 @@
     },
     data () {
       return {
-        // extendsList: ['睡眠', '灯光', '负离子'],
-        extendsList: [],
+        extendsList: ['睡眠', '灯光', '负离子'],
         tempCmds: {
           "fanspeed": 1,
           "mode": 2,
@@ -81,20 +79,17 @@
     setWH()
     setPosUseFlexInit(column)
     background #F2F2F2
-    .header
-      position fixed
-      top 0
-      width 100%
     .banner
-      setWH(100%, 22.8rem)
+      setWH(100%, 28rem)
       setPosUseFlex()
+      imgUrl("../../assets/background.png")
       img
-        setWH(8rem, 8rem)
+        setWH(10rem, 10rem)
         transform translateY(3rem)
     .container
       flex 1
       .btn-fun
-        padding 2rem 3rem
+        padding 2rem 4rem
         >span
           setWH(5rem, 5rem)
           setFont(1.4rem, $fontColorTheme, center)
@@ -102,7 +97,7 @@
           background #fff
           border-radius 50%
       .extend
-        padding 2rem 3rem
+        padding 2rem 4rem
         flex-wrap wrap
         >span
           setWH(28%, 4rem)

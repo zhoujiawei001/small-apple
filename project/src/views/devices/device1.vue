@@ -183,9 +183,6 @@
     background #F2F2F2
     setPosUseFlexInit(column)
     setWH()
-    .header
-      position fixed
-      width 100%
     .container
       flex 1
       margin-top 6.8rem
@@ -193,8 +190,10 @@
     .top
       padding 1rem 2rem
       .stb-switch, .tv-switch
+        width 33%
         setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
       .input-choose
+        width 33%
         setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
     .channel-voice
       padding 1rem 6rem
@@ -231,7 +230,7 @@
           display inline-block
           setWH(5rem, 5rem)
           line-height 5rem
-          setFont(2rem, $fontColorTheme, center)
+          setFont(1rem, $fontColorTheme, center, 800)
           border-radius 50%
           &.top-circle
             top 0
@@ -243,7 +242,7 @@
             bottom 0
         .ok
           setWH(8rem, 8rem)
-          setFont(3rem, $fontColorTheme, center)
+          setFont(3rem, $fontColorTheme, center, 300)
           line-height 8rem
           border-radius 50%
       .left

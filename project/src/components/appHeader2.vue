@@ -44,6 +44,9 @@
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
   .header
+    position fixed
+    top 0
+    width 100%
     header
       setPosUseFlexInit(row, space-between, center)
       .title

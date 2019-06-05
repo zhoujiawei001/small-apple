@@ -7,19 +7,16 @@
     </div>
     <div class="container">
       <div>
-        <!--?????????-->
-        <span class="switch-on"
+        <span class="switch-on btn"
               @click="sendBody('power')"
               :class="{'btn-disable2': !cmdsKey.includes('power')}">开</span>
-        <span class="switch-off"
+        <span class="switch-off btn"
               @click="sendBody('poweroff')"
               :class="{'btn-disable2': !cmdsKey.includes('poweroff')}">关</span>
       </div>
-      <!--<div class="power-box"
-           @click="sendBody('power')"
-           :class="{'btn-disable2': !cmdsKey.includes('power')}">
+      <div class="power-box">
         <span class="power"></span>
-      </div>-->
+      </div>
     </div>
   </div>
 </template>
@@ -52,17 +49,13 @@
     setPosUseFlexInit(column)
     background #F2F2F2
 
-    .header
-      position fixed
-      top 0
-      width 100%
-
     .banner
-      setWH(100%, 22.8rem)
+      setWH(100%, 28rem)
       setPosUseFlex()
+      imgUrl("../../assets/background.png")
 
       img
-        setWH(8rem, 8rem)
+        setWH(10rem, 10rem)
         transform translateY(3rem)
 
     .container
@@ -73,21 +66,16 @@
         setPosUseFlexInit(row, space-between, center)
 
         .switch-on, .switch-off
+          background #fff
           setWH(8rem, 8rem)
           line-height 8rem
           setFont(2rem, $fontColorTheme, center)
           border-radius 50%
 
-        .switch-on
-          background #fff
-
-        .switch-off
-          background $fontColorTheme
-          color #fff
-
       .power-box
         justify-content center
         margin-top 2rem
+        border-radius 50%
 
         .power
           setIcon('../../assets/blue/fan-switch.png', '../../assets/white/fan-switch.png', 8rem, 4rem)

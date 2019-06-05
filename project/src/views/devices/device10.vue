@@ -2,67 +2,69 @@
   <!--电视盒子-->
   <div class="dev-box">
     <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
-    <div class="top flex">
-      <div class="stb-switch"
-           @click="sendBody('power')"
-           :class="{'btn-disable2': !cmdsKey.includes('power')}">
-        <span class="img-box"></span>
-        <span class="text">机顶盒开关</span>
+    <div class="container">
+      <div class="top flex">
+        <div class="stb-switch"
+             @click="sendBody('power')"
+             :class="{'btn-disable2': !cmdsKey.includes('power')}">
+          <span class="img-box"></span>
+          <span class="text">机顶盒开关</span>
+        </div>
+        <div class="tv-switch btn-disable2">
+          <span class="img-box"></span>
+          <span class="text">电视机开关</span>
+        </div>
+        <div class="input-choose btn-disable2">
+          <span class="img-box"></span>
+          <span class="text">输入选择</span>
+        </div>
       </div>
-      <div class="tv-switch btn-disable2">
-        <span class="img-box"></span>
-        <span class="text">电视机开关</span>
-      </div>
-      <div class="input-choose btn-disable2">
-        <span class="img-box"></span>
-        <span class="text">输入选择</span>
-      </div>
-    </div>
-    <div class="volume">
-      <div class="box">
+      <div class="volume">
+        <div class="box">
         <span class="add btn"
               @click="sendBody('vol+')"
               :class="{'btn-disable2': !cmdsKey.includes('vol+')}">＋</span>
-        <span class="text">音量</span>
-        <span class="sub btn"
-              @click="sendBody('vol-')"
-              :class="{'btn-disable2': !cmdsKey.includes('vol-')}">—</span>
+          <span class="text">音量</span>
+          <span class="sub btn"
+                @click="sendBody('vol-')"
+                :class="{'btn-disable2': !cmdsKey.includes('vol-')}">—</span>
+        </div>
       </div>
-    </div>
-    <div class="flex function">
-      <div class="left">
+      <div class="flex function">
+        <div class="left">
         <span class="home"
               @click="sendBody('boot')"
               :class="{'btn-disable2': !cmdsKey.includes('boot')}"></span>
-        <span class="menu btn"
-              @click="sendBody('menu')"
-              :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
-      </div>
-      <div class="mid">
-        <div class="ok border-1px btn"
-             @click="sendBody('ok')"
-             :class="{'btn-disable2': !cmdsKey.includes('ok')}">ok
+          <span class="menu btn"
+                @click="sendBody('menu')"
+                :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
         </div>
-        <span class="top-circle btn"
-              @click="sendBody('up')"
-              :class="{'btn-disable2': !cmdsKey.includes('up')}">○</span>
-        <span class="bottom-circle btn"
-              @click="sendBody('down')"
-              :class="{'btn-disable2': !cmdsKey.includes('down')}">○</span>
-        <span class="left-circle btn"
-              @click="sendBody('left')"
-              :class="{'btn-disable2': !cmdsKey.includes('left')}">○</span>
-        <span class="right-circle btn"
-              @click="sendBody('right')"
-              :class="{'btn-disable2': !cmdsKey.includes('right')}">○</span>
-      </div>
-      <div class="right">
+        <div class="mid">
+          <div class="ok border-1px btn"
+               @click="sendBody('ok')"
+               :class="{'btn-disable2': !cmdsKey.includes('ok')}">ok
+          </div>
+          <span class="top-circle btn"
+                @click="sendBody('up')"
+                :class="{'btn-disable2': !cmdsKey.includes('up')}">○</span>
+          <span class="bottom-circle btn"
+                @click="sendBody('down')"
+                :class="{'btn-disable2': !cmdsKey.includes('down')}">○</span>
+          <span class="left-circle btn"
+                @click="sendBody('left')"
+                :class="{'btn-disable2': !cmdsKey.includes('left')}">○</span>
+          <span class="right-circle btn"
+                @click="sendBody('right')"
+                :class="{'btn-disable2': !cmdsKey.includes('right')}">○</span>
+        </div>
+        <div class="right">
         <span class="quiet"
               @click="sendBody('mute')"
               :class="{'btn-disable2': !cmdsKey.includes('mute')}"></span>
-        <span class="return"
-              @click="sendBody('back')"
-              :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
+          <span class="return"
+                @click="sendBody('back')"
+                :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -103,7 +105,13 @@
   @import "../../style/mixin.styl"
   .dev-box
     setWH()
+    setPosUseFlexInit(column)
     background #F2F2F2
+
+    .container
+      flex 1
+      margin-top 6.8rem
+      overflow auto
 
     .top
       padding 1rem 2rem

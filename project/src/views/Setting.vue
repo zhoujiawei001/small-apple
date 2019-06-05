@@ -1,8 +1,8 @@
 <template>
   <div class="setting">
-    <div :style="{height: statusBarHg + 'px'}"></div>
+    <div :style="{background:'#F3F3F3',height: statusBarHg + 'px'}"></div>
     <header>
-      <div class="img-box" @click="goBack()"><img src="../assets/arrow-left.svg"></div>
+      <div class="img-box" @click="goBack()"><img src="../assets/back.png"></div>
       <div class="text">设置</div>
     </header>
     <div class="name flex" @click="showInput()">
@@ -87,7 +87,6 @@
           delAddedDev(this.hid).then(data => {
             if (data.errcode === 0) {
               getExtendToServe().then(data => {
-                console.log('删除成功', data)
                 window.hilink.toast('2', '删除成功')
                 this.$store.commit('setAddedDevList', data)
                 setTimeout(() => {
@@ -153,24 +152,24 @@
   .setting
     header
       setPosUseFlexInit(row, flex-start, center)
-      setHeight(4.8rem)
-      padding 0 1rem
-      border-bottom 2px solid #ddd
+      height 4.8rem
+      padding 0 1.6rem
       display flex
+      background #F3F3F3
 
       .img-box
-        setWH(2.8rem, 2.8rem)
+        setWH(2rem, 2rem)
         margin-right 1rem
 
         img
           setWH()
 
       .text
-        setFont(1.8rem)
+        setFont(1.8rem, #000, left, 600)
 
     .name, .delete
       position relative
-      margin 0 1rem
+      margin 0 1.6rem
       border-bottom 1px solid #ddd
       setHeight(4.8rem)
 
