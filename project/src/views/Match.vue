@@ -62,8 +62,52 @@ export default {
     appHeader,
     appTipsBox
   },
+  watch: {
+    'loadRes.isFinish': {
+      handler(newVal, oldVal) {
+        console.log(newVal, oldVal)
+        console.log('watch-isFinish')
+        if (newVal === 1) {
+          this.registerVirtualDev().then(data => {
+            if (data.errcode === 0) {
+              this.rc.devId = data.devId
+              console.log('第二个RC', this.rc)
+              this.postYkDevToServe().then(data2 => {
+                if (data2.errcode === 0) {
+                  postExtendToServe(this.rc).then(data3 => {
+                    if (data3.errcode === 0) {
+                      let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
+                      cloneList.push(this.rc)
+                      this.$store.commit('setAddedDevList', cloneList)
+                      this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
+                      this.$router.push('/')
+                    } else {
+                      window.hilink.toast('2', '添加遥控失败')
+                      removeRegisteredVirtualDevYk(this.rc.devId)
+                      this.tips = false
+                    }
+                  })
+                } else {
+                  window.hilink.toast('2', '添加遥控失败')
+                  removeRegisteredVirtualDevYk(this.rc.devId)
+                  this.tips = false
+                }
+              })
+            } else {
+              window.hilink.toast('2', '添加遥控失败')
+              this.tips = false
+            }
+          })
+        } else {
+          window.hilink.toast('2', '下载码库失败')
+          this.tips = false
+        }
+      },
+      deep: true
+    }
+  },
   computed: {
-    ...mapState(['tid','appDevId', 'addedDevList']),
+    ...mapState(['tid','appDevId', 'addedDevList', 'loadRes']),
     typeName () {
       let obj = {
         1: '电视机顶盒',
@@ -122,48 +166,48 @@ export default {
     })
   },
   mounted () {
-    window.deviceEventCallback = res => {
-      let loadResObj = parseHilinkData(res)
-      console.log('loadRes', parseHilinkData(res))
-      if (loadResObj.sid === 'loadRes') {
-        let obj = loadResObj.data.loadRes
-        if (obj.isFinish === 1) {
-          this.registerVirtualDev().then(data => {
-            if (data.errcode === 0) {
-              this.rc.devId = data.devId
-              console.log('第二个RC', this.rc)
-              this.postYkDevToServe().then(data2 => {
-                if (data2.errcode === 0) {
-                  postExtendToServe(this.rc).then(data3 => {
-                    if (data3.errcode === 0) {
-                      let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
-                      cloneList.push(this.rc)
-                      this.$store.commit('setAddedDevList', cloneList)
-                      this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
-                      this.$router.push('/')
-                    } else {
-                      window.hilink.toast('2', '添加遥控失败')
-                      removeRegisteredVirtualDevYk(this.rc.devId)
-                      this.tips = false
-                    }
-                  })
-                } else {
-                  window.hilink.toast('2', '添加遥控失败')
-                  removeRegisteredVirtualDevYk(this.rc.devId)
-                  this.tips = false
-                }
-              })
-            } else {
-              window.hilink.toast('2', '添加遥控失败')
-              this.tips = false
-            }
-          })
-        } else {
-          window.hilink.toast('2', '下载码库失败')
-          this.tips = false
-        }
-      }
-    }
+    // window.deviceEventCallback = res => {
+    //   let loadResObj = parseHilinkData(res)
+    //   console.log('loadRes', parseHilinkData(res))
+    //   if (loadResObj.sid === 'loadRes') {
+    //     let obj = loadResObj.data.loadRes
+    //     if (obj.isFinish === 1) {
+    //       this.registerVirtualDev().then(data => {
+    //         if (data.errcode === 0) {
+    //           this.rc.devId = data.devId
+    //           console.log('第二个RC', this.rc)
+    //           this.postYkDevToServe().then(data2 => {
+    //             if (data2.errcode === 0) {
+    //               postExtendToServe(this.rc).then(data3 => {
+    //                 if (data3.errcode === 0) {
+    //                   let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
+    //                   cloneList.push(this.rc)
+    //                   this.$store.commit('setAddedDevList', cloneList)
+    //                   this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
+    //                   this.$router.push('/')
+    //                 } else {
+    //                   window.hilink.toast('2', '添加遥控失败')
+    //                   removeRegisteredVirtualDevYk(this.rc.devId)
+    //                   this.tips = false
+    //                 }
+    //               })
+    //             } else {
+    //               window.hilink.toast('2', '添加遥控失败')
+    //               removeRegisteredVirtualDevYk(this.rc.devId)
+    //               this.tips = false
+    //             }
+    //           })
+    //         } else {
+    //           window.hilink.toast('2', '添加遥控失败')
+    //           this.tips = false
+    //         }
+    //       })
+    //     } else {
+    //       window.hilink.toast('2', '下载码库失败')
+    //       this.tips = false
+    //     }
+    //   }
+    // }
   },
   methods: {
     ...mapActions(['getDevModeList', 'getDevCodeLibAndInfo']),
@@ -342,7 +386,7 @@ export default {
     }
   },
   beforeDestroy () {
-    window.deviceEventCallback = null
+    // window.deviceEventCallback = null
     clearInterval(this.timer)
     watchVirtualKey(false)
   }

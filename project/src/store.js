@@ -8,6 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     appDevId: '',
+    devName: '',
+    appStatus: 0, // 小苹果状态 0-关，1-开
     statusBarHg: 20, // 手机状态栏高度
     screenWd: 0, // 获取屏幕宽度
     tid: 1, // 设备类型ID
@@ -16,6 +18,7 @@ export default new Vuex.Store({
     addedDevList: [], // 已经添加的遥控设备
     brandScrollPos: null, // brand页面滚动的距离
     cmdList: {}, //码库
+    loadRes: 0 // 码库下载状态 0-未下载 1-已下载
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px
@@ -63,15 +66,47 @@ export default new Vuex.Store({
     },
     updateCmdList(state, payload) {
       Object.assign(state.cmdList, payload)
+    },
+    setDevName (state, payload) {
+      state.devName = payload
+    },
+    setAppStatus (state, payload) {
+      state.appStatus = payload
+    },
+    setLoadRes (state, payload) {
+      state.loadRes = payload
     }
   },
   actions: {
     initFun ({ commit, state }) {
-      window.onResume = () =>{}
+      window.onResume = () =>{
+        window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
+      }
+      window.deviceEventCallback = res => {
+        let data = parseHilinkData(res)
+        window.app.changeSerData(data)
+        console.log(data)
+        console.log('123')
+      }
       window.app = {
         getDevInfoAllCallback (res) {
           let data = parseHilinkData(res)
           state.appDevId = data.devId
+          commit('setDevName', data.devName)
+          console.log('状态全集', data)
+          data.services.forEach(item => {
+            window.app.changeSerData(item)
+          })
+        },
+        /** 服务数据上报转化 **/
+        changeSerData (obj) {
+          switch (obj.sid) {
+            case 'ledOnoff':
+              commit('setAppStatus', obj.data.on)
+              break
+            case 'loadRes':
+              commit('setLoadRes', obj.data.loadRes)
+          }
         },
         setTitleCallback (res) {
           console.log(res)

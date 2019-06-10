@@ -6,13 +6,24 @@
         :imgUrl="appIcon"
         :style="styObjBg"></appBgImg>
       <main>
-        <appStatusBar :class="clsObjStatusDown" @handle-icon="clickSwitchIcon"></appStatusBar>
+        <appStatusBar
+          :class="clsObjStatusDown"
+          @handle-icon="clickSwitchIcon"
+          :devName="devName"
+          :devStatus="appStatus"
+          :key="100"></appStatusBar>
         <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
         <appDevItem :item="item" v-for="(item, i) in addedDevList" :key="i"></appDevItem>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
-    <appStatusBar :style="styObjStatus" :class="clsObjStatusUp"></appStatusBar>
+    <appStatusBar
+      :style="styObjStatus"
+      :class="clsObjStatusUp"
+      @handle-icon="clickSwitchIcon"
+      :devName="devName"
+      :devStatus="appStatus"
+      :key="101"></appStatusBar>
     <div class="mask-line" :class="clsObjStatusUp" :style="objMaskLine"></div>
     <transition name="fade">
       <appTipsBox
@@ -45,7 +56,7 @@ export default {
     appTipsBox
   },
   computed: {
-    ...mapState(['addedDevList', 'statusBarHg']),
+    ...mapState(['addedDevList', 'statusBarHg', 'devName', 'appStatus']),
     ...mapGetters(['screenRem']),
     headerHg () {
       return 4.8 * this.screenRem + this.statusBarHg
@@ -91,17 +102,14 @@ export default {
       }
     },
     appIcon () {
-      return require(`../assets/apple_${this.switch}.png`)
+      return require(`../assets/apple_${this.appStatus}.png`)
     }
   },
   data () {
     return {
       scrollHg: 0,
-      tipsBox: false,
-      switch: 'on'
+      tipsBox: false
     }
-  },
-  created () {
   },
   mounted () {
     this.$nextTick(() => {
@@ -134,14 +142,10 @@ export default {
       )
     },
     clickSwitchIcon () {
-      if (this.switch === 'on') {
-        this.switch = 'off'
-      } else {
-        this.switch = 'on'
-      }
+      let status = this.appStatus ? 0 : 1
       let body = {
         ledOnoff: {
-          ledOnoff: this.switch === 'on'? 1 : 0
+          ledOnoff: status
         }
       }
       sendBodyToDev(body)

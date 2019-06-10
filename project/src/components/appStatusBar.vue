@@ -1,8 +1,8 @@
 <template>
-  <div class="appStatusBar">
+  <div class="appStatusBar" :style="objStyle">
     <div class="left">
-      <span>夜灯开启</span>
-      <p>遥控大师小苹果</p>
+      <span>夜灯{{devStatus ? '开启' : '关闭'}}</span>
+      <p>{{devName}}</p>
     </div>
     <div class="right" @click="clickSwitch"></div>
   </div>
@@ -11,6 +11,24 @@
 <script>
 export default {
   name: 'appStatusBar',
+  props: {
+    devStatus: {
+      type: Number,
+      default: 1
+    },
+    devName: {
+      type: String,
+      default: '遥控大师小苹果'
+    }
+  },
+  computed: {
+    objStyle () {
+      return {
+        background: `url(${require(`../assets/appStatus_${this.devStatus}.png`)}) no-repeat center`,
+        backgroundSize: '100%'
+      }
+    }
+  },
   methods: {
     clickSwitch () {
       this.$emit('handle-icon')
@@ -24,12 +42,12 @@ export default {
   .appStatusBar
     height 7.6rem
     padding 0 1.6rem
-    imgUrl('../assets/appStatus_on.png')
     position relative
     box-sizing initial
+    border-radius: .4rem
     .right
-      width 5.4rem
-      height 5.4rem
+      width 5rem
+      height 5rem
       imgUrl2('../assets/switch.png')
       position absolute
       top 50%
