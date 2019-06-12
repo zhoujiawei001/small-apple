@@ -30,7 +30,7 @@ export default {
   border-radius 4px
   position relative
   img
-    height 5.4rem
+    height 5rem
     position absolute
     top 50%
     left 50%

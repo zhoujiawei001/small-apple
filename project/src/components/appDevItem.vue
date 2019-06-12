@@ -74,29 +74,23 @@
     background-color: #fff
     border-radius 4px
     padding 0 1.6rem
-
     .left
       width 68%
       display flex
       justify-content space-between
       align-items: center
-
       img
-        width 36%
-
+        width 32%
       .info
-        width 64%
-        padding-left 1.6rem
-
+        width 68%
+        padding-left 2.4rem
         .info-txt
           font-size 1.4rem
           setEllipsisOne()
-
         p
           margin-top .4rem
           font-size 1.2rem
           color $fontColorTheme
-
     .right
-      width 5.4rem
+      width 5rem
 </style>

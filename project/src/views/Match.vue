@@ -16,20 +16,34 @@
       </div>
     </div>
     <div class="mt-section_2">
-      <div class="container">
-        <span class="number">{{currentNum}}/{{total}}</span>
-        <div class="btn-plus" :class="{'btn-disable': tips || total === '--'}" @click="sendCode('plus')">
-          <img src="../assets/match_plus.png" alt="">
-        </div>
-        <div class="btn-reduce" :class="{'btn-disable': tips || total === '--'}" @click="sendCode('reduce')">
+      <span class="number">{{currentNum}}/{{total}}</span>
+      <div class="btn-icons">
+        <div class="btn-reduce"
+           :class="[{'btn-disable': tips || total === '--'}, {'active': isActiveRe}]"
+           @touchstart="longHandleMatch('reduce')"
+           @touchend="endLongHandleMatch('reduce')"
+           @click="sendCode('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
-        <div class="text">
-          <span v-if="tips">正在匹配请勿离开</span>
+        <div class="btn-switch"
+          :class="{'btn-disable': tips || total === '--'}"
+          @click="sendCode('switch')">
+          <img src="../assets/blue/fan-switch.png" alt="">
         </div>
-        <div class="btn-next" :class="{'btn-disable': currentNum === 0 || tips}" @click="nextFun">
-          下一步
+        <div class="btn-plus"
+           :class="[{'btn-disable': tips || total === '--'}, {'active': isActivePl}]"
+           @touchstart="longHandleMatch('plus')"
+           @touchend="endLongHandleMatch('plus')"
+           @click="sendCode('plus')">
+          <img src="../assets/match_plus.png" alt="">
         </div>
+      </div>
+      <div class="info">长按左右键头，可以逐个连续匹配</div>
+      <div class="text">
+        <span v-if="tips">正在匹配请勿离开</span>
+      </div>
+      <div class="btn-next" :class="{'btn-disable': tips}" @click="nextFun">
+        下一步
       </div>
     </div>
     <transition name="fade">
@@ -49,13 +63,16 @@ export default {
     return {
       total: '--',
       modeList: [],
-      currentNum: 0,
+      currentNum: 1,
       rc: {},
       allowIndexArr: [], // 可选index集合
       tips: false, // 小提示显示隐藏
       tipsBox: false, // 提示框显示隐藏
       count: 0, // 下发匹配时间单位s
-      timer: null // 计算超时定时器
+      timer: null, // 计算超时定时器
+      longTimer: null, // 长按定时下发
+      isActiveRe: false, // 控制按下去的背景颜色
+      isActivePl: false // 控制按下去的背景颜色
     }
   },
   components: {
@@ -84,23 +101,23 @@ export default {
                     } else {
                       window.hilink.toast('2', '添加遥控失败')
                       removeRegisteredVirtualDevYk(this.rc.devId)
-                      this.tips = false
+                      this.handleMatchFailedFun()
                     }
                   })
                 } else {
                   window.hilink.toast('2', '添加遥控失败')
                   removeRegisteredVirtualDevYk(this.rc.devId)
-                  this.tips = false
+                  this.handleMatchFailedFun()
                 }
               })
             } else {
               window.hilink.toast('2', '添加遥控失败')
-              this.tips = false
+              this.handleMatchFailedFun()
             }
           })
         } else {
           window.hilink.toast('2', '下载码库失败')
-          this.tips = false
+          this.handleMatchFailedFun()
         }
       },
       deep: true
@@ -226,11 +243,13 @@ export default {
         if (this.currentNum > this.total) {
           this.currentNum = 1
         }
-      } else {
+      } else if (val === 'reduce') {
         this.currentNum --
         if (this.currentNum < 1) {
           this.currentNum = this.total
         }
+      } else {
+        console.log('currentNum', this.currentNum)
       }
       let body = {
         batch: {
@@ -247,6 +266,31 @@ export default {
         }
       }
       sendBodyToDev(body)
+    },
+    /** 长按逐个匹配 **/
+    longHandleMatch (val) {
+      if (this.isActivePl || this.isActiveRe) return // 防止两个按钮同时点击出现定时错乱
+      if (val === 'plus') {
+        this.isActivePl = true
+      } else {
+        this.isActiveRe = true
+      }
+      this.longTimer = setInterval(() => {
+        this.sendCode(val)
+      }, 1200)
+    },
+    /** 结束长按匹配 **/
+    endLongHandleMatch (val) {
+      // if (this.isActivePl || this.isActiveRe) return
+      if (val === 'plus') {
+        if (this.isActiveRe) return // 防止两个按钮同时点击出现定时错乱
+        this.isActivePl = false
+      } else {
+        if (this.isActivePl) return // 防止两个按钮同时点击出现定时错乱
+        this.isActiveRe = false
+      }
+      clearInterval(this.longTimer)
+      this.longTimer = null
     },
     nextFun () {
       this.tips = true
@@ -292,7 +336,7 @@ export default {
       }
       this.sendBodyInMatch(body).then(data => {
         if (data.errcode) {
-          this.tips = false
+          this.handleMatchFailedFun()
         }
       })
     },
@@ -376,13 +420,18 @@ export default {
       this.timer = setInterval(() => {
         this.count++
         if (this.count > 30) {
-          clearInterval(this.timer)
           window.hilink.toast('2', '匹配超时')
-          this.tips = false
-          this.count = 0
+          this.handleMatchFailedFun()
         }
         console.log('time', this.count)
       }, 1000)
+    },
+    /** 匹配失败处理 **/
+    handleMatchFailedFun () {
+      this.tips = false
+      clearInterval(this.timer)
+      this.timer = null
+      this.count = 0
     }
   },
   beforeDestroy () {
@@ -432,22 +481,31 @@ export default {
       p:nth-child(2)
         padding .3rem 0
   .mt-section_2
+    padding 2.4rem 0
     height calc(100% - 22.8rem)
     background-color: $bgColorTheme;
     position relative
-    .container
-      display flex
-      align-items center
-      flex-direction column
+    .number
+      font-size 3.2rem
       color $fontColorTheme
-      font-size 1.2rem
-      setCenterUsePosition2()
-      .number
-        font-size 3.2rem
+      position absolute
+      left 50%
+      top 2.4rem
+      transform translateX(-50%)
+    .btn-icons
+      width 28.8rem
+      position absolute
+      top 10.8rem
+      left 50%
+      transform translateX(-50%)
+      display: flex;
+      justify-content space-between
+      align-items center
       .btn-reduce
+      .btn-switch
       .btn-plus
-        width 10.2rem
-        height 8.4rem
+        width 9.2rem
+        height 8.6rem
         background-color: #fff;
         border-radius 1.2rem
         position relative
@@ -455,23 +513,37 @@ export default {
           background-color rgba(0,0,0,.1)
         img
           setCenterUsePosition2()
-          width 5.4rem
-      .btn-plus
-        margin 2.2rem 0
-      .text
-        margin 2.4rem 0
-        color $fontColorTheme
-        font-weight bold
-        height 1.6rem
-        span
-          animation fadeInOut 3s infinite
-      .btn-next
-        width 10.2rem
-        height 3.6rem
-        border-radius 2rem
-        line-height 3.6rem
-        text-align center
-        background-color: #fff;
-        &:active
-          background-color rgba(0,0,0,.1)
+          width 5rem
+      .active
+        background-color rgba(0,0,0,.1)
+    .info
+      position absolute
+      top 24rem
+      left 50%
+      transform translateX(-50%)
+      font-size 1.2rem
+    .text
+      position absolute
+      bottom 8.4rem
+      left 50%
+      transform translateX(-50%)
+      color $fontColorTheme
+      font-weight bold
+      height 1.6rem
+      font-size 1.2rem
+      span
+        animation fadeInOut 3s infinite
+    .btn-next
+      position absolute
+      bottom 2.4rem
+      left 50%
+      transform translateX(-50%)
+      width 10.2rem
+      height 3.6rem
+      border-radius 2rem
+      line-height 3.6rem
+      text-align center
+      background-color: #fff;
+      &:active
+        background-color rgba(0,0,0,.1)
 </style>

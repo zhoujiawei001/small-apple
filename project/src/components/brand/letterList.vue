@@ -47,11 +47,8 @@ export default {
         line-height 1.6rem
         font-size 1.2rem
         border-radius 50%
-        color $fontColorTheme
-        &:active
-          background-color: $fontColorTheme;
-          color #fff
+        color rgb(26,26,26)
       .active
-        background-color $fontColorTheme
+        background-color rgb(100, 100, 100)
         color: #fff
 </style>

@@ -41,7 +41,7 @@ export default {
       height 5.2rem
       line-height 5.2rem
       padding-left .8rem
-      color $fontColorTheme
+      color rgb(26,26,26)
       font-size 1.2rem
       setBorderBot()
 </style>
