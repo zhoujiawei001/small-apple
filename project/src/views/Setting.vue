@@ -172,6 +172,7 @@
 
       .text
         setFont(1.8rem, #000, left, 600)
+        margin-left .8rem
 
     .name, .delete
       position relative

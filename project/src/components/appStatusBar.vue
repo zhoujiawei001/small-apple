@@ -46,8 +46,8 @@ export default {
     box-sizing initial
     border-radius: .4rem
     .right
-      width 5rem
-      height 5rem
+      width 4.8rem
+      height 4.8rem
       imgUrl2('../assets/switch.png')
       position absolute
       top 50%

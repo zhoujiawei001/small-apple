@@ -11,6 +11,7 @@ export const viewsMixin = {
   created () {
     if (this.cmdList.hasOwnProperty(this.rc.rid)) {
       this.cmds = this.cmdList[this.rc.rid]
+      console.log('cmds', this.cmds)
     } else {
       this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
         this.cmds = data.rc_command

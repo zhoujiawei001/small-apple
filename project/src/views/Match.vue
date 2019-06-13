@@ -521,6 +521,8 @@ export default {
       top 24rem
       left 50%
       transform translateX(-50%)
+      width 100%
+      text-align center
       font-size 1.2rem
     .text
       position absolute

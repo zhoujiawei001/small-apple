@@ -1,59 +1,80 @@
 <template>
   <!--风扇-->
   <div class="dev-fan">
-    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
+    <appHeader :title="title" @back-icon="$router.go(-1)" @set="moreSet()"></appHeader>
     <div class="banner">
-      <img src="../../assets/blue/fan.png" alt="fan.png">
+      <img src="../../assets/devIcon2/6.png" alt="fan.png">
     </div>
     <div class="container">
-      <div class="btn-fun flex">
-        <span class="shaking-head btn"
-              @click="sendBody('oscillation')"
-              :class="{'btn-disable2': !cmdsKey.includes('oscillation')}">摇头</span>
-        <span class="wind-kind btn"
-              @click="sendBody('mode')"
-              :class="{'btn-disable2': !cmdsKey.includes('mode')}">风类</span>
-        <span class="timer btn"
-              @click="sendBody('timer')"
-              :class="{'btn-disable2': !cmdsKey.includes('timer')}">定时</span>
-      </div>
-      <div class="power flex">
-        <div class="fan-switch"
-             @click="sendBody('power')"
-             :class="{'btn-disable2': !cmdsKey.includes('power')}">
-          <span class="img-box"></span>
-          <span class="text">电源</span>
+      <div class="btn-standard">
+        <div class="left">
+          <span>延时开机</span>
+          <p>01:30</p>
         </div>
-        <div class="fan-wind-speed"
-             @click="sendBody('fanspeed')"
-             :class="{'btn-disable2': !cmdsKey.includes('fanspeed')}">
-          <span class="img-box"></span>
-          <span class="text">风速</span>
+        <div
+          class="middle"
+          @click="sendBody('power')"
+          :class="{'btn-disable': !cmdsKey.includes('power')}">
+          <img src="../../assets/fan-switch-off.png" alt="">
+          <p>电源</p>
+        </div>
+        <div class="right">
+          <span>开机时长</span>
+          <p>01:30</p>
         </div>
       </div>
-      <div class="extend flex">
-        <span class="btn btn-disable2"
-              v-for="(item, idx) in extendsList"
-              :key="item"
-              @click="onclickExtendBtn(idx)">{{item}}</span>
-      </div>
+      <ul class="btn-extend">
+        <li
+          v-for="(item, index) in extendsList"
+          @click="sendBody(item.value)"
+          :class="{'btn-disable': !cmdsKey.includes(item.value)}"
+          :key="index">
+          {{item.text}}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
-  import appHeader2 from '@/components/appHeader2'
+  import appHeader from '@/components/appHeader'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device6',
     mixins: [viewsMixin],
     components: {
-      appHeader2,
+      appHeader,
     },
     data () {
       return {
-        extendsList: ['睡眠', '灯光', '负离子'],
+        // extendsList: ['风速', '摆头', '风类', '睡眠', '灯光', '负离子'],
+        extendsList: [
+          {
+            text: '风速',
+            value: 'fanspeed'
+          },
+          {
+            text: '摆头',
+            value: 'oscillation'
+          },
+          {
+            text: '风类',
+            value: 'mode'
+          },
+          {
+            text: '睡眠',
+            value: 'sleep'
+          },
+          {
+            text: '灯光',
+            value: 'light'
+          },
+          {
+            text: '负离子',
+            value: 'anion'
+          }
+        ],
         tempCmds: {
           "fanspeed": 1,
           "mode": 2,
@@ -61,7 +82,8 @@
           "oscillation": 4,
           "power": 5,
           "poweroff": 6,
-          "timer": 7
+          "timer": 7,
+          "anion": 8
         }
       }
     },
@@ -84,56 +106,54 @@
       setPosUseFlex()
       imgUrl("../../assets/background.png")
       img
-        setWH(10rem, 10rem)
-        transform translateY(3rem)
+        setWH(20rem, 20rem)
+        transform translateY(1.8rem)
     .container
       flex 1
-      .btn-fun
-        padding 2rem 4rem
-        >span
-          setWH(5rem, 5rem)
-          setFont(1.4rem, $fontColorTheme, center)
-          line-height 5rem
-          background #fff
-          border-radius 50%
-      .extend
-        padding 2rem 4rem
-        flex-wrap wrap
-        >span
-          setWH(28%, 4rem)
-          setFont(1.4rem, $fontColorTheme, center)
-          margin-bottom 1rem
-          line-height 4rem
-          background #fff
-          border-radius 2rem
-      .power
-        padding 2rem 5rem
-        .fan-switch
+      padding 3.2rem 1.6rem 0 1.6rem
+      background-color #F2F2F2
+      .btn-standard
+        setPosUseFlex(row, space-between)
+        .left
+        .middle
+        .right
+          height 8rem
+          width 8rem
+          border-radius .8rem
+          font-size 1.2rem
           setPosUseFlex()
-          background #fff
-          setFont(1.3rem, $fontColorTheme, center)
-          padding 2rem 2rem 1rem 2rem
-          border-radius 1rem
-          .img-box
-            setWH(3rem, 3rem)
-            imgUrl('../../assets/blue/fan-switch.png')
           &:active
-            color #ffffff
-            background-color $fontColorTheme
-            .img-box
-              imgUrl('../../assets/white/fan-switch.png')
-      .fan-wind-speed
-        setPosUseFlex()
-        background #fff
-        setFont(1.3rem, $fontColorTheme, center)
-        padding 2rem 2rem 1rem 2rem
-        border-radius 1rem
-        .img-box
-          setWH(3rem, 3rem)
-          imgUrl('../../assets/blue/fan.png')
-        &:active
-          color #ffffff
-          background-color $fontColorTheme
-          .img-box
-            imgUrl('../../assets/white/fan.png')
+            background-color rgba(0,0,0,.1)
+        .left
+        .right
+          border 1px solid #fff
+          p
+            font-size 1.6rem
+        .middle
+          background-color: #fff;
+          img
+            width 3.2rem
+      .btn-extend
+        padding 4.6rem 2.4rem 0 2.4rem
+        display flex
+        flex-wrap wrap
+        justify-content center
+        li
+          width 6.8rem
+          height 3.6rem
+          background-color: #fff;
+          border-radius 3.6rem
+          line-height 3.6rem
+          text-align center
+          font-size 1.2rem
+          &:active
+            background-color rgba(0,0,0,.1)
+        li:nth-child(-n+3)
+          margin-bottom 1.8rem
+        li:nth-child(2)
+          margin 0 2rem 1.8rem 2rem
+        li:nth-child(n+4)
+          margin-top 1.8rem
+        li:nth-child(5)
+          margin 1.8rem 2rem 0 2rem
 </style>

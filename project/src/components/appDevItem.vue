@@ -92,5 +92,5 @@
           font-size 1.2rem
           color $fontColorTheme
     .right
-      width 5rem
+      width 4.8rem
 </style>

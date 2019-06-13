@@ -53,6 +53,7 @@ export default {
   height: 4.8rem
   align-items center
   justify-content space-between
+  flex-direction row
   padding 0 1.6rem
   position: fixed
   top: 0
@@ -66,6 +67,8 @@ export default {
     imgUrl('../assets/back.png')
   .title
     font-size 1.6rem
+    max-width 16rem
+    setEllipsisOne()
   .more
     height 2rem
     width 2rem
