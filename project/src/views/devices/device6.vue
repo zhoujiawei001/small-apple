@@ -1,7 +1,10 @@
 <template>
   <!--风扇-->
   <div class="dev-fan">
-    <appHeader :title="title" @back-icon="$router.go(-1)" @set="moreSet()"></appHeader>
+    <appHeader
+      :title="title"
+      @back-icon="$router.go(-1)"
+      @set="moreSet"></appHeader>
     <div class="banner">
       <img src="../../assets/devIcon2/6.png" alt="fan.png">
     </div>
@@ -137,9 +140,9 @@
         padding 4.6rem 2.4rem 0 2.4rem
         display flex
         flex-wrap wrap
-        justify-content center
+        justify-content space-around
         li
-          width 6.8rem
+          width 26.5%
           height 3.6rem
           background-color: #fff;
           border-radius 3.6rem
@@ -150,10 +153,10 @@
             background-color rgba(0,0,0,.1)
         li:nth-child(-n+3)
           margin-bottom 1.8rem
-        li:nth-child(2)
-          margin 0 2rem 1.8rem 2rem
+        /*li:nth-child(2)*/
+          /*margin 0 2rem 1.8rem 2rem*/
         li:nth-child(n+4)
           margin-top 1.8rem
-        li:nth-child(5)
-          margin 1.8rem 2rem 0 2rem
+        /*li:nth-child(5)*/
+          /*margin 1.8rem 2rem 0 2rem*/
 </style>

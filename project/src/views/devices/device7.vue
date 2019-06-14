@@ -1,12 +1,13 @@
 <template>
   <!--空调-->
   <div class="dev-AC">
-    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
+    <appHeader
+      :title="title"
+      @back-icon="$router.go(-1)"
+      @set="moreSet"></appHeader>
     <div class="banner">
-      <div class="temperature">
-        <div class="temp-box">
-          {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
-        </div>
+      <div class="temp-box">
+        {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
       </div>
       <div class="ac-icon flex">
         <img :src="imgMode">
@@ -23,22 +24,22 @@
         <span class="btn" @click="changeLeftRight">左右</span>
       </div>
       <div class="change-temperature flex">
-        <span class="btn" @click="changeTemp('-')">—</span>
+        <span class="btn-reduce" @click="changeTemp('-')">—</span>
         <div class="text">温度</div>
-        <span class="btn" @click="changeTemp('+')">＋</span>
+        <span class="btn-plus" @click="changeTemp('+')">＋</span>
       </div>
       <div class="timer-switch flex">
-        <div class="timer-on btn-disable">
+        <div class="left">
           <span class="text">定时开机</span>
-          <span class="detail">01:30</span>
+          <p class="detail">01:30</p>
         </div>
-        <div class="ac-switch">
-          <span class="img-box"></span>
-          <span class="text" @click="clickSwitch">电源</span>
+        <div class="middle" @click="clickSwitch">
+          <img src="../../assets/fan-switch-off.png" alt="">
+          <p class="text">电源</p>
         </div>
-        <div class="timer btn-disable">
+        <div class="right">
           <span class="text">开机时长</span>
-          <span class="detail">01:30</span>
+          <p class="detail">01:30</p>
         </div>
       </div>
     </div>
@@ -46,13 +47,13 @@
 </template>
 
 <script>
-  import appHeader2 from '@/components/appHeader2'
+  import appHeader from '@/components/appHeader'
   import {sendBodyToDev} from '../../utils/pub'
   import {mapState, mapActions} from 'vuex'
   export default {
     name: 'device7',
     components: {
-      appHeader2
+      appHeader
     },
     data() {
       return {
@@ -454,78 +455,69 @@
       setWH(100%, 28rem)
       setPosUseFlex(column, flex-end)
       imgUrl("../../assets/background.png")
-      .temperature
-        flex 1
-        position relative
-        setFont(8rem, $fontColorTheme, center, 100)
-        .temp-box
-          padding-top 7rem
-          setCenterUsePosition2()
+      position relative
+      .temp-box
+        setFont(8rem, rgb(26,26,26), center, 100)
+        setCenterUsePosition2()
         .circle
           font-size 8rem
       .ac-icon
         width 100%
-        padding 0 3rem 2rem 3rem
+        padding 0 2.4rem 1.6rem 2.4rem
         img
           setWH(3rem, 3rem)
 
     .container
       flex 1
-
+      padding 1.6rem
+      setPosUseFlex(column, space-between)
       .btn-function
-        padding 2rem
-
+        width 100%
         > span
           setWH(5rem, 5rem)
-          setFont(1.4rem, $fontColorTheme, center)
+          setFont(1.4rem, rgb(26,26,26), center)
           line-height 5rem
           background #fff
           border-radius 50%
-
       .change-temperature
-        margin 2rem
-        padding 0 2rem
+        width 100%
         background #fff
         height 6rem
         border-radius 3rem
-
         span
           setWH(3rem, 3rem)
           line-height 3rem
           setBorder()
-          setFont(2rem, $fontColorTheme, center)
-
-        .text
-          setFont(1.2rem, $fontColorTheme, center)
-
-      .timer-switch
-        padding 1rem 2rem
-
-        .ac-switch
-          setPosUseFlex()
-          background #fff
-          setFont(1.3rem, $fontColorTheme, center)
-          padding 1rem 2rem
-          border-radius 1rem
-
-          .img-box
-            setWH(3rem, 3rem)
-            imgUrl('../../assets/blue/fan-switch.png')
-
+          setFont(2rem, rgb(26,26,26), center)
+          border-radius 100%
           &:active
-            color #ffffff
-            background-color $fontColorTheme
-
-            .img-box
-              imgUrl('../../assets/white/fan-switch.png')
-
-        .timer-on, .timer
-          color $fontColorTheme
+            background-color rgba(0,0,0,.1)
+        .btn-reduce
+          margin-left 1.6rem
+        .btn-plus
+          margin-right 1.6rem
+        .text
+          setFont(1.2rem, rgb(26,26,26), center)
+      .timer-switch
+        width 100%
+        setPosUseFlex(row, space-between)
+        .left
+        .middle
+        .right
+          height 8rem
+          width 8rem
+          border-radius .8rem
+          font-size 1.2rem
           setPosUseFlex()
-          setWH(7rem, 7rem)
-          border-radius 1rem
-          setBorder(#fff)
-
-          .detail
-            font-size 1.7rem
+          &:active
+            background-color rgba(0,0,0,.1)
+        .left
+        .right
+          border 1px solid #fff
+          p
+            font-size 1.6rem
+        .middle
+          background-color: #fff;
+          img
+            width 3.2rem
 </style>
