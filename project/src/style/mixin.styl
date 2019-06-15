@@ -1,6 +1,8 @@
 $fontColorTheme = #3EA0EA // 主题色
 $bgColorTheme = #f2f2f2 // 背景主色
 $bdColorTheme = #ddd // 边框主题色
+$fontColorTheme2 = rgb(26,26,26) // 主色字体
+$bgActiveColor = rgba(0,0,0,0.1) // 激活背景颜色
 imgUrl($url)
   background url($url) no-repeat center
   background-size cover
@@ -122,18 +124,13 @@ setEllipsisMore($count = 2)
 
 setBgImgAndText($defult-img, $active-img)
   setPosUseFlex()
-  setFont(1.5rem, $fontColorTheme, center)
+  setFont(1.3rem, $fontColorTheme2, center)
   padding 1rem
   .img-box
-    setWH(4rem, 4rem)
+    setWH(3.2rem, 3.2rem)
     imgUrl($defult-img)
   &:active
-    color #ffffff
-    background-color $fontColorTheme
-
-    .img-box
-      imgUrl($active-img)
-
+    background-color $bgActiveColor
 
 setIcon($defult-img, $active-img, $wh1 = 4rem, $wh2 = 3rem)
   setWH($wh1, $wh1)
@@ -141,5 +138,4 @@ setIcon($defult-img, $active-img, $wh1 = 4rem, $wh2 = 3rem)
   background #fff url($defult-img) no-repeat center
   background-size $wh2 $wh2
   &:active
-    background-color $fontColorTheme
-    background-image url($active-img)
+    background-color $bgActiveColor

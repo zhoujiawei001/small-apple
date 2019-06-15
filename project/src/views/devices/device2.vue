@@ -1,9 +1,11 @@
 <template>
   <!--电视机-->
   <div class="dev-TV">
-    <appHeader2 :title="title"
-                @moreSet="moreSet()"></appHeader2>
-    <div class="container">
+    <appHeader
+      :title="title"
+      @back-icon="$router.go(-1)"
+      @set="moreSet"></appHeader>
+    <div class="container" :style="styObjCont">
       <div class="top flex">
         <div class="tv-switch"
              @click="sendBody('power')"
@@ -88,12 +90,12 @@
       <div class="tel-number">
         <span class="item btn"
               v-for="(item, idx) of telNumber"
-              :key="item"
+              :key="idx"
               :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
               @click="sendBody(item)">{{item}}</span>
         <span class="item btn"
-              :class="{'btn-disable2': !cmdsKey.includes('-/--')}"
-              @click="sendBody('-/--')">-/--</span>
+              :class="{'btn-disable2': !cmdsKey.includes('*')}"
+              @click="sendBody('*')">*</span>
         <span class="item btn"
               :class="{'btn-disable2': !cmdsKey.includes('1')}"
               @click="sendBody('1')">0</span>
@@ -106,14 +108,14 @@
 </template>
 
 <script>
-  import appHeader2 from '@/components/appHeader2'
+  import appHeader from '@/components/appHeader'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device2',
     mixins: [viewsMixin],
     components: {
-      appHeader2,
+      appHeader,
     },
     data () {
       return {
@@ -171,6 +173,13 @@
         }
       }
     },
+    computed: {
+      styObjCont () {
+        return {
+          marginTop: `calc(4.8rem + ${this.statusBarHg}px)`
+        }
+      }
+    },
     methods: {}
   }
 </script>
@@ -186,114 +195,101 @@
       flex 1
       margin-top 6.8rem
       overflow auto
+      .top
+        padding 1rem 0
+        .tv-switch
+          width calc(100%/3)
+          setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
+        .input-choose
+          width calc(100%/3)
+          setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
+        .home
+          width calc(100%/3)
+          setBgImgAndText('../../assets/blue/home.png', '../../assets/white/home.png')
+      .channel-voice
+        padding 1rem 5rem
+        .channel, .voice
+          setWH(5.6rem, 15rem)
+          background #ffffff
+          border-radius 3rem
+          setPosUseFlex(column, space-between)
+          .text
+            setFont(1.3rem, $fontColorTheme2, center)
+          .up, .down
+            border-radius 50%
+            setWH(5.6rem, 5.6rem)
+            line-height 5.6rem
+            setFont(2.6rem, $fontColorTheme2, center)
 
-    .top
-      padding 1rem 2rem
-
-      .tv-switch
-        width 33%
-        setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
-
-      .input-choose
-        width 33%
-        setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
-
-      .home
-        width 33%
-        setBgImgAndText('../../assets/blue/home.png', '../../assets/white/home.png')
-
-    .channel-voice
-      padding 1rem 6rem
-
-      .channel, .voice
-        setWH(5rem, 15rem)
-        background #ffffff
-        border-radius 2.5rem
-        setPosUseFlex(column, space-between)
-
-        .text
-          setFont(1.5rem, $fontColorTheme, center)
-
-        .up, .down
-          border-radius 50%
-          setWH(5rem, 5rem)
-          line-height 5rem
-          setFont(3rem, $fontColorTheme, center)
-
+        .function
+          setWH(5rem, 15rem)
+          setPosUseFlex(column, space-between)
+          .quiet
+            setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
+          .back
+            setWH(4rem, 4rem)
+            line-height 4rem
       .function
-        setWH(5rem, 15rem)
-        setPosUseFlex(column, space-between)
-
-        .quiet
-          setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
-
-        .back
-          setWH(4rem, 4rem)
-          line-height 4rem
-
-    .function
-      padding 1rem 2rem
-
-      .mid
-        position relative
-        setPosUseFlex()
-        setWH(18rem, 18rem)
-        background #ffffff
-        border-radius 50%
-
-        > span
-          position absolute
-          display inline-block
-          setWH(5rem, 5rem)
-          line-height 5rem
-          setFont(1rem, $fontColorTheme, center, 800)
+        padding 1rem 2rem
+        .mid
+          position relative
+          setPosUseFlex()
+          setWH(18rem, 18rem)
+          background #ffffff
           border-radius 50%
+          > span
+            position absolute
+            display inline-block
+            setWH(5rem, 5rem)
+            line-height 5rem
+            setFont(1.2rem, $fontColorTheme2, center, 800)
+            border-radius 50%
 
-          &.top-circle
-            top 0
+            &.top-circle
+              top 0
 
-          &.left-circle
-            left 0
+            &.left-circle
+              left 0
 
-          &.right-circle
-            right 0
+            &.right-circle
+              right 0
 
-          &.bottom-circle
-            bottom 0
+            &.bottom-circle
+              bottom 0
 
-        .ok
-          setWH(8rem, 8rem)
-          setFont(3rem, $fontColorTheme, center, 300)
-          line-height 8rem
+          .ok
+            setWH(7rem, 7rem)
+            setFont(2rem, $fontColorTheme2, center, 300)
+            line-height 7rem
+            border-radius 50%
+
+        .left
+          setWH(5rem, 18rem)
+          setPosUseFlex(column, space-between)
+
+          .menu
+            setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
+
+          .back
+            setWH(4rem, 4rem)
+            line-height 4rem
+            text-align center
+
+        .right
+          setWH(5rem, 18rem)
+          setPosUseFlex(column, space-between)
+
+          .return
+            setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
+
+      .tel-number
+        padding 1rem 6rem
+        setPosUseFlexInit(row, space-between, center, wrap)
+
+        .item
+          setFont(2rem, $fontColorTheme2, center)
+          margin-bottom 1rem
+          setWH(6.5rem, 6.5rem)
+          line-height 6.5rem
           border-radius 50%
-
-      .left
-        setWH(5rem, 18rem)
-        setPosUseFlex(column, space-between)
-
-        .menu
-          setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
-
-        .back
-          setWH(4rem, 4rem)
-          line-height 4rem
-          text-align center
-
-      .right
-        setWH(5rem, 18rem)
-        setPosUseFlex(column, space-between)
-
-        .return
-          setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
-
-    .tel-number
-      padding 1rem 6rem
-      setPosUseFlexInit(row, space-between, center, wrap)
-
-      .item
-        setFont(2.5rem, $fontColorTheme, center)
-        margin-bottom 1rem
-        setWH(6.5rem, 6.5rem)
-        line-height 6.5rem
-        border-radius 50%
 </style>

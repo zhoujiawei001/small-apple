@@ -22,13 +22,18 @@ export const viewsMixin = {
     }
   },
   computed: {
-    ...mapState(['addedDevList', 'cmdList']),
+    ...mapState(['addedDevList', 'cmdList', 'statusBarHg']),
     cmdsKey () {
       return Object.keys(this.cmds)
     },
     title () {
       let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
       return arr[0].hname || arr[0].name
+    },
+    styObjCont () {
+      return {
+        marginTop: `calc(4.8rem + ${this.statusBarHg}px)`
+      }
     }
   },
   methods: {
