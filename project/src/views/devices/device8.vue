@@ -1,9 +1,12 @@
 <template>
   <!--灯泡-->
   <div class="dev-light">
-    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
+    <appHeader
+      :title="title"
+      @back-icon="$router.go(-1)"
+      @set="moreSet"></appHeader>
     <div class="banner">
-      <img src="../../assets/blue/light.png" alt="light.png">
+      <img src="../../assets/devIcon2/8.png" alt="light.png">
     </div>
     <div class="container">
       <div>
@@ -22,14 +25,14 @@
 </template>
 
 <script>
-  import appHeader2 from '@/components/appHeader2'
+  import appHeader from '@/components/appHeader'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device8',
     mixins: [viewsMixin],
     components: {
-      appHeader2,
+      appHeader,
     },
     data () {
       return {
@@ -55,8 +58,8 @@
       imgUrl("../../assets/background.png")
 
       img
-        setWH(10rem, 10rem)
-        transform translateY(3rem)
+        setWH(20rem, 20rem)
+        transform translateY(1.8rem)
 
     .container
       flex 1
@@ -69,7 +72,7 @@
           background #fff
           setWH(8rem, 8rem)
           line-height 8rem
-          setFont(2rem, $fontColorTheme, center)
+          setFont(2rem, $fontColorTheme2, center)
           border-radius 50%
 
       .power-box

@@ -1,8 +1,11 @@
 <template>
   <!--电视盒子-->
   <div class="dev-box">
-    <appHeader2 :title="title" @moreSet="moreSet()"></appHeader2>
-    <div class="container">
+    <appHeader
+      :title="title"
+      @back-icon="$router.go(-1)"
+      @set="moreSet"></appHeader>
+    <div class="container" :style="styObjCont">
       <div class="top flex">
         <div class="stb-switch"
              @click="sendBody('power')"
@@ -21,7 +24,7 @@
       </div>
       <div class="volume">
         <div class="box">
-        <span class="add btn"
+          <span class="add btn"
               @click="sendBody('vol+')"
               :class="{'btn-disable2': !cmdsKey.includes('vol+')}">＋</span>
           <span class="text">音量</span>
@@ -32,7 +35,7 @@
       </div>
       <div class="flex function">
         <div class="left">
-        <span class="home"
+          <span class="home"
               @click="sendBody('boot')"
               :class="{'btn-disable2': !cmdsKey.includes('boot')}"></span>
           <span class="menu btn"
@@ -66,19 +69,30 @@
                 :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
         </div>
       </div>
+      <!-- 额外功能 -->
+      <div class="extend-fn">
+        <div class="left">
+          <span>延时开机</span>
+          <p>01:30</p>
+        </div>
+        <div class="right">
+          <span>开机时长</span>
+          <p>01:30</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import appHeader2 from '@/components/appHeader2'
+  import appHeader from '@/components/appHeader'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
     name: 'device10',
     mixins: [viewsMixin],
     components: {
-      appHeader2,
+      appHeader,
     },
     data () {
       return {
@@ -113,89 +127,106 @@
       margin-top 6.8rem
       overflow auto
 
-    .top
-      padding 1rem 2rem
+      .top
+        padding 1rem 0
 
-      .stb-switch, .tv-switch
-        width 33%
-        setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
+        .stb-switch, .tv-switch
+          width calc(100%/3)
+          setBgImgAndText('../../assets/blue/stb-switch.png', '../../assets/white/stb-switch.png')
 
-      .input-choose
-        width 33%
-        setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
+        .input-choose
+          width calc(100%/3)
+          setBgImgAndText('../../assets/blue/stb-choose.png', '../../assets/white/stb-choose.png')
 
-    .function
-      padding 1rem 2rem
+      .function
+        padding 1rem 2rem
 
-      .mid
-        position relative
-        setPosUseFlex()
-        setWH(18rem, 18rem)
-        background #ffffff
-        border-radius 50%
-
-        > span
-          position absolute
-          display inline-block
-          setWH(5rem, 5rem)
-          line-height 5rem
-          setFont(1rem, $fontColorTheme, center, 800)
+        .mid
+          position relative
+          setPosUseFlex()
+          setWH(18rem, 18rem)
+          background #ffffff
           border-radius 50%
 
-          &.top-circle
-            top 0
+          > span
+            position absolute
+            display inline-block
+            setWH(5rem, 5rem)
+            line-height 5rem
+            setFont(1.2rem, $fontColorTheme2, center, 800)
+            border-radius 50%
 
-          &.left-circle
-            left 0
+            &.top-circle
+              top 0
 
-          &.right-circle
-            right 0
+            &.left-circle
+              left 0
 
-          &.bottom-circle
-            bottom 0
+            &.right-circle
+              right 0
 
-        .ok
-          setWH(8rem, 8rem)
-          setFont(3rem, $fontColorTheme, center, 300)
-          line-height 8rem
-          border-radius 50%
+            &.bottom-circle
+              bottom 0
 
-      .left
-        setWH(5rem, 18rem)
-        setPosUseFlex(column, space-between)
+          .ok
+            setWH(7rem, 7rem)
+            setFont(2rem, $fontColorTheme2, center, 300)
+            line-height 7rem
+            border-radius 50%
 
-        .home
-          setIcon('../../assets/blue/home.png', '../../assets/white/home.png')
+        .left
+          setWH(5rem, 18rem)
+          setPosUseFlex(column, space-between)
 
-        .menu
-          setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
+          .home
+            setIcon('../../assets/blue/home.png', '../../assets/white/home.png')
 
-      .right
-        setWH(5rem, 18rem)
-        setPosUseFlex(column, space-between)
+          .menu
+            setIcon('../../assets/blue/menu.png', '../../assets/white/menu.png')
 
-        .return
-          setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
+        .right
+          setWH(5rem, 18rem)
+          setPosUseFlex(column, space-between)
 
-        .quiet
-          setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
+          .return
+            setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
 
-    .volume
-      margin-bottom 1rem
-      setPosUseFlexInit(row, center)
+          .quiet
+            setIcon('../../assets/blue/quiet.png', '../../assets/white/quiet.png')
 
-      .box
-        setPosUseFlex(column, space-between)
-        setWH(5rem, 15rem)
-        background #fff
-        border-radius 3rem
+      .volume
+        margin-bottom 1rem
+        setPosUseFlexInit(row, center)
 
-        .text
-          setFont(1.5rem, $fontColorTheme, center)
+        .box
+          setPosUseFlex(column, space-between)
+          setWH(5.6rem, 15rem)
+          background #fff
+          border-radius 3rem
 
-        .add, .sub
-          border-radius 50%
-          setWH(5rem, 5rem)
-          line-height 5rem
-          setFont(3rem, $fontColorTheme, center)
+          .text
+            setFont(1.3rem, $fontColorTheme2, center)
+
+          .add, .sub
+            border-radius 50%
+            setWH(5.6rem, 5.6rem)
+            line-height 5.6rem
+            setFont(2.6rem, $fontColorTheme2, center)
+      .extend-fn
+        setPosUseFlex(row, space-between)
+        padding 3.2rem 6rem
+        .left
+        .right
+          height 8rem
+          width 8rem
+          border-radius .8rem
+          font-size 1.2rem
+          setPosUseFlex()
+          &:active
+            background-color rgba(0,0,0,.1)
+        .left
+        .right
+          border 1px solid #fff
+          p
+            font-size 1.6rem
 </style>
