@@ -9,7 +9,9 @@
         <p>{{typeName(item.tid)}}</p>
       </div>
     </div>
-    <img class="right" src="../assets/switch_on.png" alt="" @click.stop.prevent="handleSwitch">
+    <div class="right">
+      <img src="../assets/switch_on.png" alt="" @click.stop.prevent="handleSwitch">
+    </div>
   </div>
 </template>
 
@@ -93,4 +95,9 @@
           color $fontColorTheme
     .right
       width 4.8rem
+      height 4.8rem
+      img
+        width 4.8rem
+      &:active
+        background-color $bgActiveColor
 </style>
