@@ -42,7 +42,7 @@
       <div class="text">
         <span v-if="tips">正在匹配请勿离开</span>
       </div>
-      <div class="btn-next" :class="{'btn-disable': tips}" @click="nextFun">
+      <div class="btn-next" :class="{'btn-disable': tips || tips2}" @click="nextFun">
         下一步
       </div>
     </div>
@@ -56,7 +56,7 @@
 import appHeader from '@/components/appHeader'
 import appTipsBox from '@/components/appTipsBox'
 import {mapState, mapActions} from 'vuex'
-import { sendBodyToDev, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
+import { sendBodyToDev2, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
 export default {
   name: 'Match',
   data () {
@@ -67,6 +67,7 @@ export default {
       rc: {},
       allowIndexArr: [], // 可选index集合
       tips: false, // 小提示显示隐藏
+      tips2: false, // 专门解决由上次发送指令导致下次发送不成功的情况
       tipsBox: false, // 提示框显示隐藏
       count: 0, // 下发匹配时间单位s
       timer: null, // 计算超时定时器
@@ -238,6 +239,7 @@ export default {
       }
     },
     sendCode (val) {
+      this.tips2 = true
       if (val === 'plus') {
         this.currentNum ++
         if (this.currentNum > this.total) {
@@ -265,7 +267,9 @@ export default {
           }
         }
       }
-      sendBodyToDev(body)
+      sendBodyToDev2(body, 'sendSrcToDevCallback').then(data => {
+        this.tips2 = false
+      })
     },
     /** 长按逐个匹配 **/
     longHandleMatch (val) {
@@ -546,6 +550,7 @@ export default {
       line-height 3.6rem
       text-align center
       background-color: #fff;
+      font-size 1.2rem
       &:active
         background-color rgba(0,0,0,.1)
 </style>

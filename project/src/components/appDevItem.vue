@@ -10,13 +10,13 @@
       </div>
     </div>
     <div class="right">
-      <img src="../assets/switch_on.png" alt="" @click.stop.prevent="handleSwitch">
+      <img :src="require(`../assets/switch_${item.isSwitch}.png`)" alt="" @click.stop.prevent="handleSwitch(item.isSwitch, item.hid)">
     </div>
   </div>
 </template>
 
 <script>
-  import { sendBodyToDev } from '../utils/pub'
+  import { sendBodyToDev2 } from '../utils/pub'
   export default {
     name: 'appDevItem',
     props: ['item'],
@@ -44,7 +44,8 @@
           }
         })
       },
-      handleSwitch () {
+      handleSwitch (isSwitch, hid) {
+        let obj = {};
         let body = {
           batch: {
             controlKey: {
@@ -59,7 +60,22 @@
             }
           }
         }
-        sendBodyToDev(body)
+        sendBodyToDev2(body, 'handleIconCallback').then(data => {
+          if (!data.errcode) {
+            if (isSwitch === 'on') {
+              obj = {
+                isSwitch: 'off',
+                hid: hid
+              }
+            } else {
+              obj = {
+                isSwitch: 'on',
+                hid: hid
+              }
+            }
+            this.$emit('handle-icon', obj)
+          }
+        })
       }
     }
   }
@@ -96,6 +112,7 @@
     .right
       width 4.8rem
       height 4.8rem
+      border-radius 50%
       img
         width 4.8rem
       &:active

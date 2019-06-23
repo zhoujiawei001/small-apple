@@ -13,7 +13,10 @@
           :devStatus="appStatus"
           :key="100"></appStatusBar>
         <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
-        <appDevItem :item="item" v-for="(item, i) in addedDevList" :key="i"></appDevItem>
+        <appDevItem
+          :item="item" v-for="(item, i) in addedDevList"
+          :key="i"
+          @handle-icon="handleIconSwitch"></appDevItem>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
@@ -44,7 +47,7 @@ import appDevItem from '@/components/appDevItem'
 import appTipsBox from '@/components/appTipsBox'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
-import { sendBodyToDev } from '../utils/pub'
+import { sendBodyToDev, modifyDevSwitchByHid } from '../utils/pub'
 export default {
   name: 'home',
   components: {
@@ -149,6 +152,22 @@ export default {
         }
       }
       sendBodyToDev(body)
+    },
+    handleIconSwitch (obj) {
+      modifyDevSwitchByHid(obj.hid, obj.isSwitch).then(data => {
+        if (!data.errcode) {
+          let newList = JSON.parse(JSON.stringify(this.addedDevList))
+          newList = newList.map(item => {
+            if (item.hid === obj.hid) {
+              item.isSwitch = obj.isSwitch
+              return item
+            } else {
+              return item
+            }
+          })
+          this.$store.commit('setAddedDevList', newList)
+        }
+      })
     }
   }
 }

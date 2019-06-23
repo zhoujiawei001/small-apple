@@ -5,7 +5,9 @@
       :title="title"
       @back-icon="$router.go(-1)"
       @set="moreSet"></appHeader>
-    <div class="banner">
+    <div
+      class="banner"
+      :class="{'btn-disable2': isSwitch === 'off'}">
       <div class="temp-box">
         {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
       </div>
@@ -17,13 +19,13 @@
       </div>
     </div>
     <div class="container">
-      <div class="btn-function flex">
+      <div class="btn-function flex" :class="{'btn-disable2': isSwitch === 'off'}">
         <span class="btn" @click="changeMode">模式</span>
         <span class="btn" @click="changeWind">风量</span>
         <span class="btn" @click="changeUpDown">上下</span>
         <span class="btn" @click="changeLeftRight">左右</span>
       </div>
-      <div class="change-temperature flex">
+      <div class="change-temperature flex" :class="{'btn-disable2': isSwitch === 'off'}">
         <span class="btn-reduce" @click="changeTemp('-')">—</span>
         <div class="text">温度</div>
         <span class="btn-plus" @click="changeTemp('+')">＋</span>
@@ -57,7 +59,7 @@
     },
     data() {
       return {
-        switch: 'on',
+        isSwitch: 'on',
         rc: JSON.parse(this.$route.query.rc),
         currentTemp: 26,
         currentState: 'r_s0_26_u1_l1_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
@@ -90,6 +92,15 @@
             [this.rc.rid]: Object.keys(data.rc_command)
           })
         })
+      }
+    },
+    mounted () {
+      if (window.localStorage.getItem(`ac-switch__${this.rc.hid}`)) {
+        this.isSwitch = window.localStorage.getItem(`ac-switch__${this.rc.hid}`)
+      }
+      if (window.localStorage.getItem(`ac-state__${this.rc.hid}`)) {
+        this.currentState = window.localStorage.getItem(`ac-state__${this.rc.hid}`)
+        this.currentTemp = this.currentState.split('_')[2]
       }
     },
     computed: {
@@ -408,8 +419,8 @@
       },
       /** 点击电源 **/
       clickSwitch () {
-        if (this.switch === 'on') {
-          this.switch = 'off'
+        if (this.isSwitch === 'on') {
+          this.isSwitch = 'off'
           let body = {
             batch: {
               airKey: {
@@ -422,7 +433,7 @@
           }
           sendBodyToDev(body)
         } else {
-          this.switch = 'on'
+          this.isSwitch = 'on'
           this.currentState = 'r_s0_26_u0_l0_p0'
           let body = {
             batch: {
@@ -440,7 +451,15 @@
           }
           sendBodyToDev(body)
         }
+        window.localStorage.setItem(`ac-switch__${this.rc.hid}`, this.isSwitch)
+      },
+      /** 保存状态到本地数据 **/
+      saveStateToLocal () {
+        window.localStorage.setItem(`ac-state__${this.rc.hid}`, this.currentState)
       }
+    },
+    beforeDestroy () {
+      this.saveStateToLocal()
     }
   }
 </script>

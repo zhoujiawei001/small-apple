@@ -18,9 +18,23 @@ export function sendBodyToDev (body) {
     console.warn('无setDeviceInfo接口')
   }
 }
+export function sendBodyToDev2 (body, callback) {
+  console.log('body', body)
+  return new Promise(resolve => {
+    try {
+      window[callback] = res => {
+        console.log(callback, parseHilinkData(res))
+        resolve(parseHilinkData(res))
+      }
+      window.hilink.setDeviceInfo('0', JSON.stringify(body), callback)
+    } catch (e) {
+      console.warn('无setDeviceInfo接口')
+    }
+  })
+}
 
 export class RC {
-  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip2, zip = '1', ui = 0, encode = 0) {
+  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip2, isSwitch = 'on', zip = '1', ui = 0, encode = 0) {
     this.rid = rid + ''
     this.name = name
     this.index = index
@@ -35,6 +49,7 @@ export class RC {
     this.zip2 = zip2
     this.ui = ui
     this.encode = encode
+    this.isSwitch = isSwitch
   }
 }
 
@@ -134,6 +149,37 @@ export function modifyDevName(hid, newName) {
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
+      } catch (e) {
+        console.warn('无上报接口')
+      }
+    })
+  })
+}
+
+/** 修改遥控设备的开关状态根据hid **/
+export function modifyDevSwitchByHid (hid, isSwitch) {
+  return new Promise(resolve => {
+    getExtendToServe().then(data => {
+      let newList = data.map(item => {
+        if (item.hid === hid) {
+          item.isSwitch = isSwitch
+          return item
+        } else {
+          return item
+        }
+      })
+      let body = {
+        type: 'deviceList',
+        data: {
+          list: newList
+        }
+      }
+      try {
+        window.postDeviceExtendDataCallback2 = res => {
+          console.log('postDeviceExtendDataCallback2', parseHilinkData(res))
+          resolve(parseHilinkData(res))
+        }
+        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback2')
       } catch (e) {
         console.warn('无上报接口')
       }
