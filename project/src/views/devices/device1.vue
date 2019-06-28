@@ -257,13 +257,24 @@
             setFont(1.2rem, $fontColorTheme2, center, 800)
             border-radius 50%
             &.top-circle
+              left 50%
+              transform translateX(-50%)
               top 0
+
             &.left-circle
               left 0
+              top: 50%
+              transform translateY(-50%)
+
             &.right-circle
+              top: 50%
+              transform translateY(-50%)
               right 0
+
             &.bottom-circle
               bottom 0
+              left 50%
+              transform translateX(-50%)
           .ok
             setWH(7rem, 7rem)
             setFont(2rem, $fontColorTheme2, center, 300)

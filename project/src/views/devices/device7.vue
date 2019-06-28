@@ -31,17 +31,20 @@
         <span class="btn-plus" @click="changeTemp('+')">＋</span>
       </div>
       <div class="timer-switch flex">
-        <div class="left">
-          <span class="text">定时开机</span>
-          <p class="detail">01:30</p>
+        <div
+          class="left"
+          @click="closeDelayTime">
+          <span class="text">关闭倒计时</span>
         </div>
         <div class="middle" @click="clickSwitch">
           <img src="../../assets/fan-switch-off.png" alt="">
           <p class="text">电源</p>
         </div>
-        <div class="right">
-          <span class="text">开机时长</span>
-          <p class="detail">01:30</p>
+        <div
+          class="right"
+          @click="setDelayTime(2)">
+          <span class="text">倒计时关</span>
+          <p class="detail">{{currentDelayTime}}</p>
         </div>
       </div>
     </div>
@@ -65,7 +68,17 @@
         currentState: 'r_s0_26_u1_l1_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
         isHasStar: false, // 判断码库是否包含星星
         isOpenAirTemp: false,
-        cmdskeys: [] // 码库Key键集合
+        cmdskeys: [], // 码库Key键集合
+        delayOpen: '', // 倒计时开
+        delayClose: '', // 倒计时关
+        currentDelayTime: '', // 当前倒计时
+        clickTimes: 0, // 点击时间
+        delayTimer: null, // 倒计时定时器
+        delayBody: {}, // 下发指令参数
+        delayBodyTimer: null, // 下发指令定时器
+        copyDelayBody: {},
+        clickCounts: 0, // 点击次数
+        listMin: [10, 20, 30]
       }
     },
     created () {
@@ -102,9 +115,36 @@
         this.currentState = window.localStorage.getItem(`ac-state__${this.rc.hid}`)
         this.currentTemp = this.currentState.split('_')[2]
       }
+      this.runDelay()
+    },
+    watch: {
+      delay: {
+        handler(val) {
+          console.log('watch', val)
+          let arr = val.filter(item => item.id === this.rc.index)
+          if (arr[0].enable) {
+            this.clearDelayTimer()
+            this.clickCounts = 0
+            this.delayTimer = setInterval(() => {
+              this.clickTimes = arr[0].endTime - Date.parse(new Date()) / 1000
+              let nowTime = Date.parse(new Date()) / 1000
+              let intervalTime = arr[0].endTime - nowTime
+              console.log('intervalTime', intervalTime)
+              this.currentDelayTime = this.changeTimeToStr(intervalTime)
+            }, 1000)
+          } else {
+            this.clickCounts = 0
+            this.clearDelayTimer()
+            this.clearDelayBodyTimer()
+            this.clickTimes = 0
+            this.currentDelayTime = ''
+          }
+        },
+        deep: true
+      }
     },
     computed: {
-      ...mapState(['addedDevList', 'cmdList']),
+      ...mapState(['addedDevList', 'cmdList', 'delay']),
       title () {
         let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
         return arr[0].hname || arr[0].name
@@ -120,6 +160,10 @@
       },
       imgLeftRight () {
         return require(`../../assets/airIcon/leftRight_${this.currentState.split('_')[4]}.png`)
+      },
+      currentDelay () { // 当前延时
+        let arr = this.delay.filter(item => item.id === this.rc.index)
+        return arr[0]
       }
     },
     methods: {
@@ -456,10 +500,126 @@
       /** 保存状态到本地数据 **/
       saveStateToLocal () {
         window.localStorage.setItem(`ac-state__${this.rc.hid}`, this.currentState)
+      },
+      /** 设置延时
+       * @param val 1-是延时开， 2是延时关
+       * **/
+      setDelayTime (val) {
+        this.clickTimes += this.listMin[this.clickCounts] * 60
+        this.clickCounts++
+        if (this.clickCounts > 2) {
+          this.clickCounts = 2
+        }
+        // this.clickTimes += 2 * 60
+        this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+        if (this.delayBodyTimer) {
+          clearTimeout(this.delayBodyTimer)
+          this.delayBodyTimer = null
+        }
+        if (this.delayTimer) {
+          clearInterval(this.delayTimer)
+          this.delayTimer = null
+        }
+        this.delayBodyTimer = setTimeout(() => {
+          let obj = {
+            id: this.currentDelay.id,
+            enable: 1,
+            endTime: this.changeTimeToTimestamp(this.clickTimes),
+            duration: this.clickTimes,
+            para: 'power',
+            paraValue: '2',
+            sid: 'airKey'
+          }
+          let body = {
+            delay: {
+              delay: [obj]
+            }
+          }
+          // sendBodyToDev(body)
+          this.$store.commit('setDelay', obj)
+        }, 3000)
+      },
+      /** 关闭倒计时 **/
+      closeDelayTime () {
+        let body = {
+          delay: {
+            delay: [
+              {
+                id: this.currentDelay.id,
+                enable: 0,
+                endTime: 0,
+                duration: 0,
+                para: 'power',
+                paraValue: '2',
+                sid: 'airKey'
+              }
+            ]
+          }
+        }
+        // sendBodyToDev(body)
+        this.$store.commit('setDelay', {
+          id: this.currentDelay.id,
+          enable: 0,
+          endTime: 0,
+          duration: 0,
+          para: 'power',
+          paraValue: '2',
+          sid: 'airKey'
+        })
+      },
+      /** 直接发时间戳过去 **/
+      changeTimeToTimestamp (sec) {
+        let curTimestamp = Date.parse(new Date()) / 1000 // 当前时间戳
+        return curTimestamp + sec // 将来时间戳
+      },
+      /** 补零方法 **/
+      addZeroToBefore (num) {
+        if (num < 10) {
+          return '0' + num
+        } else {
+          return '' + num
+        }
+      },
+      /** 将间隔时间s转化为00:00:00 **/
+      changeTimeToStr (seconds) {
+        let h = Math.floor(seconds / 3600)
+        let min = Math.floor((seconds % 3600) / 60)
+        let s = seconds % 60
+        console.log(h,min,s)
+        return this.addZeroToBefore(h) + ':' + this.addZeroToBefore(min) + ':' + this.addZeroToBefore(s)
+      },
+      /** 一开始就运行倒计时 **/
+      runDelay () {
+        if (this.currentDelay.enable === 0) return
+        this.clickTimes = this.currentDelay.enable ? this.currentDelay.endTime - Date.parse(new Date()) / 1000 : 0
+        this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+        this.delayTimer = setInterval(() => {
+          this.clickTimes = this.currentDelay.endTime - Date.parse(new Date()) / 1000
+          let nowTime = Date.parse(new Date()) / 1000
+          let intervalTime = this.currentDelay.endTime - nowTime
+          console.log('intervalTime', intervalTime)
+          this.currentDelayTime = this.changeTimeToStr(intervalTime)
+        }, 1000)
+      },
+      /** 消除delayTimer定时器 **/
+      clearDelayTimer () {
+        if (this.delayTimer) {
+          clearInterval(this.delayTimer)
+          this.delayTimer = null
+        }
+      },
+      /** 消除delayBodyTimer定时器 **/
+      clearDelayBodyTimer () {
+        if (this.delayBodyTimer) {
+          clearTimeout(this.delayBodyTimer)
+          this.delayBodyTimer = null
+        }
       }
     },
     beforeDestroy () {
       this.saveStateToLocal()
+      this.clearDelayTimer()
+      this.clearDelayBodyTimer()
     }
   }
 </script>

@@ -18,7 +18,27 @@ export default new Vuex.Store({
     addedDevList: [], // 已经添加的遥控设备
     brandScrollPos: null, // brand页面滚动的距离
     cmdList: {}, //码库
-    loadRes: 0 // 码库下载状态 0-未下载 1-已下载
+    loadRes: 0, // 码库下载状态 0-未下载 1-已下载
+    delay: [
+      {
+        id: 29,
+        enable: 0,
+        endTime: 0,
+        duration: 0,
+        sid: 'airKey',
+        para: 'power',
+        paraValue: 2 // 1-倒计时开，2-倒计时关
+      },
+      {
+        id: 30,
+        enable: 0,
+        endTime: 0,
+        duration: 0,
+        sid: 'airKey',
+        para: 'power',
+        paraValue: 2 // 1-倒计时开，2-倒计时关
+      }
+    ]
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px
@@ -75,6 +95,21 @@ export default new Vuex.Store({
     },
     setLoadRes (state, payload) {
       state.loadRes = payload
+    },
+    setDelay (state, payload) {
+      if (payload.length) {
+        state.delay = payload
+      } else {
+        let arr = [...state.delay]
+        let arr2 = arr.map(item => {
+          if (item.id === payload.id) {
+            return payload
+          } else {
+            return item
+          }
+        })
+        state.delay = arr2
+      }
     }
   },
   actions: {
@@ -106,6 +141,10 @@ export default new Vuex.Store({
               break
             case 'loadRes':
               commit('setLoadRes', obj.data.loadRes)
+              break
+            case 'delay':
+              commit('setDelay', obj.data.delay.delay)
+              break
           }
         },
         setTitleCallback (res) {
