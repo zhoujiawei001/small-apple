@@ -5,13 +5,19 @@
       <div class="img-box" @click="goBack()"><img src="../assets/back.png"></div>
       <div class="text">设置</div>
     </header>
-    <div class="name flex" @click="showInput()">
+    <div class="name flex scale-1px" @click="showInput()">
       <span class="left">设备名称</span>
       <span class="right">{{devName}}</span>
       <span class="arrow-right"></span>
     </div>
-    <div class="delete flex" @click="delFlag=true">
+    <div class="delete flex scale-1px" @click="delFlag=true">
       <span class="left">删除设备</span>
+      <span class="arrow-right"></span>
+    </div>
+    <div
+      class="delete flex scale-1px"
+      :class="{'btn-disable': $route.query.tid === 7}">
+      <span class="left">遥控学习按键</span>
       <span class="arrow-right"></span>
     </div>
     <div class="modify-devName" v-if="modifyFlag">
@@ -26,8 +32,9 @@
           <div class="warn" v-show="warnFlag">请输入1-64个字符</div>
         </div>
         <div class="btn-groups">
-          <span @click="cancelModify()">取消</span>
-          <span @click="confirmModify()">确定</span>
+          <span class="left" @click="cancelModify()">取消</span>
+          <span class="middle"></span>
+          <span class="right" @click="confirmModify()">确定</span>
         </div>
       </div>
     </div>
@@ -38,8 +45,9 @@
           此操作会清楚手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，许重新添加。
         </div>
         <div class="btn-groups">
-          <span @click="delFlag=false">取消</span>
-          <span @click="confirmDel()">删除</span>
+          <span class="left" @click="delFlag=false">取消</span>
+          <span class="middle"></span>
+          <span class="right" @click="confirmDel()">删除</span>
         </div>
       </div>
     </div>
@@ -237,17 +245,6 @@
             margin-top .2rem
             setFont(1rem, red, left, 600)
 
-        .btn-groups
-          setPosUseFlexInit(row, space-between, center)
-
-          span
-            setWH(48%, 3.6rem)
-            line-height 3.6rem
-            setFont(1.5rem, rgb(0, 91, 186), center)
-
-            &:first-child
-              border-right 1px solid #ddd
-
     .del-dev
       position absolute
       background rgba(0, 0, 0, .3)
@@ -271,21 +268,24 @@
         .info
           setFont(1.5rem, black, left)
           padding 1.5rem 0
-
-        .btn-groups
-          setPosUseFlexInit(row, space-between, center)
-
-          span
-            setWH(48%, 3.6rem)
-            line-height 3.6rem
-            setFont(1.5rem, rgb(0, 91, 186), center)
-
-            &:first-child
-              border-right 1px solid #ddd
-
   @keyframes fadeIn
     0%
       opacity 0
     100%
       opacity 1
+  .btn-groups
+    display: flex
+    justify-content space-between
+    align-items center
+    span.left,
+    span.right
+      width 40%
+      height 3.6rem
+      line-height 3.6rem
+      setFont(1.5rem, rgb(0, 91, 186), center)
+    span.middle
+      width 1px!important
+      height 3.2rem
+      background-color: #ddd;
+      transform scaleX(.5)
 </style>

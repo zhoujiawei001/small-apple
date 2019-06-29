@@ -123,3 +123,36 @@ a {
     opacity 1
   75%
     opacity 0
+/** 单条border样式设置1px **/
+.scale-1px
+  position relative
+  border none!important
+.scale-1px:after
+  content: ''
+  position absolute
+  left 0
+  bottom 0
+  background #ddd
+  width 100%
+  height 1px
+  -webkit-transform scaleY(0.5)
+  transform scaleY(0.5)
+  -webkit-transform-origin 0 0
+  transform-origin 0 0
+/** 四条边框border样式设置1px **/
+.scale-4x
+  position relative
+  margin-bottom 20px
+  border none!important
+.scale-4px:after
+  content: ''
+  top 0
+  left 0
+  border 1px solid #ddd
+  width 200%
+  height 200%
+  -webkit-transform: scale(0.5)
+  transform: scale(0.5)
+  -webkit-transform-origin: left top
+  transform-origin: left top
+

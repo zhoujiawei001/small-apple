@@ -97,19 +97,7 @@ export default new Vuex.Store({
       state.loadRes = payload
     },
     setDelay (state, payload) {
-      if (payload.length) {
-        state.delay = payload
-      } else {
-        let arr = [...state.delay]
-        let arr2 = arr.map(item => {
-          if (item.id === payload.id) {
-            return payload
-          } else {
-            return item
-          }
-        })
-        state.delay = arr2
-      }
+      state.delay = payload
     }
   },
   actions: {
@@ -143,7 +131,7 @@ export default new Vuex.Store({
               commit('setLoadRes', obj.data.loadRes)
               break
             case 'delay':
-              commit('setDelay', obj.data.delay.delay)
+              commit('setDelay', obj.data.delay)
               break
           }
         },

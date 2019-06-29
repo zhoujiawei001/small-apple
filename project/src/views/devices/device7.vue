@@ -34,7 +34,7 @@
         <div
           class="left"
           @click="closeDelayTime">
-          <span class="text">关闭倒计时</span>
+          <span class="text">取消倒计时</span>
         </div>
         <div class="middle" @click="clickSwitch">
           <img src="../../assets/fan-switch-off.png" alt="">
@@ -53,7 +53,7 @@
 
 <script>
   import appHeader from '@/components/appHeader'
-  import {sendBodyToDev} from '../../utils/pub'
+  import {sendBodyToDev, sendBodyToDev2} from '../../utils/pub'
   import {mapState, mapActions} from 'vuex'
   export default {
     name: 'device7',
@@ -78,7 +78,7 @@
         delayBodyTimer: null, // 下发指令定时器
         copyDelayBody: {},
         clickCounts: 0, // 点击次数
-        listMin: [10, 20, 30]
+        listMin: [1, 2, 3]
       }
     },
     created () {
@@ -130,7 +130,15 @@
               let nowTime = Date.parse(new Date()) / 1000
               let intervalTime = arr[0].endTime - nowTime
               console.log('intervalTime', intervalTime)
-              this.currentDelayTime = this.changeTimeToStr(intervalTime)
+              if (intervalTime < 0) {
+                this.clearDelayTimer()
+                this.clickCounts = 0
+                this.clickTimes = 0
+                this.currentDelayTime = ''
+                this.isSwitch = 'off'
+              } else {
+                this.currentDelayTime = this.changeTimeToStr(intervalTime)
+              }
             }, 1000)
           } else {
             this.clickCounts = 0
@@ -175,7 +183,8 @@
           query: {
             name: this.title,
             hid: this.rc.hid,
-            devId: this.rc.devId
+            devId: this.rc.devId,
+            tid: this.rc.tid
           }
         })
       },
@@ -495,18 +504,22 @@
           }
           sendBodyToDev(body)
         }
-        window.localStorage.setItem(`ac-switch__${this.rc.hid}`, this.isSwitch)
       },
       /** 保存状态到本地数据 **/
       saveStateToLocal () {
         window.localStorage.setItem(`ac-state__${this.rc.hid}`, this.currentState)
+        window.localStorage.setItem(`ac-switch__${this.rc.hid}`, this.isSwitch)
       },
       /** 设置延时
        * @param val 1-是延时开， 2是延时关
        * **/
       setDelayTime (val) {
         this.clickTimes += this.listMin[this.clickCounts] * 60
+        if (this.clickTimes >= 12 * 3600) { // 延时时间最大不得超过12个小时
+          this.clickTimes = 12 * 3600
+        }
         this.clickCounts++
+        if (this.clickTimes)
         if (this.clickCounts > 2) {
           this.clickCounts = 2
         }
@@ -535,8 +548,11 @@
               delay: [obj]
             }
           }
-          // sendBodyToDev(body)
-          this.$store.commit('setDelay', obj)
+          sendBodyToDev2(body, 'setDelayCallback').then(res => {
+            if (!res.errcode) {
+              window.hilink.toast('2', '倒计时已开始')
+            }
+          })
         }, 3000)
       },
       /** 关闭倒计时 **/
@@ -556,15 +572,10 @@
             ]
           }
         }
-        // sendBodyToDev(body)
-        this.$store.commit('setDelay', {
-          id: this.currentDelay.id,
-          enable: 0,
-          endTime: 0,
-          duration: 0,
-          para: 'power',
-          paraValue: '2',
-          sid: 'airKey'
+        sendBodyToDev2(body, 'cancelDelayCallback').then(res => {
+          if (!res.errcode) {
+            window.hilink.toast('2', '倒计时已取消')
+          }
         })
       },
       /** 直接发时间戳过去 **/
