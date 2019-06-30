@@ -6,6 +6,8 @@ export const viewsMixin = {
     return {
       cmds: {},
       rc: JSON.parse(this.$route.query.rc),
+      longClickTimer: null, // 长按定时器
+      longClickNum: 0 // 判断长按还是点击的值
     }
   },
   created () {
@@ -40,20 +42,23 @@ export const viewsMixin = {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
-      if (this.$isVibrate) {
-        navigator.vibrate(100)
-      }
-      let body = {
-        batch: {
-          controlKey: {
-            controlKey: this.tempCmds[val] + ''
-          },
-          deviceList: {
-            list: [this.rc]
+      if (!this.cmdsKey.includes(val)) return
+      if (this.rc.pageType === 'controlPage') {
+        if (this.$isVibrate) {
+          navigator.vibrate(100)
+        }
+        let body = {
+          batch: {
+            controlKey: {
+              controlKey: this.tempCmds[val] + ''
+            },
+            deviceList: {
+              list: [this.rc]
+            }
           }
         }
+        sendBodyToDev(body)
       }
-      sendBodyToDev(body)
     },
     moreSet () {
       this.$router.push({
@@ -61,9 +66,40 @@ export const viewsMixin = {
         query: {
           name: this.title,
           hid: this.rc.hid,
-          devId: this.rc.devId
+          devId: this.rc.devId,
+          tid: this.rc.tid
         }
       })
+    },
+    /** 长按事件 **/
+    longClickStart (val) {
+      console.log('rc', this.rc);
+      if (this.rc.pageType === 'learnPage') {
+        this.longClickNum = 0
+        this.longClickTimer = setTimeout(() => {
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.tempCmds[val] + '',
+                feedKey: 1
+              },
+              deviceList: {
+                list: [this.rc]
+              }
+            }
+          }
+          sendBodyToDev(body)
+          this.longClickNum = 1
+        }, 500)
+      }
+    },
+    longClickEnd (val) {
+      if (this.rc.pageType === 'learnPage') {
+        clearTimeout(this.longClickTimer);
+        if(this.longClickTimer !== 0 && this.longClickNum ===0){//点击
+          // this.sendBody (val)
+        }
+      }
     }
   }
 }

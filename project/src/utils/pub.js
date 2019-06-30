@@ -34,7 +34,7 @@ export function sendBodyToDev2 (body, callback) {
 }
 
 export class RC {
-  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip2, isSwitch = 'on', zip = '1', ui = 0, encode = 0) {
+  constructor (rid, name, index, src, beRmodel, rmodel, bid, tid, hname, hid, zip2, isSwitch = 'on', pageType = 'controlPage', zip = '1', ui = 0, encode = 0) {
     this.rid = rid + ''
     this.name = name
     this.index = index
@@ -50,6 +50,7 @@ export class RC {
     this.ui = ui
     this.encode = encode
     this.isSwitch = isSwitch
+    this.pageType = pageType
   }
 }
 

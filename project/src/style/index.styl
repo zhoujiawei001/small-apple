@@ -104,7 +104,7 @@ a {
 
 .btn-disable2
   opacity: .4
-  pointer-events none
+  //pointer-events none
 /** vue动画：淡入淡出 **/
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
@@ -123,6 +123,18 @@ a {
     opacity 1
   75%
     opacity 0
+/** 背景颜色转换 **/
+@keyframes bgcChange
+  0%
+    background-color $bdColorTheme
+  25%
+    background-color $fontColorTheme
+  50%
+    background-color $bdColorTheme
+  75%
+    background-color $fontColorTheme
+.learnActive
+  animation bgcChange 3s infinite
 /** 单条border样式设置1px **/
 .scale-1px
   position relative

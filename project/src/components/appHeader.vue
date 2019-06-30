@@ -2,7 +2,7 @@
   <div class="appHeader" :style="styObj">
     <span class="back" @click="back"></span>
     <span class="title">{{title}}</span>
-    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore}"></span>
+    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage'}"></span>
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default {
     hiddenMore: {
       type: Boolean,
       default: false
+    },
+    curPageType: {
+      type: String,
+      default: ''
     }
   },
   data () {

@@ -16,8 +16,9 @@
     </div>
     <div
       class="delete flex scale-1px"
-      :class="{'btn-disable': $route.query.tid === 7}">
-      <span class="left">遥控学习按键</span>
+      :class="{'btn-disable': $route.query.tid === 7}"
+      @click="goToLearnPage">
+      <span class="left">遥控器按键学习</span>
       <span class="arrow-right"></span>
     </div>
     <div class="modify-devName" v-if="modifyFlag">
@@ -104,14 +105,23 @@
               getExtendToServe().then(data => {
                 this.$store.commit('setAddedDevList', data)
                 this.$router.push('/')
+                this.deleLocalData()
               })
             }
           })
         }
       }
     },
+    mounted () {
+      console.log('query', this.$route.query)
+    },
     computed: {
-      ...mapState(['statusBarHg'])
+      ...mapState(['statusBarHg', 'addedDevList']),
+      queryObj () {
+        let newList = this.addedDevList.filter(item => item.hid === this.hid)
+        newList[0].pageType = 'learnPage'
+        return newList[0]
+      }
     },
     methods: {
       // 确定改名
@@ -152,6 +162,19 @@
       },
       goBack () {
         this.$router.go(-1)
+      },
+      /** 跳去学习页面 **/
+      goToLearnPage () {
+        this.$router.push({
+          path:`/device${this.$route.query.tid}`,
+          query: {
+            rc: JSON.stringify(this.queryObj)
+          }
+        })
+      },
+      /** 删除设备在本地缓存数据 **/
+      deleLocalData () {
+        window.localStorage.removeItem(`learnCode_${this.hid}`)
       }
     },
     destroyed () {

@@ -38,7 +38,10 @@ export default new Vuex.Store({
         para: 'power',
         paraValue: 2 // 1-倒计时开，2-倒计时关
       }
-    ]
+    ],
+    controlKey: {
+      feedKey: 0
+    } // 学习返回码 0-学习失败/超时， 1-开始学习，2-学习成功
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px
@@ -98,6 +101,10 @@ export default new Vuex.Store({
     },
     setDelay (state, payload) {
       state.delay = payload
+    },
+    setFeedKey (state, payload) {
+      console.log('payload_feedKey', payload)
+      state.controlKey = payload
     }
   },
   actions: {
@@ -108,7 +115,7 @@ export default new Vuex.Store({
       window.deviceEventCallback = res => {
         let data = parseHilinkData(res)
         window.app.changeSerData(data)
-        console.log(data)
+        console.log('设备上报', data)
         console.log('123')
       }
       window.app = {
@@ -128,11 +135,15 @@ export default new Vuex.Store({
               commit('setAppStatus', obj.data.on)
               break
             case 'loadRes':
+              console.log('loadRes', obj.data.loadRes)
               commit('setLoadRes', obj.data.loadRes)
               break
             case 'delay':
               commit('setDelay', obj.data.delay)
               break
+            case 'controlKey':
+              console.log('obj_controlKey_feedKey', obj.data.controlKey)
+              commit('setFeedKey', obj.data.controlKey)
           }
         },
         setTitleCallback (res) {

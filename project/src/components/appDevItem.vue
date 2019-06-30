@@ -33,6 +33,11 @@
           }
           return obj[val]
         }
+      },
+      queryObj () {
+        let newObj = JSON.parse(JSON.stringify(this.item))
+        newObj.pageType = 'controlPage'
+        return newObj
       }
     },
     methods: {
@@ -40,7 +45,7 @@
         this.$router.push({
           path: `/device${this.item.tid}`,
           query: {
-            rc: JSON.stringify(this.item)
+            rc: JSON.stringify(this.queryObj)
           }
         })
       },
