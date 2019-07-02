@@ -135,14 +135,12 @@ export default new Vuex.Store({
               commit('setAppStatus', obj.data.on)
               break
             case 'loadRes':
-              console.log('loadRes', obj.data.loadRes)
               commit('setLoadRes', obj.data.loadRes)
               break
             case 'delay':
               commit('setDelay', obj.data.delay)
               break
             case 'controlKey':
-              console.log('obj_controlKey_feedKey', obj.data.controlKey)
               commit('setFeedKey', obj.data.controlKey)
           }
         },
