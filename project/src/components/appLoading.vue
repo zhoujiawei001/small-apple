@@ -1,7 +1,7 @@
 <template>
   <div class="loading">
     <div class="container">
-      <div class="text">正在删除...</div>
+      <div class="text">{{loadingTxt}}</div>
       <div class="loading-svg">
         <img src="../assets/loading.svg">
       </div>
@@ -11,7 +11,8 @@
 
 <script>
   export default {
-    name: 'appLoading'
+    name: 'appLoading',
+    props: ['loadingTxt']
   }
 </script>
 
@@ -28,7 +29,7 @@
       background #fff
       border-radius .8rem
       setWH(95vw, 7rem)
-      bottom 1rem
+      bottom 10rem
       left 50%
       transform translateX(-50%)
       padding 1rem 1.6rem

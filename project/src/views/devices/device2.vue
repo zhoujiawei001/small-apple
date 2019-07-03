@@ -180,6 +180,8 @@
     <transition name="fade">
       <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
+    <!-- 加载中 -->
+    <appLoading loadingTxt="正在删除..." v-show="loadingFlag"></appLoading>
   </div>
 </template>
 
@@ -188,6 +190,7 @@
   import appTipsBox from '@/components/appTipsBox'
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
+  import appLoading from '@/components/appLoading'
   // import { viewsMixin } from '@/utils/mixin'
   import { mapState, mapActions } from 'vuex'
   import { sendBodyToDev, watchVirtualKey } from '../../utils/pub'
@@ -199,7 +202,8 @@
       appHeader,
       appTipsBox,
       appLearnTips,
-      appMatchTips
+      appMatchTips,
+      appLoading
     },
     data () {
       return {
@@ -266,7 +270,8 @@
         learnBoxText: '长按要学习的按键，进入学习状态，此键会闪烁，等待学习',
         learnTimeoutTimer: null, // 学习超时定时器
         learnTimeoutCount: 0, // 学习时间
-        curNum: 1
+        curNum: 1,
+        loadingFlag: true
       }
     },
     watch: {

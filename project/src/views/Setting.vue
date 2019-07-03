@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <appLoading v-show="loadingFlag"></appLoading>
+    <appLoading loadingTxt="正在删除..." v-show="loadingFlag"></appLoading>
   </div>
 </template>
 
