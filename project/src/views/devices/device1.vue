@@ -3,24 +3,37 @@
   <div class="dev-STB">
     <appHeader
       :title="title"
-      @back-icon="$router.go(-1)"
+      :curPageType="rc.pageType"
+      @back-icon="onClickBack"
       @set="moreSet"></appHeader>
     <div class="container" :style="styObjCont">
       <div class="top flex">
         <div
           class="stb-switch"
           @click="sendBody('power')"
-          :class="{'btn-disable2': !cmdsKey.includes('power')}">
+          @touchstart="longClickStart('power')"
+          @touchend="longClickEnd('power')"
+          :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <span class="img-box"></span>
           <span class="text">机顶盒开关</span>
         </div>
-        <div class="tv-switch btn-disable2">
+        <div
+          class="tv-switch"
+          @click="sendBody('tvpower')"
+          @touchstart="longClickStart('tvpower')"
+          @touchend="longClickEnd('tvpower')"
+          :class="[{'btn-disable2': !cmdsKey.includes('tvpower')},{ 'learnActive': isLearn && curLearnKey === 'tvpower'}]">
           <span class="img-box"></span>
           <span class="text">电视机开关</span>
         </div>
-        <div class="input-choose btn-disable2">
+        <div
+          class="input-choose"
+          @click="sendBody('signal')"
+          @touchstart="longClickStart('signal')"
+          @touchend="longClickEnd('signal')"
+          :class="[{'btn-disable2': !cmdsKey.includes('signal')},{ 'learnActive': isLearn && curLearnKey === 'signal'}]">
           <span class="img-box"></span>
-          <span class="text">输入选择</span>
+          <span class="text">输入选项</span>
         </div>
       </div>
       <div class="channel-voice flex">
@@ -28,32 +41,44 @@
           <span
             class="up btn"
             @click="sendBody('ch+')"
-            :class="{'btn-disable2': !cmdsKey.includes('ch+')}">＋</span>
+            @touchstart="longClickStart('ch+')"
+            @touchend="longClickEnd('ch+')"
+            :class="[{'btn-disable2': !cmdsKey.includes('ch+')},{ 'learnActive': isLearn && curLearnKey === 'ch+'}]">＋</span>
             <span class="text">频道</span>
-            <span class="down btn"
+            <span
+              class="down btn"
               @click="sendBody('ch-')"
-              :class="{'btn-disable2': !cmdsKey.includes('ch-')}">—</span>
+              @touchstart="longClickStart('ch-')"
+              @touchend="longClickEnd('ch-')"
+              :class="[{'btn-disable2': !cmdsKey.includes('ch-')},{ 'learnActive': isLearn && curLearnKey === 'ch-'}]">—</span>
         </div>
         <div class="function">
           <span
             class="quiet"
             @click="sendBody('mute')"
-            :class="{'btn-disable2': !cmdsKey.includes('mute')}"></span>
+            @touchstart="longClickStart('mute')"
+            @touchend="longClickEnd('mute')"
+            :class="[{'btn-disable2': !cmdsKey.includes('mute')},{ 'learnActive': isLearn && curLearnKey === 'mute'}]"></span>
           <span
             class="home"
             @click="sendBody('boot')"
-            :class="{'btn-disable2': !cmdsKey.includes('boot')}"></span>
+            @touchstart="longClickStart('boot')"
+            @touchend="longClickEnd('boot')"
+            :class="[{'btn-disable2': !cmdsKey.includes('boot')},{ 'learnActive': isLearn && curLearnKey === 'boot'}]"></span>
         </div>
         <div class="voice">
           <span
             class="up btn"
             @click="sendBody('vol+')"
-            :class="{'btn-disable2': !cmdsKey.includes('vol+')}">＋</span>
+            @touchstart="longClickStart('vol+')"
+            @touchend="longClickEnd('vol+')"
+            :class="[{'btn-disable2': !cmdsKey.includes('vol+')},{ 'learnActive': isLearn && curLearnKey === 'vol+'}]">＋</span>
             <span class="text">音量</span>
             <span
               class="down btn"
-              @click="sendBody('vol-')"
-              :class="{'btn-disable2': !cmdsKey.includes('vol-')}">—</span>
+              @touchstart="longClickStart('vol-')"
+              @touchend="longClickEnd('vol-')"
+              :class="[{'btn-disable2': !cmdsKey.includes('vol-')},{ 'learnActive': isLearn && curLearnKey === 'vol-'}]">—</span>
         </div>
       </div>
       <div class="flex function">
@@ -61,93 +86,138 @@
           <span
             class="menu"
             @click="sendBody('menu')"
-            :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
-            <span
-              class="back btn"
-              @click="sendBody('exit')"
-              :class="{'btn-disable2': !cmdsKey.includes('exit')}">退出</span>
+            @touchstart="longClickStart('menu')"
+            @touchend="longClickEnd('menu')"
+            :class="[{'btn-disable2': !cmdsKey.includes('menu')},{ 'learnActive': isLearn && curLearnKey === 'menu'}]"></span>
+          <span
+            class="back btn"
+            @click="sendBody('exit')"
+            @touchstart="longClickStart('exit')"
+            @touchend="longClickEnd('exit')"
+            :class="[{'btn-disable2': !cmdsKey.includes('exit')},{ 'learnActive': isLearn && curLearnKey === 'exit'}]">退出</span>
         </div>
         <div class="mid">
           <div
             class="ok border-1px btn"
             @click="sendBody('ok')"
-            :class="{'btn-disable2': !cmdsKey.includes('ok')}">OK</div>
+            @touchstart="longClickStart('ok')"
+            @touchend="longClickEnd('ok')"
+            :class="[{'btn-disable2': !cmdsKey.includes('ok')},{ 'learnActive': isLearn && curLearnKey === 'ok'}]">OK
+          </div>
           <span
             class="top-circle btn"
             @click="sendBody('up')"
-            :class="{'btn-disable2': !cmdsKey.includes('up')}">○</span>
+            @touchstart="longClickStart('up')"
+            @touchend="longClickEnd('up')"
+            :class="[{'btn-disable2': !cmdsKey.includes('up')},{ 'learnActive': isLearn && curLearnKey === 'up'}]">○</span>
           <span
             class="bottom-circle btn"
             @click="sendBody('down')"
-            :class="{'btn-disable2': !cmdsKey.includes('down')}">○</span>
+            @touchstart="longClickStart('down')"
+            @touchend="longClickEnd('down')"
+            :class="[{'btn-disable2': !cmdsKey.includes('down')},{ 'learnActive': isLearn && curLearnKey === 'down'}]">○</span>
           <span
             class="left-circle btn"
             @click="sendBody('left')"
-            :class="{'btn-disable2': !cmdsKey.includes('left')}">○</span>
+            @touchstart="longClickStart('left')"
+            @touchend="longClickEnd('left')"
+            :class="[{'btn-disable2': !cmdsKey.includes('left')},{ 'learnActive': isLearn && curLearnKey === 'left'}]">○</span>
           <span
             class="right-circle btn"
             @click="sendBody('right')"
-            :class="{'btn-disable2': !cmdsKey.includes('right')}">○</span>
+            @touchstart="longClickStart('right')"
+            @touchend="longClickEnd('right')"
+            :class="[{'btn-disable2': !cmdsKey.includes('right')},{ 'learnActive': isLearn && curLearnKey === 'right'}]">○</span>
         </div>
         <div class="right">
           <span
             class="return"
             @click="sendBody('back')"
-            :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
+            @touchstart="longClickStart('back')"
+            @touchend="longClickEnd('back')"
+            :class="[{'btn-disable2': !cmdsKey.includes('back')},{ 'learnActive': isLearn && curLearnKey === 'back'}]"></span>
         </div>
       </div>
       <div class="btn-forward-back-off flex">
         <span
           class="back-off"
           @click="sendBody('rew')"
-          :class="{'btn-disable2': !cmdsKey.includes('rew')}"></span>
+          @touchstart="longClickStart('rew')"
+          @touchend="longClickEnd('rew')"
+          :class="[{'btn-disable2': !cmdsKey.includes('rew')},{ 'learnActive': isLearn && curLearnKey === 'rew'}]"></span>
         <div
           class="pause"
           @click="sendBody('pause')"
-          :class="{'btn-disable2': !cmdsKey.includes('pause')}">
+          @touchstart="longClickStart('pause')"
+          @touchend="longClickEnd('pause')"
+          :class="[{'btn-disable2': !cmdsKey.includes('pause')},{ 'learnActive': isLearn && curLearnKey === 'pause'}]">
           <img src="../../assets/blue/pause.png" alt="">
         </div>
         <span
           class="forward"
           @click="sendBody('ff')"
-          :class="{'btn-disable2': !cmdsKey.includes('ff')}"></span>
+          @touchstart="longClickStart('ff')"
+          @touchend="longClickEnd('ff')"
+          :class="[{'btn-disable2': !cmdsKey.includes('ff')},{ 'learnActive': isLearn && curLearnKey === 'ff'}]"></span>
       </div>
       <div class="tel-number">
         <span
           class="item btn"
           v-for="(item, idx) of telNumber"
           :key="idx"
-          :class="{'btn-disable2': !cmdsKey.includes(item+'')}"
-          @click="sendBody(item)">{{item}}</span>
+          @click="sendBody(item)"
+          @touchstart="longClickStart(item)"
+          @touchend="longClickEnd(item)"
+          :class="[{'btn-disable2': !cmdsKey.includes(item)},{ 'learnActive': isLearn && curLearnKey === item}]">{{item}}</span>
         <span
           class="item btn"
-          :class="{'btn-disable2': !cmdsKey.includes('*')}"
-          @click="sendBody('*')">*</span>
+          @touchstart="longClickStart('*')"
+          @touchend="longClickEnd('*')"
+          @click="sendBody('*')"
+          :class="[{'btn-disable2': !cmdsKey.includes('*')},{ 'learnActive': isLearn && curLearnKey === '*'}]">*</span>
         <span
           class="item btn"
-          :class="{'btn-disable2': !cmdsKey.includes('0')}"
-          @click="sendBody('0')">0</span>
+          @click="sendBody('0')"
+          @touchstart="longClickStart('0')"
+          @touchend="longClickEnd('0')"
+          :class="[{'btn-disable2': !cmdsKey.includes('0')},{ 'learnActive': isLearn && curLearnKey === '0'}]">0</span>
         <span
           class="item btn"
-          :class="{'btn-disable2': !cmdsKey.includes('#')}"
-          @click="sendBody('#')">#</span>
+          @touchstart="longClickStart('#')"
+          @touchend="longClickEnd('#')"
+          @click="sendBody('#')"
+          :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
     </div>
+    <!-- 底层提示 -->
+    <appLearnTips
+      v-if="rc.pageType === 'learnPage'"
+      :learnBoxText="learnBoxText"
+      :btnText="isLearn? '结束' : '完成'"
+      @handle-end="handleEnd"></appLearnTips>
+    <!-- 返回提示框 -->
+    <transition name="fade">
+      <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
 <script>
   import appHeader from '@/components/appHeader'
+  import appTipsBox from '@/components/appTipsBox'
+  import appLearnTips from '@/components/appLearnTips'
   import { viewsMixin } from '@/utils/mixin'
   export default {
     name: 'device1',
     mixins: [viewsMixin],
     components: {
       appHeader,
+      appTipsBox,
+      appLearnTips
     },
     data () {
       return {
-        telNumber: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
         tempCmds: {
           '0': 1,
           '1': 2,
@@ -194,7 +264,10 @@
           'rec': 43,
           'red': 44,
           'rew': 45,
-          'search': 46
+          'search': 46,
+          'tvpower': 47,
+          'av/tv': 48,
+          'signal': 49
         }
       }
     }
@@ -207,6 +280,8 @@
     background #F2F2F2
     setPosUseFlexInit(column)
     setWH()
+    -webkit-overflow-scrolling: touch
+    overflow-scrolling: touch
     .container
       flex 1
       margin-top 6.8rem
@@ -307,7 +382,7 @@
           justify-content: center
           align-items center
           &:active
-            background-color: $bgColorTheme;
+            background-color: $bgActiveColor;
           img
             width 4rem
         .back-off

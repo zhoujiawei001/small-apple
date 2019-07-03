@@ -3,70 +3,117 @@
   <div class="dev-box">
     <appHeader
       :title="title"
-      @back-icon="$router.go(-1)"
+      :curPageType="rc.pageType"
+      @back-icon="onClickBack"
       @set="moreSet"></appHeader>
     <div class="container" :style="styObjCont">
       <div class="top flex">
-        <div class="stb-switch"
-             @click="sendBody('power')"
-             :class="{'btn-disable2': !cmdsKey.includes('power')}">
+        <div
+          class="stb-switch"
+          @click="sendBody('power')"
+          @touchstart="longClickStart('power')"
+          @touchend="longClickEnd('power')"
+          :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <span class="img-box"></span>
           <span class="text">机顶盒开关</span>
         </div>
-        <div class="tv-switch btn-disable2">
+        <div
+          class="tv-switch"
+          @click="sendBody('tvpower')"
+          @touchstart="longClickStart('tvpower')"
+          @touchend="longClickEnd('tvpower')"
+          :class="[{'btn-disable2': !cmdsKey.includes('tvpower')},{ 'learnActive': isLearn && curLearnKey === 'tvpower'}]">
           <span class="img-box"></span>
           <span class="text">电视机开关</span>
         </div>
-        <div class="input-choose btn-disable2">
+        <div
+          class="input-choose"
+          @click="sendBody('signal')"
+          @touchstart="longClickStart('signal')"
+          @touchend="longClickEnd('signal')"
+          :class="[{'btn-disable2': !cmdsKey.includes('signal')},{ 'learnActive': isLearn && curLearnKey === 'signal'}]">
           <span class="img-box"></span>
-          <span class="text">输入选择</span>
+          <span class="text">输入选项</span>
         </div>
       </div>
       <div class="volume">
         <div class="box">
-          <span class="add btn"
-              @click="sendBody('vol+')"
-              :class="{'btn-disable2': !cmdsKey.includes('vol+')}">＋</span>
+          <span
+            class="add btn"
+            @click="sendBody('vol+')"
+            @touchstart="longClickStart('vol+')"
+            @touchend="longClickEnd('vol+')"
+            :class="[{'btn-disable2': !cmdsKey.includes('vol+')},{ 'learnActive': isLearn && curLearnKey === 'vol+'}]">＋</span>
           <span class="text">音量</span>
-          <span class="sub btn"
-                @click="sendBody('vol-')"
-                :class="{'btn-disable2': !cmdsKey.includes('vol-')}">—</span>
+          <span
+            class="sub btn"
+            @click="sendBody('vol-')"
+            @touchstart="longClickStart('vol-')"
+            @touchend="longClickEnd('vol-')"
+            :class="[{'btn-disable2': !cmdsKey.includes('vol-')},{ 'learnActive': isLearn && curLearnKey === 'vol-'}]">—</span>
         </div>
       </div>
       <div class="flex function">
         <div class="left">
-          <span class="home"
-              @click="sendBody('boot')"
-              :class="{'btn-disable2': !cmdsKey.includes('boot')}"></span>
-          <span class="menu btn"
-                @click="sendBody('menu')"
-                :class="{'btn-disable2': !cmdsKey.includes('menu')}"></span>
+          <span
+            class="home"
+            @click="sendBody('boot')"
+            @touchstart="longClickStart('boot')"
+            @touchend="longClickEnd('boot')"
+            :class="[{'btn-disable2': !cmdsKey.includes('boot')},{ 'learnActive': isLearn && curLearnKey === 'boot'}]"></span>
+          <span
+            class="menu btn"
+            @click="sendBody('menu')"
+            @touchstart="longClickStart('menu')"
+            @touchend="longClickEnd('menu')"
+            :class="[{'btn-disable2': !cmdsKey.includes('menu')},{ 'learnActive': isLearn && curLearnKey === 'menu'}]"></span>
         </div>
         <div class="mid">
-          <div class="ok border-1px btn"
-               @click="sendBody('ok')"
-               :class="{'btn-disable2': !cmdsKey.includes('ok')}">OK
+          <div
+            class="ok border-1px btn"
+            @click="sendBody('ok')"
+            @touchstart="longClickStart('ok')"
+            @touchend="longClickEnd('ok')"
+            :class="[{'btn-disable2': !cmdsKey.includes('ok')},{ 'learnActive': isLearn && curLearnKey === 'ok'}]">OK
           </div>
-          <span class="top-circle btn"
-                @click="sendBody('up')"
-                :class="{'btn-disable2': !cmdsKey.includes('up')}">○</span>
-          <span class="bottom-circle btn"
-                @click="sendBody('down')"
-                :class="{'btn-disable2': !cmdsKey.includes('down')}">○</span>
-          <span class="left-circle btn"
-                @click="sendBody('left')"
-                :class="{'btn-disable2': !cmdsKey.includes('left')}">○</span>
-          <span class="right-circle btn"
-                @click="sendBody('right')"
-                :class="{'btn-disable2': !cmdsKey.includes('right')}">○</span>
+          <span
+            class="top-circle btn"
+            @click="sendBody('up')"
+            @touchstart="longClickStart('up')"
+            @touchend="longClickEnd('up')"
+            :class="[{'btn-disable2': !cmdsKey.includes('up')},{ 'learnActive': isLearn && curLearnKey === 'up'}]">○</span>
+          <span
+            class="bottom-circle btn"
+            @click="sendBody('down')"
+            @touchstart="longClickStart('down')"
+            @touchend="longClickEnd('down')"
+            :class="[{'btn-disable2': !cmdsKey.includes('down')},{ 'learnActive': isLearn && curLearnKey === 'down'}]">○</span>
+          <span
+            class="left-circle btn"
+            @click="sendBody('left')"
+            @touchstart="longClickStart('left')"
+            @touchend="longClickEnd('left')"
+            :class="[{'btn-disable2': !cmdsKey.includes('left')},{ 'learnActive': isLearn && curLearnKey === 'left'}]">○</span>
+          <span
+            class="right-circle btn"
+            @click="sendBody('right')"
+            @touchstart="longClickStart('right')"
+            @touchend="longClickEnd('right')"
+            :class="[{'btn-disable2': !cmdsKey.includes('right')},{ 'learnActive': isLearn && curLearnKey === 'right'}]">○</span>
         </div>
         <div class="right">
-        <span class="quiet"
-              @click="sendBody('mute')"
-              :class="{'btn-disable2': !cmdsKey.includes('mute')}"></span>
-          <span class="return"
-                @click="sendBody('back')"
-                :class="{'btn-disable2': !cmdsKey.includes('back')}"></span>
+        <span
+          class="quiet"
+          @click="sendBody('mute')"
+          @touchstart="longClickStart('mute')"
+          @touchend="longClickEnd('mute')"
+          :class="[{'btn-disable2': !cmdsKey.includes('mute')},{ 'learnActive': isLearn && curLearnKey === 'mute'}]"></span>
+          <span
+            class="return"
+            @click="sendBody('back')"
+            @touchstart="longClickStart('back')"
+            @touchend="longClickEnd('back')"
+            :class="[{'btn-disable2': !cmdsKey.includes('back')},{ 'learnActive': isLearn && curLearnKey === 'back'}]"></span>
         </div>
       </div>
       <!-- 额外功能 -->
@@ -81,11 +128,23 @@
         </div>
       </div>
     </div>
+    <!-- 底层提示 -->
+    <appLearnTips
+      v-if="rc.pageType === 'learnPage'"
+      :learnBoxText="learnBoxText"
+      :btnText="isLearn? '结束' : '完成'"
+      @handle-end="handleEnd"></appLearnTips>
+    <!-- 返回提示框 -->
+    <transition name="fade">
+      <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
 <script>
   import appHeader from '@/components/appHeader'
+  import appTipsBox from '@/components/appTipsBox'
+  import appLearnTips from '@/components/appLearnTips'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -93,6 +152,8 @@
     mixins: [viewsMixin],
     components: {
       appHeader,
+      appTipsBox,
+      appLearnTips
     },
     data () {
       return {
@@ -108,7 +169,10 @@
           'up': 9,
           'vol+': 10,
           'vol-': 11,
-          'mute': 12
+          'mute': 12,
+          'tvpower': 13,
+          'av/tv': 14,
+          'signal': 15
         }
       }
     }
@@ -157,16 +221,24 @@
             border-radius 50%
 
             &.top-circle
+              left 50%
+              transform translateX(-50%)
               top 0
 
             &.left-circle
               left 0
+              top: 50%
+              transform translateY(-50%)
 
             &.right-circle
+              top: 50%
+              transform translateY(-50%)
               right 0
 
             &.bottom-circle
               bottom 0
+              left 50%
+              transform translateX(-50%)
 
           .ok
             setWH(7rem, 7rem)
