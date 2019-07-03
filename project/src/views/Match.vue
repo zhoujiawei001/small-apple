@@ -21,8 +21,7 @@
         <div class="btn-reduce"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActiveRe}]"
            @touchstart="longHandleMatch('reduce')"
-           @touchend="endLongHandleMatch('reduce')"
-           @click="sendCode('reduce')">
+           @touchend="endLongHandleMatch('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
         <div class="btn-switch"
@@ -33,8 +32,7 @@
         <div class="btn-plus"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActivePl}]"
            @touchstart="longHandleMatch('plus')"
-           @touchend="endLongHandleMatch('plus')"
-           @click="sendCode('plus')">
+           @touchend="endLongHandleMatch('plus')">
           <img src="../assets/match_plus.png" alt="">
         </div>
       </div>
@@ -73,7 +71,10 @@ export default {
       timer: null, // 计算超时定时器
       longTimer: null, // 长按定时下发
       isActiveRe: false, // 控制按下去的背景颜色
-      isActivePl: false // 控制按下去的背景颜色
+      isActivePl: false, // 控制按下去的背景颜色
+      longClickTimer: null, // 长按定时器
+      longClickNum: 0, // 判断长按还是点击的值
+      secondModeList: [] // 二级匹配数据
     }
   },
   components: {
@@ -183,52 +184,8 @@ export default {
       }
     })
   },
-  mounted () {
-    // window.deviceEventCallback = res => {
-    //   let loadResObj = parseHilinkData(res)
-    //   console.log('loadRes', parseHilinkData(res))
-    //   if (loadResObj.sid === 'loadRes') {
-    //     let obj = loadResObj.data.loadRes
-    //     if (obj.isFinish === 1) {
-    //       this.registerVirtualDev().then(data => {
-    //         if (data.errcode === 0) {
-    //           this.rc.devId = data.devId
-    //           console.log('第二个RC', this.rc)
-    //           this.postYkDevToServe().then(data2 => {
-    //             if (data2.errcode === 0) {
-    //               postExtendToServe(this.rc).then(data3 => {
-    //                 if (data3.errcode === 0) {
-    //                   let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
-    //                   cloneList.push(this.rc)
-    //                   this.$store.commit('setAddedDevList', cloneList)
-    //                   this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
-    //                   this.$router.push('/')
-    //                 } else {
-    //                   window.hilink.toast('2', '添加遥控失败')
-    //                   removeRegisteredVirtualDevYk(this.rc.devId)
-    //                   this.tips = false
-    //                 }
-    //               })
-    //             } else {
-    //               window.hilink.toast('2', '添加遥控失败')
-    //               removeRegisteredVirtualDevYk(this.rc.devId)
-    //               this.tips = false
-    //             }
-    //           })
-    //         } else {
-    //           window.hilink.toast('2', '添加遥控失败')
-    //           this.tips = false
-    //         }
-    //       })
-    //     } else {
-    //       window.hilink.toast('2', '下载码库失败')
-    //       this.tips = false
-    //     }
-    //   }
-    // }
-  },
   methods: {
-    ...mapActions(['getDevModeList', 'getDevCodeLibAndInfo']),
+    ...mapActions(['getDevModeList', 'getDevCodeLibAndInfo', 'getSecondLevelMatchData']),
     /** 初始化一些数据 **/
     initSomeData () {
       let arr = this.addedDevList.map(item => item.index)
@@ -279,13 +236,23 @@ export default {
       } else {
         this.isActiveRe = true
       }
-      this.longTimer = setInterval(() => {
+      this.longClickNum = 0
+      this.longClickTimer = setTimeout(() => {
+        if (this.$isVibrate) {
+          navigator.vibrate(100)
+        }
+        this.longClickNum = 1
         this.sendCode(val)
-      }, 1200)
+        this.longTimer = setInterval(() => {
+          if (this.$isVibrate) {
+            navigator.vibrate(100)
+          }
+          this.sendCode(val)
+        }, 1200)
+      },1200)
     },
     /** 结束长按匹配 **/
     endLongHandleMatch (val) {
-      // if (this.isActivePl || this.isActiveRe) return
       if (val === 'plus') {
         if (this.isActiveRe) return // 防止两个按钮同时点击出现定时错乱
         this.isActivePl = false
@@ -295,27 +262,53 @@ export default {
       }
       clearInterval(this.longTimer)
       this.longTimer = null
+      clearTimeout(this.longClickTimer)
+      this.longClickTimer = null
+      if (this.longClickNum === 0) {
+        this.sendCode(val)
+        console.log('currentCmd', this.modeList[this.currentNum - 1])
+      }
     },
     nextFun () {
-      this.tips = true
-      this.handleMatchTimeout()
-      this.getDevCodeLibAndInfo(this.currentRid)
-        .then(data => {
-          this.rc = new RC(
-            data.rid,
-            data.name,
-            this.allowIndexArr[0],
-            this.currentCode,
-            data.be_rmodel,
-            data.rmodel,
-            data.bid,
-            +data.be_rc_type,
-            '',
-            assembleTS(),
-            this.currentZip)
-          console.log('第一个RC', this.rc)
-          this.setUrlDomainToDev(this.rc)
+      if (this.tid !== 7) {
+        this.getSecondLevelMatchData().then(data => {
+          this.secondModeList = data
+          this.$store.commit('setSecondList', this.secondModeList)
+          this.$store.commit('setSecondListTotal', this.secondModeList.length)
+          this.rc = {
+            rid: this.secondModeList[0].rid,
+            pageType: 'matchPage',
+            hname: '电视机'
+          }
+          this.$router.push({
+            path: `/device${this.tid}`,
+            query: {
+              rc: JSON.stringify(this.rc)
+            }
+          })
         })
+      } else {
+        this.tips = true
+        this.handleMatchTimeout()
+        this.getDevCodeLibAndInfo(this.currentRid)
+          .then(data => {
+            this.rc = new RC(
+              data.rid,
+              data.name,
+              this.allowIndexArr[0],
+              this.currentCode,
+              data.be_rmodel,
+              data.rmodel,
+              data.bid,
+              +data.be_rc_type,
+              '',
+              assembleTS(),
+              this.currentZip)
+            console.log('第一个RC', this.rc)
+            this.setUrlDomainToDev(this.rc)
+          })
+      }
+
     },
     /** 下发参数给设备下载码库 **/
     setUrlDomainToDev (rc) {

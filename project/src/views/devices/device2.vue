@@ -162,12 +162,20 @@
           :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
     </div>
-    <!-- 底层提示 -->
+    <!-- learn底层提示 -->
     <appLearnTips
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :btnText="isLearn? '结束' : '完成'"
       @handle-end="handleEnd"></appLearnTips>
+    <!-- match底层提示 -->
+    <appMatchTips
+      v-if="rc.pageType === 'matchPage'"
+      :curNum="curNum"
+      :total="secondListTotal"
+      @handle-left="handleLeft"
+      @handle-right="handleRight"
+      @handle-mid="handleMid"></appMatchTips>
     <!-- 返回提示框 -->
     <transition name="fade">
       <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
@@ -179,6 +187,7 @@
   import appHeader from '@/components/appHeader'
   import appTipsBox from '@/components/appTipsBox'
   import appLearnTips from '@/components/appLearnTips'
+  import appMatchTips from '@/components/appMatchTips'
   // import { viewsMixin } from '@/utils/mixin'
   import { mapState, mapActions } from 'vuex'
   import { sendBodyToDev, watchVirtualKey } from '../../utils/pub'
@@ -189,7 +198,8 @@
     components: {
       appHeader,
       appTipsBox,
-      appLearnTips
+      appLearnTips,
+      appMatchTips
     },
     data () {
       return {
@@ -255,7 +265,8 @@
         tipsBox: false, // 提示框显示隐藏
         learnBoxText: '长按要学习的按键，进入学习状态，此键会闪烁，等待学习',
         learnTimeoutTimer: null, // 学习超时定时器
-        learnTimeoutCount: 0 // 学习时间
+        learnTimeoutCount: 0, // 学习时间
+        curNum: 1
       }
     },
     watch: {
@@ -278,16 +289,22 @@
       }
     },
     created () {
-      if (this.cmdList.hasOwnProperty(this.rc.rid)) {
-        this.cmds = this.cmdList[this.rc.rid]
-        console.log('cmds', this.cmds)
-      } else {
+      if (this.rc.pageType === 'matchPage') {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
-          this.$store.commit('updateCmdList', {
-            [this.rc.rid]: data.rc_command
-          })
         })
+      } else {
+        if (this.cmdList.hasOwnProperty(this.rc.rid)) {
+          this.cmds = this.cmdList[this.rc.rid]
+          console.log('cmds', this.cmds)
+        } else {
+          this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
+            this.cmds = data.rc_command
+            this.$store.commit('updateCmdList', {
+              [this.rc.rid]: data.rc_command
+            })
+          })
+        }
       }
       watchVirtualKey(true).then(bool => {
         if (bool) {
@@ -308,18 +325,26 @@
       console.log('cmdsKey', this.cmdsKey)
     },
     computed: {
-      ...mapState(['addedDevList', 'cmdList', 'statusBarHg', 'controlKey']),
+      ...mapState(['addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList']),
       cmdsKey () {
-        return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
+        if (this.rc.pageType === 'matchPage') {
+          return Object.keys(this.cmds)
+        } else {
+          return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
+        }
       },
       title () {
-        let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
-        return arr[0].hname || arr[0].name
+        if (this.rc.pageType === 'matchPage') {
+          return this.rc.hname
+        } else {
+          let arr = this.addedDevList.filter(item => item.hid === this.rc.hid)
+          return arr[0].hname || arr[0].name
+        }
       },
       styObjCont () {
         return {
           marginTop: `calc(4.8rem + ${this.statusBarHg}px)`,
-          paddingBottom: this.rc.pageType === 'learnPage' ? '5.8rem' : 0
+          paddingBottom: this.rc.pageType === 'controlPage' ? 0 : '5.8rem'
         }
       }
     },
@@ -493,6 +518,33 @@
         } else {
           this.$router.go(-1)
         }
+      },
+      /** 二级匹配 **/
+      handleLeft () {
+        if (this.curNum === 1) return
+        this.curNum--
+        if (this.$isVibrate) {
+          navigator.vibrate(100)
+        }
+        let $rid = this.secondList[this.curNum - 1].rid
+        this.getDevCodeLibAndInfo($rid).then(data => {
+          this.cmds = data.rc_command
+          console.log('curNum-lf', this.cmds)
+        })
+      },
+      handleRight () {
+        if (this.curNum === this.secondListTotal) return
+        this.curNum++
+        if (this.$isVibrate) {
+          navigator.vibrate(100)
+        }
+        let $rid = this.secondList[this.curNum - 1].rid
+        this.getDevCodeLibAndInfo($rid).then(data => {
+          this.cmds = data.rc_command
+          console.log('curNum-Rg', this.cmds)
+        })
+      },
+      handleMid () {
       }
     },
     beforeDestroy () {
