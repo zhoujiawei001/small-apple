@@ -3,25 +3,28 @@
   <div class="dev-fan">
     <appHeader
       :title="title"
-      @back-icon="$router.go(-1)"
+      :curPageType="rc.pageType"
+      @back-icon="onClickBack"
       @set="moreSet"></appHeader>
     <div class="banner">
       <img src="../../assets/devIcon2/6.png" alt="fan.png">
     </div>
     <div class="container">
       <div class="btn-standard">
-        <div class="left">
+        <div class="left" style="visibility: hidden;">
           <span>延时开机</span>
           <p>01:30</p>
         </div>
         <div
           class="middle"
           @click="sendBody('power')"
-          :class="{'btn-disable': !cmdsKey.includes('power')}">
+          @touchstart="longClickStart('power')"
+          @touchend="longClickEnd('power')"
+          :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <img src="../../assets/fan-switch-off.png" alt="">
           <p>电源</p>
         </div>
-        <div class="right">
+        <div class="right" style="visibility: hidden;">
           <span>开机时长</span>
           <p>01:30</p>
         </div>
@@ -30,17 +33,31 @@
         <li
           v-for="(item, index) in extendsList"
           @click="sendBody(item.value)"
-          :class="{'btn-disable': !cmdsKey.includes(item.value)}"
+          @touchstart="longClickStart(item.value)"
+          @touchend="longClickEnd(item.value)"
+          :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]"
           :key="index">
           {{item.text}}
         </li>
       </ul>
     </div>
+    <!-- 底层提示 -->
+    <appLearnTips
+      v-if="rc.pageType === 'learnPage'"
+      :learnBoxText="learnBoxText"
+      :btnText="isLearn? '结束' : '完成'"
+      @handle-end="handleEnd"></appLearnTips>
+    <!-- 返回提示框 -->
+    <transition name="fade">
+      <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+    </transition>
   </div>
 </template>
 
 <script>
   import appHeader from '@/components/appHeader'
+  import appTipsBox from '@/components/appTipsBox'
+  import appLearnTips from '@/components/appLearnTips'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -48,6 +65,8 @@
     mixins: [viewsMixin],
     components: {
       appHeader,
+      appTipsBox,
+      appLearnTips
     },
     data () {
       return {
@@ -86,7 +105,9 @@
           "power": 5,
           "poweroff": 6,
           "timer": 7,
-          "anion": 8
+          "anion": 8,
+          "light": 9,
+          "sleep": 10
         }
       }
     },
@@ -104,6 +125,8 @@
     setWH()
     setPosUseFlexInit(column)
     background #F2F2F2
+    -webkit-overflow-scrolling: touch
+    overflow-scrolling: touch
     .banner
       setWH(100%, 28rem)
       setPosUseFlex()

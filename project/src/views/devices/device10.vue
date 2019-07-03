@@ -185,7 +185,8 @@
     setWH()
     setPosUseFlexInit(column)
     background #F2F2F2
-
+    -webkit-overflow-scrolling: touch
+    overflow-scrolling: touch
     .container
       flex 1
       margin-top 6.8rem
