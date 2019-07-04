@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="mt-section_2">
-      <span class="number">{{currentNum}}/{{total}}</span>
+      <span class="number">{{total === '--'? '--' : currentNum}}/{{total}}</span>
       <div class="btn-icons">
         <div class="btn-reduce"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActiveRe}]"
@@ -40,7 +40,7 @@
       <div class="text">
         <span v-if="tips">正在匹配请勿离开</span>
       </div>
-      <div class="btn-next" :class="{'btn-disable': tips || tips2}" @click="nextFun">
+      <div class="btn-next" :class="{'btn-disable': tips || tips2 || total === '--'}" @click="nextFun">
         下一步
       </div>
     </div>
@@ -281,7 +281,7 @@ export default {
           this.rc = {
             rid: this.secondModeList[0].rid,
             pageType: 'matchPage',
-            hname: '电视机',
+            hname: this.$route.query.zh + this.typeName,
             code: this.currentCode,
             zip: this.currentZip,
             index: this.allowIndexArr[0]

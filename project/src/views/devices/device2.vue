@@ -560,8 +560,6 @@
         this.learnTimeoutTimer = null
         clearTimeout(this.longClickTimer)
         this.longClickTimer = null
-        clearInterval(this.learnTimeoutTimer)
-        this.learnTimeoutTimer = null
         clearInterval(this.matchTimer)
         this.matchTimer = null
       },

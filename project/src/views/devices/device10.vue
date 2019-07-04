@@ -128,16 +128,26 @@
         </div>
       </div>
     </div>
-    <!-- 底层提示 -->
+    <!-- learn底层提示 -->
     <appLearnTips
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :btnText="isLearn? '结束' : '完成'"
       @handle-end="handleEnd"></appLearnTips>
+    <!-- match底层提示 -->
+    <appMatchTips
+      v-if="rc.pageType === 'matchPage'"
+      :curNum="curNum"
+      :total="secondListTotal"
+      @handle-left="handleLeft"
+      @handle-right="handleRight"
+      @handle-mid="handleMid"></appMatchTips>
     <!-- 返回提示框 -->
     <transition name="fade">
       <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
+    <!-- 加载中 -->
+    <appLoading loadingTxt="正在匹配中..." v-if="loadingFlag"></appLoading>
   </div>
 </template>
 
@@ -145,6 +155,8 @@
   import appHeader from '@/components/appHeader'
   import appTipsBox from '@/components/appTipsBox'
   import appLearnTips from '@/components/appLearnTips'
+  import appMatchTips from '@/components/appMatchTips'
+  import appLoading from '@/components/appLoading'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -153,7 +165,9 @@
     components: {
       appHeader,
       appTipsBox,
-      appLearnTips
+      appLearnTips,
+      appMatchTips,
+      appLoading
     },
     data () {
       return {

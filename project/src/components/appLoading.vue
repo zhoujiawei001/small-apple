@@ -29,7 +29,7 @@
       background #fff
       border-radius .8rem
       setWH(95vw, 7rem)
-      bottom 10rem
+      bottom 1rem
       left 50%
       transform translateX(-50%)
       padding 1rem 1.6rem
