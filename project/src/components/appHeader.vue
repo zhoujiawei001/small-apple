@@ -2,7 +2,7 @@
   <div class="appHeader" :style="styObj">
     <span class="back" @click="back"></span>
     <span class="title">{{title}}</span>
-    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage'}"></span>
+    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}"></span>
   </div>
 </template>
 

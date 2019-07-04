@@ -13,7 +13,7 @@ export default new Vuex.Store({
     statusBarHg: 20, // 手机状态栏高度
     screenWd: 0, // 获取屏幕宽度
     tid: 1, // 设备类型ID
-    bid: null, // 设备品牌ID
+    bid: 0, // 设备品牌ID
     typeData: [], // 设备类型数据
     addedDevList: [], // 已经添加的遥控设备
     brandScrollPos: null, // brand页面滚动的距离
@@ -226,61 +226,74 @@ export default new Vuex.Store({
     /** 获取设备型号数据 **/
     getDevModeList ({commit, state}, bid) {
       return new Promise(resolve => {
-        // $http.get(
-        //   `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`
-        // ).then(res => {
-        //   console.log('getDevModeList', res.data.result)
-        //   resolve(res.data.result)
+        // $http.get('/huawei/l.php', {
+        //   params: {
+        //     c: 'matching1',
+        //     be_rc_type: 2,
+        //     bid: 244,
+        //     zip:1,
+        //     vl: 1
+        //   }
+        // }).then(res => {
+        //     console.log('getDevModeList', res.data.result)
+        //     resolve(res.data.result)
         // })
 
-        $http.get('/huawei/l.php', {
-          params: {
+        let reqParams = {
+          domain: 'http://hwh5.yaokantv.com',
+          path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
+          method: 'POST',
+          param: {
             c: 'matching1',
-            be_rc_type: 2,
-            bid: 244,
-            zip:1,
+            bid: bid,
+            be_rc_type: state.tid,
+            zip: 1,
             vl: 1
           }
-        }).then(res => {
-            console.log('getDevModeList', res.data.result)
-            resolve(res.data.result)
-        })
-
-        // let reqParams = {
-        //   domain: 'http://hwh5.yaokantv.com',
-        //   path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`,
-        //   method: 'POST',
-        //   param: {
-        //     m: 'live',
-        //     c: 'area_fname',
-        //     bid: bid,
-        //     rc_type: state.tid,
-        //     zip: 1
-        //   }
-        // }
-        // window.getMatchResultCallback = res => {
-        //   let data = parseHilinkData(res)
-        //   // console.log('获取设备型号数据', data)
-        //   resolve(data.result)
-        // }
-        // window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
+        }
+        window.getMatchResultCallback = res => {
+          let data = parseHilinkData(res)
+          console.log('获取设备型号一级数据', data)
+          resolve(data.result)
+        }
+        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
       })
     },
     /** 获取二级匹配数据 **/
-    getSecondLevelMatchData () {
+    getSecondLevelMatchData ({commit, state}, groupId) {
       return new Promise(resolve => {
-        $http.get('/huawei/l.php', {
-          params: {
+        // $http.get('/huawei/l.php', {
+        //   params: {
+        //     c: 'matching2',
+        //     be_rc_type: 2,
+        //     bid: 244,
+        //     group_id: 8266,
+        //     vl: 1
+        //   }
+        // }).then(res => {
+        //   console.log('getSecondLevelMatchData', res.data.result)
+        //   resolve(res.data.result)
+        // })
+
+        let reqParams = {
+          domain: 'http://hwh5.yaokantv.com',
+          path: `/huawei/l.php?c=matching2&bid=${state.bid}&be_rc_type=${state.tid}&group_id=${groupId}&zip=1&vl=1`,
+          method: 'POST',
+          param: {
             c: 'matching2',
-            be_rc_type: 2,
-            bid: 244,
-            group_id: 8266,
+            be_rc_type: state.tid * 1,
+            bid: state.bid * 1,
+            group_id: groupId,
+            zip: 1,
             vl: 1
           }
-        }).then(res => {
-          console.log('getSecondLevelMatchData', res.data.result)
-          resolve(res.data.result)
-        })
+        }
+        window.getMatchResultCallback = res => {
+          let data = parseHilinkData(res)
+          console.log('获取设备型号二级数据', data)
+          resolve(data.result)
+        }
+        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
       })
     },
     /** 获取设备码库和基本信息 **/

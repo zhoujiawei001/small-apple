@@ -163,6 +163,9 @@ export default {
     },
     currentRid () {
       return this.modeList[this.currentNum - 1].rid
+    },
+    currentGroupId () {
+      return this.modeList[this.currentNum - 1].group_id1
     }
   },
   created () {
@@ -271,14 +274,17 @@ export default {
     },
     nextFun () {
       if (this.tid !== 7) {
-        this.getSecondLevelMatchData().then(data => {
+        this.getSecondLevelMatchData(this.currentGroupId).then(data => {
           this.secondModeList = data
           this.$store.commit('setSecondList', this.secondModeList)
           this.$store.commit('setSecondListTotal', this.secondModeList.length)
           this.rc = {
             rid: this.secondModeList[0].rid,
             pageType: 'matchPage',
-            hname: '电视机'
+            hname: '电视机',
+            code: this.currentCode,
+            zip: this.currentZip,
+            index: this.allowIndexArr[0]
           }
           this.$router.push({
             path: `/device${this.tid}`,
