@@ -117,12 +117,12 @@
         </div>
       </div>
       <!-- 额外功能 -->
-      <div class="extend-fn">
+      <div class="extend-fn" v-if="false">
         <div class="left">
           <span>延时开机</span>
           <p>01:30</p>
         </div>
-        <div class="right">
+        <div class="right" v-if="false">
           <span>开机时长</span>
           <p>01:30</p>
         </div>

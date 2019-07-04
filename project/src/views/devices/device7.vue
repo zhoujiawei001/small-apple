@@ -7,7 +7,8 @@
       @set="moreSet"></appHeader>
     <div
       class="banner"
-      :class="{'btn-disable2': isSwitch === 'off'}">
+      :class="{'btn-disable2': isSwitch === 'off'}"
+      :style="bannerObj">
       <div class="temp-box">
         {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
       </div>
@@ -36,8 +37,11 @@
           @click="closeDelayTime">
           <span class="text">取消倒计时</span>
         </div>
-        <div class="middle" @click="clickSwitch">
-          <img src="../../assets/fan-switch-off.png" alt="">
+        <div
+          class="middle"
+          @click="clickSwitch"
+          :style="switchObj">
+          <span :style="switchIconObj"></span>
           <p class="text">电源</p>
         </div>
         <div
@@ -53,7 +57,7 @@
 
 <script>
   import appHeader from '@/components/appHeader'
-  import {sendBodyToDev, sendBodyToDev2} from '../../utils/pub'
+  import {sendBodyToDev, sendBodyToDev2, modifyDevSwitchByHid} from '../../utils/pub'
   import {mapState, mapActions} from 'vuex'
   export default {
     name: 'device7',
@@ -62,7 +66,7 @@
     },
     data() {
       return {
-        isSwitch: 'on',
+        isSwitch: JSON.parse(this.$route.query.rc).isSwitch,
         rc: JSON.parse(this.$route.query.rc),
         currentTemp: 26,
         currentState: 'r_s0_26_u1_l1_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
@@ -78,7 +82,7 @@
         delayBodyTimer: null, // 下发指令定时器
         copyDelayBody: {},
         clickCounts: 0, // 点击次数
-        listMin: [1, 2, 3]
+        listMin: [10, 20, 30]
       }
     },
     created () {
@@ -108,9 +112,9 @@
       }
     },
     mounted () {
-      if (window.localStorage.getItem(`ac-switch__${this.rc.hid}`)) {
-        this.isSwitch = window.localStorage.getItem(`ac-switch__${this.rc.hid}`)
-      }
+      // if (window.localStorage.getItem(`ac-switch__${this.rc.hid}`)) {
+      //   this.isSwitch = window.localStorage.getItem(`ac-switch__${this.rc.hid}`)
+      // }
       if (window.localStorage.getItem(`ac-state__${this.rc.hid}`)) {
         this.currentState = window.localStorage.getItem(`ac-state__${this.rc.hid}`)
         this.currentTemp = this.currentState.split('_')[2]
@@ -172,6 +176,22 @@
       currentDelay () { // 当前延时
         let arr = this.delay.filter(item => item.id === this.rc.index)
         return arr[0]
+      },
+      switchObj () {
+        return {
+          backgroundColor: this.isSwitch === 'on' ? '#3EA0EA' : '',
+          color: this.isSwitch === 'on'? '#fff': 'rgb(26,26,26)'
+        }
+      },
+      switchIconObj () {
+        return {
+          background: `url(${require(`../../assets/fan-switch-${this.isSwitch}.png`)}) no-repeat center`
+        }
+      },
+      bannerObj () {
+        return {
+          background: this.isSwitch === 'on'? `url(${require(`../../assets/background.png`)}) no-repeat center` : `url(${require(`../../assets/airCondiner_off.jpg`)}) no-repeat center`
+        }
       }
     },
     methods: {
@@ -484,7 +504,7 @@
               }
             }
           }
-          sendBodyToDev(body)
+          this.clickSwitchPub(body)
         } else {
           this.isSwitch = 'on'
           this.currentState = 'r_s0_26_u0_l0_p0'
@@ -502,13 +522,33 @@
               }
             }
           }
-          sendBodyToDev(body)
+          this.clickSwitchPub(body)
         }
+      },
+      clickSwitchPub (body) {
+        sendBodyToDev2(body, 'handleIconCallback2').then(data => {
+          if (!data.errcode) {
+            modifyDevSwitchByHid(this.rc.hid, this.isSwitch).then(data => {
+              if (!data.errcode) {
+                let newList = JSON.parse(JSON.stringify(this.addedDevList))
+                newList = newList.map(item => {
+                  if (item.hid === this.rc.hid) {
+                    item.isSwitch = this.isSwitch
+                    return item
+                  } else {
+                    return item
+                  }
+                })
+                this.$store.commit('setAddedDevList', newList)
+              }
+            })
+          }
+        })
       },
       /** 保存状态到本地数据 **/
       saveStateToLocal () {
         window.localStorage.setItem(`ac-state__${this.rc.hid}`, this.currentState)
-        window.localStorage.setItem(`ac-switch__${this.rc.hid}`, this.isSwitch)
+        // window.localStorage.setItem(`ac-switch__${this.rc.hid}`, this.isSwitch)
       },
       /** 设置延时
        * @param val 1-是延时开， 2是延时关
@@ -597,7 +637,7 @@
         let min = Math.floor((seconds % 3600) / 60)
         let s = seconds % 60
         console.log(h,min,s)
-        return this.addZeroToBefore(h) + ':' + this.addZeroToBefore(min) + ':' + this.addZeroToBefore(s)
+        return this.addZeroToBefore(h) + ':' + this.addZeroToBefore(min)
       },
       /** 一开始就运行倒计时 **/
       runDelay () {
@@ -644,7 +684,7 @@
     .banner
       setWH(100%, 28rem)
       setPosUseFlex(column, flex-end)
-      imgUrl("../../assets/background.png")
+      background-size: cover!important
       position relative
       .temp-box
         setFont(8rem, rgb(26,26,26), center, 100)
@@ -708,6 +748,8 @@
             font-size 1.6rem
         .middle
           background-color: #fff;
-          img
+          span
             width 3.2rem
+            height 3.2rem
+            background-size contain!important
 </style>

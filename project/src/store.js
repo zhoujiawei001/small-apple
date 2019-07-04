@@ -174,53 +174,53 @@ export default new Vuex.Store({
     /** 获取设备类型数据 **/
     getDevTypeList ({ commit, getters}) {
       if (getters.typeList.length > 0) return
-      $http.get('/huawei/l.php', {
-        params: {
-          m: 'live',
-          c: 'be_rc_type'
-        }
-      }).then(res => {
-        console.log('getDevTypeList', res.data.result)
-        commit('setTypeData', res.data.result)
-      })
-
-      // let reqParams = {
-      //   domain: 'http://hwh5.yaokantv.com',
-      //   path: '/huawei/l.php',
-      //   method: 'GET',
-      //   param: {
+      // $http.get('/huawei/l.php', {
+      //   params: {
       //     m: 'live',
       //     c: 'be_rc_type'
       //   }
-      // }
-      // window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'app.getRCTypeResultCallback')
+      // }).then(res => {
+      //   console.log('getDevTypeList', res.data.result)
+      //   commit('setTypeData', res.data.result)
+      // })
+
+      let reqParams = {
+        domain: 'http://hwh5.yaokantv.com',
+        path: '/huawei/l.php',
+        method: 'GET',
+        param: {
+          m: 'live',
+          c: 'be_rc_type'
+        }
+      }
+      window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'app.getRCTypeResultCallback')
     },
     /** 获取设备品牌数据 **/
     getDevBrandList ({ commit, state }) {
       return new Promise(resolve => {
-        $http.get(
-          `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`
-        ).then(res => {
-          console.log('getDevBrandList', res.data.result)
-          resolve(res.data.result)
-        })
+        // $http.get(
+        //   `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`
+        // ).then(res => {
+        //   console.log('getDevBrandList', res.data.result)
+        //   resolve(res.data.result)
+        // })
 
-        // let reqParams = {
-        //   domain: 'http://hwh5.yaokantv.com',
-        //   path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
-        //   method: 'POST',
-        //   param: {
-        //     m: 'live',
-        //     c: 'fname_list',
-        //     rc_type: state.tid
-        //   }
-        // }
-        // window.getBrandResultCallback = res => {
-        //   let data = parseHilinkData(res)
-        //   // console.log('获取设备品牌数据', data)
-        //   resolve(data.result)
-        // }
-        // window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
+        let reqParams = {
+          domain: 'http://hwh5.yaokantv.com',
+          path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
+          method: 'POST',
+          param: {
+            m: 'live',
+            c: 'fname_list',
+            rc_type: state.tid
+          }
+        }
+        window.getBrandResultCallback = res => {
+          let data = parseHilinkData(res)
+          // console.log('获取设备品牌数据', data)
+          resolve(data.result)
+        }
+        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
       })
     },
     /** 获取设备型号数据 **/

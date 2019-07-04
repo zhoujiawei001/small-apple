@@ -1,8 +1,12 @@
 <template>
   <div class="appHeader" :style="styObj">
-    <span class="back" @click="back"></span>
+    <div class="back" @click="back">
+      <span></span>
+    </div>
     <span class="title">{{title}}</span>
-    <span class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}"></span>
+    <div class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}">
+      <span></span>
+    </div>
   </div>
 </template>
 
@@ -58,25 +62,37 @@ export default {
   align-items center
   justify-content space-between
   flex-direction row
-  padding 0 1.6rem
+  padding 0 1rem
   position: fixed
   top: 0
   left: 0
-  width calc(100% - 3.2rem)
+  width calc(100% - 2rem)
   z-index: 9;
   box-sizing initial
   .back
-    height 2rem
-    width 2rem
-    imgUrl('../assets/back.png')
+    height 4rem
+    width 3.2rem
+    display: flex
+    justify-content center
+    align-items center
+    span
+      height 2rem
+      width 2rem
+      imgUrl('../assets/back.png')
   .title
     font-size 1.6rem
     max-width 16rem
     setEllipsisOne()
   .more
-    height 2rem
-    width 2rem
-    imgUrl('../assets/more.png')
+    height 4rem
+    width 3.2rem
+    display: flex
+    justify-content center
+    align-items center
+    span
+      height 2rem
+      width 2rem
+      imgUrl('../assets/more.png')
   .hiddenEle
     visibility: hidden
 </style>

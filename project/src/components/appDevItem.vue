@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="right">
-      <img :src="require(`../assets/switch_${item.isSwitch}.png`)" alt="" @click.stop.prevent="handleSwitch(item.isSwitch, item.hid)">
+      <img :src="require(`../assets/switch_${item.tid === 7 ? item.isSwitch : 'off'}.png`)" alt="" @click.stop.prevent="handleSwitch()">
     </div>
   </div>
 </template>
@@ -49,35 +49,51 @@
           }
         })
       },
-      handleSwitch (isSwitch, hid) {
+      handleSwitch () {
+        console.log('item', this.item)
         let obj = {};
-        let body = {
-          batch: {
-            controlKey: {
-              controlKey: this.item.src
-            },
-            deviceList: {
-              list: [
-                {
-                  zip: this.item.zip2 + ''
-                }
-              ]
+        let body = {}
+        if (this.item.tid === 7) {
+          body = {
+            batch: {
+              airKey: {
+                power: this.item.isSwitch === 'on'? 2 : 1
+              },
+              deviceList: {
+                list: [this.item]
+              }
+            }
+          }
+        } else {
+          body = {
+            batch: {
+              controlKey: {
+                controlKey: this.item.src
+              },
+              deviceList: {
+                list: [
+                  {
+                    zip: this.item.zip2 + ''
+                  }
+                ]
+              }
             }
           }
         }
         sendBodyToDev2(body, 'handleIconCallback').then(data => {
           if (!data.errcode) {
-            if (isSwitch === 'on') {
+            if (this.item.isSwitch === 'on') {
               obj = {
                 isSwitch: 'off',
-                hid: hid
+                hid: this.item.hid
               }
             } else {
               obj = {
                 isSwitch: 'on',
-                hid: hid
+                hid: this.item.hid
               }
             }
+            if (this.item.tid !== 7) return
             this.$emit('handle-icon', obj)
           }
         })
