@@ -238,17 +238,32 @@ export default new Vuex.Store({
         //     console.log('getDevModeList', res.data.result)
         //     resolve(res.data.result)
         // })
-
-        let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
-          path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
-          method: 'POST',
-          param: {
-            c: 'matching1',
-            bid: bid,
-            be_rc_type: state.tid,
-            zip: 1,
-            vl: 1
+        let reqParams = {}
+        if (state.tid === 1 || state.tid === 7) {
+          reqParams = {
+            domain: 'http://hwh5.yaokantv.com',
+            path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`,
+            method: 'POST',
+            param: {
+              m: 'live',
+              c: 'area_fname',
+              bid: bid,
+              rc_type: state.tid,
+              zip: 1
+            }
+          }
+        } else {
+          reqParams = {
+            domain: 'http://hwh5.yaokantv.com',
+            path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
+            method: 'POST',
+            param: {
+              c: 'matching1',
+              bid: bid,
+              be_rc_type: state.tid,
+              zip: 1,
+              vl: 1
+            }
           }
         }
         window.getMatchResultCallback = res => {

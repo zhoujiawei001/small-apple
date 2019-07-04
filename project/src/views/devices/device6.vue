@@ -60,7 +60,7 @@
       <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
     <!-- 加载中 -->
-    <appLoading loadingTxt="正在匹配中..." v-if="loadingFlag"></appLoading>
+    <app-loading2 loadingTxt="正在匹配中..." v-if="loadingFlag"></app-loading2>
   </div>
 </template>
 
@@ -69,7 +69,7 @@
   import appTipsBox from '@/components/appTipsBox'
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
-  import appLoading from '@/components/appLoading'
+  import appLoading2 from '@/components/appLoading2'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -80,7 +80,7 @@
       appTipsBox,
       appLearnTips,
       appMatchTips,
-      appLoading
+      appLoading2
     },
     data () {
       return {

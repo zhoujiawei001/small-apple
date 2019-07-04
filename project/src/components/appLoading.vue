@@ -3,7 +3,7 @@
     <div class="container">
       <div class="text">{{loadingTxt}}</div>
       <div class="loading-svg">
-        <img src="../assets/loading.svg">
+        <img src="../assets/loading3.png">
       </div>
     </div>
   </div>
@@ -42,9 +42,4 @@
         animation loading 1.5s infinite
         img
           setWH()
-  @keyframes loading
-    0%
-      transform rotate(0)
-    100%
-      transform rotate(360deg)
 </style>

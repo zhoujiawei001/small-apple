@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="mt-section_2">
-      <span class="number">{{total === '--'? '--' : currentNum}}/{{total}}</span>
+      <span class="number">{{total === '--'? '-' : currentNum}}/{{total}}</span>
       <div class="btn-icons">
         <div class="btn-reduce"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActiveRe}]"
@@ -273,7 +273,7 @@ export default {
       }
     },
     nextFun () {
-      if (this.tid !== 7) {
+      if (this.tid !== 7 && this.tid !== 1) {
         this.getSecondLevelMatchData(this.currentGroupId).then(data => {
           this.secondModeList = data
           this.$store.commit('setSecondList', this.secondModeList)

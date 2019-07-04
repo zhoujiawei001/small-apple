@@ -24,8 +24,9 @@ export default {
   computed: {
     objStyle () {
       return {
-        background: `url(${require(`../assets/appStatus_${this.devStatus}.png`)}) no-repeat center`,
-        backgroundSize: '100%'
+        // background: `url(${require(`../assets/appStatus_${this.devStatus}.png`)}) no-repeat center`,
+        // backgroundSize: '100%'
+        background: this.devStatus? 'radial-gradient(#6EC1FE, #3E9FE9)' : '#B5B5B5'
       }
     }
   },
