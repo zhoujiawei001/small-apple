@@ -20,7 +20,8 @@
       <div class="btn-icons">
         <div class="btn-reduce"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActiveRe}]"
-           @touchstart="longHandleMatch('reduce')"
+           @touchstart.prevent="longHandleMatch('reduce')"
+           @touchmove.prevent=""
            @touchend="endLongHandleMatch('reduce')">
           <img src="../assets/match_reduce.png" alt="">
         </div>
@@ -32,7 +33,8 @@
         <div class="btn-plus"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActivePl}]"
            @touchstart="longHandleMatch('plus')"
-           @touchend="endLongHandleMatch('plus')">
+           @touchmove="touchEndSure"
+           @touchend.stop.prevent="endLongHandleMatch('plus')">
           <img src="../assets/match_plus.png" alt="">
         </div>
       </div>
@@ -241,6 +243,7 @@ export default {
       }
       this.longClickNum = 0
       this.longClickTimer = setTimeout(() => {
+        console.log('长按')
         if (this.$isVibrate) {
           navigator.vibrate(100)
         }
@@ -254,8 +257,13 @@ export default {
         }, 1200)
       },1200)
     },
+    /** touchMove事件 **/
+    touchEndSure (e) {
+      e.preventDefault()
+    },
     /** 结束长按匹配 **/
     endLongHandleMatch (val) {
+      console.log('touchEnd2')
       if (val === 'plus') {
         if (this.isActiveRe) return // 防止两个按钮同时点击出现定时错乱
         this.isActivePl = false
@@ -268,8 +276,8 @@ export default {
       clearTimeout(this.longClickTimer)
       this.longClickTimer = null
       if (this.longClickNum === 0) {
+        console.log('点击')
         this.sendCode(val)
-        console.log('currentCmd', this.modeList[this.currentNum - 1])
       }
     },
     nextFun () {

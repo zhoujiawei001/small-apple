@@ -344,6 +344,7 @@
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
+          console.log('二级匹配-cmds', this.cmds)
           this.defineRc(data)
         })
       } else {
@@ -618,7 +619,7 @@
         this.getDevCodeLibAndInfo($rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
-          console.log('curNum', this.cmds)
+          console.log('二级匹配-cmds', this.cmds)
           this.defineRc(data)
         })
       },
