@@ -48,7 +48,14 @@
           class="right"
           @click="setDelayTime(2)">
           <span class="text">倒计时关</span>
-          <p class="detail">{{currentDelayTime}}</p>
+          <!--<p class="detail">{{currentDelayTime}}</p>-->
+          <p
+            class="detail"
+            v-if="clickTimes > 0">
+            <span>{{currentDelayTimeHour}}</span>
+            <span>:</span>
+            <span>{{currentDelayTimeMin}}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -76,6 +83,8 @@
         delayOpen: '', // 倒计时开
         delayClose: '', // 倒计时关
         currentDelayTime: '', // 当前倒计时
+        currentDelayTimeHour: '', // 当前倒计时小时
+        currentDelayTimeMin: '', // 当前倒计时分钟
         clickTimes: 0, // 点击时间
         delayTimer: null, // 倒计时定时器
         delayBody: {}, // 下发指令参数
@@ -131,17 +140,20 @@
             this.clickCounts = 0
             this.delayTimer = setInterval(() => {
               this.clickTimes = arr[0].endTime - Date.parse(new Date()) / 1000
-              let nowTime = Date.parse(new Date()) / 1000
-              let intervalTime = arr[0].endTime - nowTime
-              console.log('intervalTime', intervalTime)
-              if (intervalTime < 0) {
+              console.log('clickTimes', this.clickTimes )
+              if (this.clickTimes < 0) {
                 this.clearDelayTimer()
                 this.clickCounts = 0
                 this.clickTimes = 0
                 this.currentDelayTime = ''
+                this.currentDelayTimeHour = ''
+                this.currentDelayTimeMin = ''
                 this.isSwitch = 'off'
+                this.changeSwitchPub()
               } else {
-                this.currentDelayTime = this.changeTimeToStr(intervalTime)
+                this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+                this.currentDelayTimeHour = this.changeTimeToStr2(this.clickTimes, 'h')
+                this.currentDelayTimeMin = this.changeTimeToStr2(this.clickTimes, 'm')
               }
             }, 1000)
           } else {
@@ -150,6 +162,8 @@
             this.clearDelayBodyTimer()
             this.clickTimes = 0
             this.currentDelayTime = ''
+            this.currentDelayTimeHour = ''
+            this.currentDelayTimeMin = ''
           }
         },
         deep: true
@@ -528,20 +542,23 @@
       clickSwitchPub (body) {
         sendBodyToDev2(body, 'handleIconCallback2').then(data => {
           if (!data.errcode) {
-            modifyDevSwitchByHid(this.rc.hid, this.isSwitch).then(data => {
-              if (!data.errcode) {
-                let newList = JSON.parse(JSON.stringify(this.addedDevList))
-                newList = newList.map(item => {
-                  if (item.hid === this.rc.hid) {
-                    item.isSwitch = this.isSwitch
-                    return item
-                  } else {
-                    return item
-                  }
-                })
-                this.$store.commit('setAddedDevList', newList)
+            this.changeSwitchPub()
+          }
+        })
+      },
+      changeSwitchPub () {
+        modifyDevSwitchByHid(this.rc.hid, this.isSwitch).then(data => {
+          if (!data.errcode) {
+            let newList = JSON.parse(JSON.stringify(this.addedDevList))
+            newList = newList.map(item => {
+              if (item.hid === this.rc.hid) {
+                item.isSwitch = this.isSwitch
+                return item
+              } else {
+                return item
               }
             })
+            this.$store.commit('setAddedDevList', newList)
           }
         })
       },
@@ -565,6 +582,8 @@
         }
         // this.clickTimes += 2 * 60
         this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+        this.currentDelayTimeHour = this.changeTimeToStr2(this.clickTimes, 'h')
+        this.currentDelayTimeMin = this.changeTimeToStr2(this.clickTimes, 'm')
         if (this.delayBodyTimer) {
           clearTimeout(this.delayBodyTimer)
           this.delayBodyTimer = null
@@ -639,18 +658,40 @@
         console.log(h,min,s)
         return this.addZeroToBefore(h) + ':' + this.addZeroToBefore(min)
       },
+      /** 将间隔时间s转化为00:00 **/
+      changeTimeToStr2 (seconds, val) {
+        if (val === 'h') {
+          return this.addZeroToBefore(Math.floor(seconds / 3600))
+        } else {
+          return this.addZeroToBefore(Math.ceil((seconds % 3600) / 60))
+        }
+      },
       /** 一开始就运行倒计时 **/
       runDelay () {
         if (this.currentDelay.enable === 0) return
         this.clickTimes = this.currentDelay.enable ? this.currentDelay.endTime - Date.parse(new Date()) / 1000 : 0
-        this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+        this.runDelayPub()
         this.delayTimer = setInterval(() => {
-          this.clickTimes = this.currentDelay.endTime - Date.parse(new Date()) / 1000
-          let nowTime = Date.parse(new Date()) / 1000
-          let intervalTime = this.currentDelay.endTime - nowTime
-          console.log('intervalTime', intervalTime)
-          this.currentDelayTime = this.changeTimeToStr(intervalTime)
+          this.runDelayPub()
         }, 1000)
+      },
+      runDelayPub () {
+        this.clickTimes = this.currentDelay.endTime - Date.parse(new Date()) / 1000
+        console.log('clickTimes', this.clickTimes)
+        if (this.clickTimes < 0) {
+          this.clearDelayTimer()
+          this.clickCounts = 0
+          this.clickTimes = 0
+          this.currentDelayTime = ''
+          this.currentDelayTimeHour = ''
+          this.currentDelayTimeMin = ''
+          this.isSwitch = 'off'
+          this.changeSwitchPub()
+        } else {
+          this.currentDelayTime = this.changeTimeToStr(this.clickTimes)
+          this.currentDelayTimeHour = this.changeTimeToStr2(this.clickTimes, 'h')
+          this.currentDelayTimeMin = this.changeTimeToStr2(this.clickTimes, 'm')
+        }
       },
       /** 消除delayTimer定时器 **/
       clearDelayTimer () {
@@ -746,6 +787,9 @@
           border 1px solid #fff
           p
             font-size 1.6rem
+            span:nth-child(2)
+              padding 0 .2rem
+              animation fadeInOut 2s infinite
         .middle
           background-color: #fff;
           span
