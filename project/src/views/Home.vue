@@ -144,6 +144,7 @@ export default {
         'jumpToCallback'
       )
     },
+    /** 点击开关按钮 **/
     clickSwitchIcon () {
       let status = this.appStatus ? 0 : 1
       let body = {
