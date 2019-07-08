@@ -52,6 +52,7 @@
       v-if="rc.pageType === 'matchPage'"
       :curNum="curNum"
       :total="secondListTotal"
+      :typeName="typeName"
       @handle-left="handleLeft"
       @handle-right="handleRight"
       @handle-mid="handleMid"></appMatchTips>

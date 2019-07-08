@@ -19,6 +19,7 @@
     position absolute
     background rgba(0, 0, 0, .3)
     setWH()
+    pointer-events none
     top 0
     .container
       position absolute

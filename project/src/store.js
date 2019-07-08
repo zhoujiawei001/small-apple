@@ -315,26 +315,26 @@ export default new Vuex.Store({
     getDevCodeLibAndInfo ({commit, state}, rid) {
       return new Promise(resolve => {
         // $http.get(
-        //   `/huawei/l.php?m=live&c=remote_details&rid=${rid}&zip=1`
+        //   `/huawei/l.php?c=remote_details&rid=${rid}&zip=1&real_key=1`
         // ).then(res => {
-        //   console.log('getDevCodeLibAndInfo', res.data)
+        //   // console.log('getDevCodeLibAndInfo', res.data)
         //   resolve(res.data)
         // })
 
         let reqParams = {
           domain: 'http://hwh5.yaokantv.com',
-          path: `/huawei/l.php?m=live&c=remote_details&rid=${rid}&zip=1`,
+          path: `/huawei/l.php?c=remote_details&rid=${rid}&zip=1&real_key=1`,
           method: 'POST',
           param: {
-            m: 'live',
             c: 'remote_details',
             rid: rid,
-            zip: 1
+            zip: 1,
+            real_key: 1
           }
         }
         window.getRCResultCallback = res => {
           let data = parseHilinkData(res)
-          // console.log('获取设备码库和基本信息', data)
+          console.log('获取设备码库和基本信息', data)
           resolve(data)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')

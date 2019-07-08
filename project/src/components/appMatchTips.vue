@@ -2,7 +2,7 @@
   <div class="appMatchTips">
     <span class="left" @click="leftFn"></span>
     <div class="middle" @click="midFn">
-      <span>{{curNum}}/{{total}}</span>
+      <span>{{curNum}}/{{total}} {{typeName}}</span>
       &nbsp;
       <span>好用，用这个</span>
     </div>
@@ -13,7 +13,7 @@
 <script>
 export default {
   name: 'appMatchTips',
-  props: ['curNum', 'total'],
+  props: ['curNum', 'total', 'typeName'],
   methods: {
     leftFn () {
       this.$emit('handle-left')

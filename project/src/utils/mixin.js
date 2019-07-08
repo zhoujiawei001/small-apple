@@ -21,7 +21,8 @@ export const viewsMixin = {
       matchTimer: null, // 匹配超时定时器
       matchCount: 0, // 匹配次数
       cmdObj: {},
-      hintText: '' // 提示文字
+      hintText: '', // 提示文字
+      typeName: '' // 设备型号
     }
   },
   watch: {
@@ -92,6 +93,8 @@ export const viewsMixin = {
       this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
         this.cmds = data.rc_command
         this.cmdObj = data
+        this.typeName = data.rmodel
+        console.log('cmdsKeys', Object.keys(this.cmds))
         this.defineRc(data)
       })
     } else {
@@ -248,7 +251,6 @@ export const viewsMixin = {
       }
     },
     longClickEnd (val) {
-      console.log('longClickEnd', val)
       if (this.rc.pageType === 'learnPage') {
         if (this.isLearn) return
         clearTimeout(this.longClickTimer);
@@ -270,8 +272,8 @@ export const viewsMixin = {
     },
     /** 点击返回 **/
     onClickBack () {
-      if (this.isLearn) {
-        this.hintText = '正在学习，请勿离开！'
+      if (this.isLearn || this.loadingFlag) {
+        this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
         this.tipsBox = true
       } else {
         this.$router.go(-1)
@@ -367,7 +369,8 @@ export const viewsMixin = {
       this.getDevCodeLibAndInfo($rid).then(data => {
         this.cmds = data.rc_command
         this.cmdObj = data
-        console.log('curNum', this.cmds)
+        this.typeName = data.rmodel
+        console.log('cmdsKeys', Object.keys(this.cmds))
         this.defineRc(data)
       })
     },

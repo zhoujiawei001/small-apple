@@ -173,6 +173,7 @@
       v-if="rc.pageType === 'matchPage'"
       :curNum="curNum"
       :total="secondListTotal"
+      :typeName="typeName"
       @handle-left="handleLeft"
       @handle-right="handleRight"
       @handle-mid="handleMid"></appMatchTips>
@@ -276,7 +277,8 @@
         cmdObj: {},
         isHasR: false, // 判断码库Key键是否含有'_r'
         curIsHasR: '', // 当前是否带'_r'
-        hintText: '' // 提示文字
+        hintText: '', // 提示文字
+        typeName: '' // 设备型号
       }
     },
     watch: {
@@ -342,8 +344,10 @@
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
+          this.typeName = data.rmodel
           this.defineRc(data)
           this.isHasRFn(Object.keys(this.cmds))
+          console.log('cmdsKeys', Object.keys(this.cmds))
         })
       } else {
         if (this.cmdList.hasOwnProperty(this.rc.rid)) {
@@ -530,8 +534,8 @@
       },
       /** 点击返回 **/
       onClickBack () {
-        if (this.isLearn) {
-          this.hintText = '正在学习，请勿离开！'
+        if (this.isLearn || this.loadingFlag) {
+          this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
           this.tipsBox = true
         } else {
           this.$router.go(-1)
@@ -627,7 +631,11 @@
         this.getDevCodeLibAndInfo($rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
+          this.isHasR = false
+          console.log('cmdsKeys', Object.keys(this.cmds))
+          this.typeName = data.rmodel
           this.defineRc(data)
+          this.isHasRFn(Object.keys(this.cmds))
         })
       },
       /** 重新定义RC **/
@@ -764,6 +772,7 @@
             break
           }
         }
+        console.log('isHasR', this.isHasR)
       },
       /** 将是否包含“_r”的KEY键保存在localStorage中 **/
       saveIsHasRToLocal () {
