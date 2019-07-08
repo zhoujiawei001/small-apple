@@ -178,7 +178,7 @@
       @handle-mid="handleMid"></appMatchTips>
     <!-- 返回提示框 -->
     <transition name="fade">
-      <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox :hintText="hintText" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
     <!-- 加载中 -->
     <app-loading2 loadingTxt="正在匹配中..." v-if="loadingFlag"></app-loading2>
@@ -191,13 +191,11 @@
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
-  // import { viewsMixin } from '@/utils/mixin'
   import { mapState, mapActions } from 'vuex'
-  import { sendBodyToDev, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from '../../utils/pub'
+  import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from '../../utils/pub'
 
   export default {
     name: 'device2',
-    // mixins: [viewsMixin],
     components: {
       appHeader,
       appTipsBox,
@@ -275,7 +273,10 @@
         loadingFlag: false,
         matchTimer: null, // 匹配超时定时器
         matchCount: 0, // 匹配次数
-        cmdObj: {}
+        cmdObj: {},
+        isHasR: false, // 判断码库Key键是否含有'_r'
+        curIsHasR: '', // 当前是否带'_r'
+        hintText: '' // 提示文字
       }
     },
     watch: {
@@ -298,13 +299,10 @@
       },
       'loadRes.isFinish': {
         handler(newVal, oldVal) {
-          console.log(newVal, oldVal)
-          console.log('watch-isFinish')
           if (newVal === 1) {
             this.registerVirtualDev().then(data => {
               if (data.errcode === 0) {
                 this.rc2.devId = data.devId
-                console.log('第二个RC', this.rc2)
                 this.postYkDevToServe().then(data2 => {
                   if (data2.errcode === 0) {
                     postExtendToServe(this.rc2).then(data3 => {
@@ -344,13 +342,12 @@
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
-          console.log('二级匹配-cmds', this.cmds)
           this.defineRc(data)
+          this.isHasRFn(Object.keys(this.cmds))
         })
       } else {
         if (this.cmdList.hasOwnProperty(this.rc.rid)) {
           this.cmds = this.cmdList[this.rc.rid]
-          console.log('cmds', this.cmds)
         } else {
           this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
             this.cmds = data.rc_command
@@ -360,10 +357,19 @@
           })
         }
       }
+    },
+    mounted () {
+      if (window.localStorage.getItem(`learnCode_${this.rc.hid}`)) {
+        this.hasLearnCodes = JSON.parse(window.localStorage.getItem(`learnCode_${this.rc.hid}`))
+      }
+      if ( window.localStorage.getItem('curIsHasR') === '' || window.localStorage.getItem('curIsHasR') === '_r') {
+        this.curIsHasR = window.localStorage.getItem('curIsHasR')
+      }
       watchVirtualKey(true).then(bool => {
         if (bool) {
           window.goBack = () => {
-            if (this.isLearn) {
+            if (this.isLearn || this.loadingFlag) {
+              this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
               this.tipsBox = true
             } else {
               this.$router.go(-1)
@@ -371,12 +377,6 @@
           }
         }
       })
-    },
-    mounted () {
-      if (window.localStorage.getItem(`learnCode_${this.rc.hid}`)) {
-        this.hasLearnCodes = JSON.parse(window.localStorage.getItem(`learnCode_${this.rc.hid}`))
-      }
-      console.log('cmdsKey', this.cmdsKey)
     },
     computed: {
       ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes']),
@@ -429,7 +429,7 @@
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.cmds[val].src
+                controlKey: this.cmds[this.isHasR? (val + this.curIsHasR) : val]? this.cmds[this.isHasR? (val + this.curIsHasR) : val].src : this.cmds[val].src
               },
               deviceList: {
                 list: [{
@@ -438,7 +438,16 @@
               }
             }
           }
-          sendBodyToDev(body)
+          sendBodyToDev2(body, 'setDeviceInfoCallbackIsHasR').then(data => {
+            if (!data.errcode) {
+              if (this.isHasR) {
+                let $val = (val + this.curIsHasR).indexOf('_r') !== -1? (val + this.curIsHasR) : (val + '_r')
+                if (this.cmds[$val]) {
+                  this.curIsHasR = this.curIsHasR? '' : '_r'
+                }
+              }
+            }
+          })
         }
       },
       sendBody2 (val) {
@@ -501,13 +510,11 @@
         }
       },
       longClickEnd (val) {
-        console.log('longClickEnd', val)
         if (this.rc.pageType === 'learnPage') {
           if (this.isLearn) return
           clearTimeout(this.longClickTimer);
           this.longClickTimer = null
           if (this.longClickNum === 0) {
-            console.log('longClickNum', this.longClickNum)
             this.sendBody2(val)
           }
         }
@@ -524,6 +531,7 @@
       /** 点击返回 **/
       onClickBack () {
         if (this.isLearn) {
+          this.hintText = '正在学习，请勿离开！'
           this.tipsBox = true
         } else {
           this.$router.go(-1)
@@ -619,7 +627,6 @@
         this.getDevCodeLibAndInfo($rid).then(data => {
           this.cmds = data.rc_command
           this.cmdObj = data
-          console.log('二级匹配-cmds', this.cmds)
           this.defineRc(data)
         })
       },
@@ -637,7 +644,6 @@
           '',
           assembleTS(),
           this.rc.zip)
-        console.log('第一个RC', this.rc2)
       },
       /** 下发参数给设备下载码库 **/
       setUrlDomainToDev (rc) {
@@ -685,7 +691,6 @@
             window.hilink.toast('2', '匹配超时')
             this.handleMatchFailedFun()
           }
-          console.log('matchCount', this.matchCount)
         }, 1000)
       },
       /** 匹配失败处理 **/
@@ -716,7 +721,6 @@
             console.log('registerCallback2', parseHilinkData(res))
             resolve(parseHilinkData(res))
           }
-          console.log('regiterInfraredHubDevice', body)
           window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
         })
       },
@@ -752,9 +756,24 @@
           window.hilink.postDeviceExtendDataById(this.rc2.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback2')
         })
       },
+      /** 判断码库是否包含“_r” 的key键*/
+      isHasRFn (cmdsKey) {
+        for (let i = 0; i < cmdsKey.length; i++) {
+          if (cmdsKey[i].indexOf('_r') !== -1) {
+            this.isHasR = true
+            break
+          }
+        }
+      },
+      /** 将是否包含“_r”的KEY键保存在localStorage中 **/
+      saveIsHasRToLocal () {
+        window.localStorage.setItem('curIsHasR',this.curIsHasR)
+      }
     },
     beforeDestroy () {
       this.removeTimer()
+      this.saveIsHasRToLocal()
+      watchVirtualKey(false)
     }
   }
 </script>

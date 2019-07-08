@@ -20,7 +20,8 @@ export const viewsMixin = {
       loadingFlag: false,
       matchTimer: null, // 匹配超时定时器
       matchCount: 0, // 匹配次数
-      cmdObj: {}
+      cmdObj: {},
+      hintText: '' // 提示文字
     }
   },
   watch: {
@@ -106,10 +107,16 @@ export const viewsMixin = {
         })
       }
     }
+  },
+  mounted () {
+    if (window.localStorage.getItem(`learnCode_${this.rc.hid}`)) {
+      this.hasLearnCodes = JSON.parse(window.localStorage.getItem(`learnCode_${this.rc.hid}`))
+    }
     watchVirtualKey(true).then(bool => {
       if (bool) {
         window.goBack = () => {
-          if (this.isLearn) {
+          if (this.isLearn || this.loadingFlag) {
+            this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
             this.tipsBox = true
           } else {
             this.$router.go(-1)
@@ -117,12 +124,6 @@ export const viewsMixin = {
         }
       }
     })
-  },
-  mounted () {
-    if (window.localStorage.getItem(`learnCode_${this.rc.hid}`)) {
-      this.hasLearnCodes = JSON.parse(window.localStorage.getItem(`learnCode_${this.rc.hid}`))
-    }
-    console.log('cmdsKey', this.cmdsKey)
   },
   computed: {
     ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes']),
@@ -270,6 +271,7 @@ export const viewsMixin = {
     /** 点击返回 **/
     onClickBack () {
       if (this.isLearn) {
+        this.hintText = '正在学习，请勿离开！'
         this.tipsBox = true
       } else {
         this.$router.go(-1)
@@ -501,5 +503,6 @@ export const viewsMixin = {
   },
   beforeDestroy () {
     this.removeTimer()
+    watchVirtualKey(false)
   }
 }

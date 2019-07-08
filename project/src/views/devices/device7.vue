@@ -13,10 +13,10 @@
         {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
       </div>
       <div class="ac-icon flex">
-        <img :src="imgMode">
-        <img :src="imgWind">
-        <img :src="imgUpDown">
-        <img :src="imgLeftRight">
+        <img :src="imgMode" alt="">
+        <img :src="imgWind" alt="">
+        <img :src="imgUpDown" alt="">
+        <img :src="imgLeftRight" alt="">
       </div>
     </div>
     <div class="container">

@@ -49,7 +49,7 @@
       @handle-mid="handleMid"></appMatchTips>
     <!-- 返回提示框 -->
     <transition name="fade">
-      <appTipsBox hintText="正在学习，请勿离开！" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox :hintText="hintText" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
     <!-- 加载中 -->
     <app-loading2 loadingTxt="正在匹配中..." v-if="loadingFlag"></app-loading2>

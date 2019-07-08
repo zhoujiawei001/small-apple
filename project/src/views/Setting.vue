@@ -104,8 +104,8 @@
             if (data.errcode === 0) {
               getExtendToServe().then(data => {
                 this.$store.commit('setAddedDevList', data)
+                this.delLocalData()
                 this.$router.push('/')
-                this.deleLocalData()
               })
             }
           })
@@ -173,7 +173,7 @@
         })
       },
       /** 删除设备在本地缓存数据 **/
-      deleLocalData () {
+      delLocalData () {
         window.localStorage.removeItem(`learnCode_${this.hid}`)
       }
     },

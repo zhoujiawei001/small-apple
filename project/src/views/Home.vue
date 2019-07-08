@@ -47,7 +47,7 @@ import appDevItem from '@/components/appDevItem'
 import appTipsBox from '@/components/appTipsBox'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
-import { sendBodyToDev, modifyDevSwitchByHid } from '../utils/pub'
+import { sendBodyToDev, modifyDevSwitchByHid, watchVirtualKey } from '../utils/pub'
 export default {
   name: 'home',
   components: {
@@ -118,6 +118,13 @@ export default {
     this.$nextTick(() => {
       this.scrollFun()
     })
+    watchVirtualKey(true).then(bool => {
+      if (bool) {
+        window.goBack = () => {
+          window.hilink.finishDeviceActivity()
+        }
+      }
+    })
   },
   methods: {
     scrollFun () {
@@ -170,6 +177,9 @@ export default {
         }
       })
     }
+  },
+  beforeDestroy() {
+    watchVirtualKey(false)
   }
 }
 </script>
