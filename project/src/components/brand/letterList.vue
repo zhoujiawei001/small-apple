@@ -1,9 +1,9 @@
 <template>
   <div class="letterList">
-    <ul @touchmove.stop.prevent="moveItems">
+    <ul @touchmove.stop="moveItems">
       <li
-        @touchstart.stop.prevent="handleItem(idx)"
-        @touchend.stop.prevent="handleItemEnd"
+        @touchstart.stop="handleItem(idx)"
+        @touchend.stop="handleItemEnd"
         v-for="(item, idx) in letterArr"
         :key="idx">
         <span :class="{active: letterIdx === idx}">{{item === 'com'? '↑' : item}}</span>

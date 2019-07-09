@@ -111,7 +111,6 @@ export default new Vuex.Store({
       state.delay = payload
     },
     setFeedKey (state, payload) {
-      console.log('payload_feedKey', payload)
       state.controlKey = payload
     }
   },
@@ -268,7 +267,6 @@ export default new Vuex.Store({
         }
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备型号一级数据', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
@@ -305,7 +303,6 @@ export default new Vuex.Store({
         }
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备型号二级数据', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
@@ -334,7 +331,6 @@ export default new Vuex.Store({
         }
         window.getRCResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('获取设备码库和基本信息', data)
           resolve(data)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')

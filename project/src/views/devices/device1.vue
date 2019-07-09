@@ -160,6 +160,7 @@
           @touchend="longClickEnd('ff')"
           :class="[{'btn-disable2': !cmdsKey.includes('ff')},{ 'learnActive': isLearn && curLearnKey === 'ff'}]"></span>
       </div>
+      <!-- 数字键 -->
       <div class="tel-number">
         <span
           class="item btn"
@@ -188,6 +189,14 @@
           @click="sendBody('#')"
           :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
+      <!-- 扩展键 -->
+      <app-expand-key
+        @touchstart-fn="longClickStart"
+        @touchend-fn="longClickEnd"
+        @click-fn="sendBody"
+        :expandKeys="expandKeys"
+        :cmds="cmds">
+      </app-expand-key>
     </div>
     <!-- 底层提示 -->
     <appLearnTips
@@ -219,6 +228,7 @@
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
+  import appExpandKey from '@/components/appExpandKey'
   import { viewsMixin } from '@/utils/mixin'
   export default {
     name: 'device1',
@@ -228,7 +238,8 @@
       appTipsBox,
       appLearnTips,
       appMatchTips,
-      appLoading2
+      appLoading2,
+      appExpandKey
     },
     data () {
       return {
@@ -283,7 +294,8 @@
           'tvpower': 47,
           'av/tv': 48,
           'signal': 49
-        }
+        },
+        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'up', 'down', 'left', 'right', 'ok', 'vol+', 'vol-', 'ch+', 'ch-', 'power', 'boot', 'mute', 'menu', 'back'] // 正常的所有键
       }
     }
   }

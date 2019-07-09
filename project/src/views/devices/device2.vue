@@ -24,7 +24,7 @@
           @touchend="longClickEnd('signal')"
           :class="[{'btn-disable2': !cmdsKey.includes('signal')},{ 'learnActive': isLearn && curLearnKey === 'signal'}]">
           <span class="img-box"></span>
-          <span class="text">输入选择</span>
+          <span class="text">输入选项</span>
         </div>
         <div
           class="home"
@@ -133,6 +133,7 @@
             :class="[{'btn-disable2': !cmdsKey.includes('back')}, { 'learnActive': isLearn && curLearnKey === 'back'}]"></span>
         </div>
       </div>
+      <!-- 数字键 -->
       <div class="tel-number">
         <span
           class="item btn"
@@ -161,6 +162,14 @@
           @click="sendBody('#')"
           :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
+      <!-- 扩展键 -->
+      <app-expand-key
+        @touchstart-fn="longClickStart"
+        @touchend-fn="longClickEnd"
+        @click-fn="sendBody"
+        :expandKeys="expandKeys"
+        :cmds="cmds">
+      </app-expand-key>
     </div>
     <!-- learn底层提示 -->
     <appLearnTips
@@ -192,6 +201,7 @@
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
+  import appExpandKey from '@/components/appExpandKey'
   import { mapState, mapActions } from 'vuex'
   import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from '../../utils/pub'
 
@@ -202,7 +212,8 @@
       appTipsBox,
       appLearnTips,
       appMatchTips,
-      appLoading2
+      appLoading2,
+      appExpandKey
     },
     data () {
       return {
@@ -278,7 +289,8 @@
         isHasR: false, // 判断码库Key键是否含有'_r'
         curIsHasR: '', // 当前是否带'_r'
         hintText: '', // 提示文字
-        typeName: '' // 设备型号
+        typeName: '', // 设备型号
+        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'up', 'down', 'left', 'right', 'ok', 'vol+', 'vol-', 'ch+', 'ch-', 'power', 'boot', 'mute', 'menu', 'info', 'back', 'exit'] // 正常的所有键
       }
     },
     watch: {
@@ -347,11 +359,14 @@
           this.typeName = data.rmodel
           this.defineRc(data)
           this.isHasRFn(Object.keys(this.cmds))
+          console.log('cmds', this.cmds)
           console.log('cmdsKeys', Object.keys(this.cmds))
         })
       } else {
         if (this.cmdList.hasOwnProperty(this.rc.rid)) {
           this.cmds = this.cmdList[this.rc.rid]
+          console.log('cmds', this.cmds)
+          console.log('cmdsKeys', Object.keys(this.cmds))
         } else {
           this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
             this.cmds = data.rc_command
@@ -391,6 +406,9 @@
           return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
         }
       },
+      expandKeys () { // 扩展键
+        return this._.difference(this.cmdsKey, this.normalAllKey)
+      },
       title () {
         if (this.rc.pageType === 'matchPage') {
           return this.rc.hname
@@ -410,6 +428,7 @@
       ...mapActions(['getDevCodeLibAndInfo']),
       /** 下发指令 **/
       sendBody (val) {
+        console.log('sendBody', val)
         if (!this.cmdsKey.includes(val)) return
         if (this.rc.pageType === 'controlPage') {
           if (this.$isVibrate) {
@@ -895,13 +914,13 @@
             setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
 
       .tel-number
-        padding 1rem 6rem
+        padding 1rem 5rem
         setPosUseFlexInit(row, space-between, center, wrap)
 
         .item
           setFont(2rem, $fontColorTheme2, center)
           margin-bottom 1rem
-          setWH(6.5rem, 6.5rem)
+          setWH(6.8rem, 6.8rem)
           line-height 6.5rem
           border-radius 50%
 </style>

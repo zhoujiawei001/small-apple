@@ -5,13 +5,32 @@
       title="选择设备品牌"
       :hiddenMore="true"
       @back-icon="backFn"></appHeader>
+    <brandSearch
+      id="input"
+      @handle-search="searchFn"></brandSearch>
     <main
       :style="styObj"
       ref="brand_list">
       <brandList
-        :listData="listData"></brandList>
+        :listData="listData"
+        v-if="!keyword"></brandList>
+      <ul
+        v-else
+        class="searchList">
+        <li
+          v-for="(item, idx) in keywordList"
+          @click="goToMatch2(item)"
+          :key="idx">{{item.zh}}  {{item.en}}</li>
+      </ul>
+      <div
+        class="noData"
+        v-show="keyword && keywordList.length === 0">
+        <img src="../assets/noData.png" alt="">
+        <p>没有匹配结果</p>
+      </div>
     </main>
     <letterList
+      v-show="!keyword"
       :letterArr="listDataKey"
       :letterIdx="letterIdx"
       @touchStart-letter="getLetterPosCli"
@@ -24,6 +43,7 @@
 import appHeader from '@/components/appHeader'
 import brandList from '@/components/brand/brandList'
 import letterList from '@/components/brand/letterList'
+import brandSearch from '@/components/brand/brandSearch'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -31,7 +51,8 @@ export default {
   components: {
     appHeader,
     brandList,
-    letterList
+    letterList,
+    brandSearch
   },
   data () {
     return {
@@ -42,7 +63,9 @@ export default {
       scrollAreaArr: [], // 字母所在滚动区域
       letterIdx: 0, // 选中的字母位
       keyArr: [],
-      itemArr: []
+      itemArr: [],
+      keyword: '', // 关键字
+      keywordList: [] // 关键列表
     }
   },
   computed: {
@@ -50,8 +73,8 @@ export default {
     ...mapGetters(['screenRem']),
     styObj () {
       return {
-        top: 4.8 * this.screenRem + this.statusBarHg + 'px',
-        height: `calc(100% - ${4.8 * this.screenRem + this.statusBarHg + 'px'})`
+        top: 8.4 * this.screenRem + this.statusBarHg + 'px',
+        height: `calc(100% - ${8.4 * this.screenRem + this.statusBarHg + 'px'})`
       }
     }
   },
@@ -79,7 +102,6 @@ export default {
           this.letterIdx = index
         }
       })
-      console.log('ft', this.letterIdx)
       this.$refs['brand_list'].addEventListener('scroll', this.getBrandScroll)
     },
     getBrandScroll () {
@@ -90,13 +112,12 @@ export default {
           this.letterIdx = index
         }
       })
-      console.log('letterIdx', this.letterIdx)
       this.$store.commit('setBrandScrollPos', $scroll)
     },
     /** 格式化初始数据 **/
     dataFormatting (originalData) {
       this.originalList = JSON.parse(JSON.stringify(originalData))
-      this.listData.com = this.originalList.slice(0, 6)
+      this.listData.com = this.originalList.filter(item => item.common === 1)
       this.letterArr.forEach(key => {
         this.listData[key] = this.originalList.filter(item => item.en.slice(0, 1).toUpperCase() === key)
       })
@@ -123,7 +144,6 @@ export default {
     getLetterPosCli (idx) {
       this.$refs['brand_list'].removeEventListener('scroll', this.getBrandScroll)
       this.letterIdx = idx
-      console.log('idx', idx)
       this.selectedLetter(idx)
     },
     /** 手指移开字母并且添加滚动事件 **/
@@ -133,7 +153,6 @@ export default {
     /** 手指移动字母列表的时候添加事件 **/
     getLetterPosMove (e) {
       this.letterIdx = Math.round((e.changedTouches[0].clientY - 12 * this.screenRem) / (1.8 * this.screenRem))
-      console.log('move', this.letterIdx)
       if (this.letterIdx < 0) {
         this.letterIdx = 0
       } else if (this.letterIdx > this.listDataKey.length - 1) {
@@ -143,14 +162,33 @@ export default {
     },
     /** 选中字母发生事件点击或手指移动公共方法 **/
     selectedLetter (idx) {
-      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: auto; top: ${4.8 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${4.8 * this.screenRem + this.statusBarHg}px)`)
-      this.$refs['brand_list'].scrollTop = this.scrollAreaArr[idx][0]
-      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: touch; top: ${4.8 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${4.8 * this.screenRem + this.statusBarHg}px)`)
+      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: auto; top: ${8.4 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${8.4 * this.screenRem + this.statusBarHg}px)`)
+      this.$refs['brand_list'].scrollTop = this.scrollAreaArr[idx][0] + 2
+      this.$refs['brand_list'].setAttribute('style', `-webkit-overflow-scrolling: touch; top: ${8.4 * this.screenRem + this.statusBarHg}px; height: calc(100% - ${8.4 * this.screenRem + this.statusBarHg}px)`)
       this.$store.commit('setBrandScrollPos', this.scrollAreaArr[idx][0])
     },
     backFn () {
       this.$store.commit('setBrandScrollPos', 0)
       this.$router.go(-1)
+    },
+    /** 输入搜索框 **/
+    searchFn (value) {
+      this.keyword = value
+      this.keywordList = this.originalList.filter(item => item.zh.indexOf(this.keyword) !== -1 || item.en.toLocaleLowerCase().indexOf(this.keyword.toLocaleLowerCase()) !== -1)
+    },
+    /** 进入match页面 */
+    goToMatch2 (item) {
+      this.$store.commit('setBid', item.bid)
+      setTimeout(() => {
+        this.$router.push({
+          path: '/match',
+          query: {
+            bid: item.bid,
+            zh: item.zh,
+            en: item.en
+          }
+        })
+      }, 200)
     }
   }
 }
@@ -164,10 +202,33 @@ export default {
   main
     background-color: $bgColorTheme;
     position absolute
-    top: 6.8rem
+    top: 10.4rem
     left: 0
     width 100%
     height calc(100% - 6.8rem)
     overflow scroll
     -webkit-overflow-scrolling: touch
+    ul.searchList
+      padding 0 1.6rem
+      li
+        height 5.2rem
+        line-height 5.2rem
+        padding-left .8rem
+        color rgb(26,26,26)
+        font-size 1.2rem
+        setBorderBot()
+    div.noData
+      position absolute
+      top 42%
+      left 50%
+      transform translate(-50%, -50%)
+      display flex
+      flex-direction column
+      align-items center
+      img
+        width 6.8rem
+      p
+        color #8a8a8a
+        font-size 1.3rem
+        margin-top .5rem
 </style>

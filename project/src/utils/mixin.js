@@ -137,6 +137,9 @@ export const viewsMixin = {
         return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
       }
     },
+    expandKeys () { // 扩展键
+      return this._.difference(this.cmdsKey, this.normalAllKey)
+    },
     title () {
       if (this.rc.pageType === 'matchPage') {
         return this.rc.hname
@@ -156,6 +159,7 @@ export const viewsMixin = {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
+      console.log('sendBody', val)
       if (!this.cmdsKey.includes(val)) return
       if (this.rc.pageType === 'controlPage') {
         if (this.$isVibrate) {
