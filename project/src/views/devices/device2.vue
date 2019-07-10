@@ -134,41 +134,27 @@
         </div>
       </div>
       <!-- 数字键 -->
-      <div class="tel-number">
-        <span
-          class="item btn"
-          v-for="(item, idx) of telNumber"
-          :key="idx"
-          @click="sendBody(item)"
-          @touchstart="longClickStart(item)"
-          @touchend="longClickEnd(item)"
-          :class="[{'btn-disable2': !cmdsKey.includes(item)},{ 'learnActive': isLearn && curLearnKey === item}]">{{item}}</span>
-        <span
-          class="item btn"
-          @touchstart="longClickStart('*')"
-          @touchend="longClickEnd('*')"
-          @click="sendBody('*')"
-          :class="[{'btn-disable2': !cmdsKey.includes('*')},{ 'learnActive': isLearn && curLearnKey === '*'}]">*</span>
-        <span
-          class="item btn"
-          @click="sendBody('0')"
-          @touchstart="longClickStart('0')"
-          @touchend="longClickEnd('0')"
-          :class="[{'btn-disable2': !cmdsKey.includes('0')},{ 'learnActive': isLearn && curLearnKey === '0'}]">0</span>
-        <span
-          class="item btn"
-          @touchstart="longClickStart('#')"
-          @touchend="longClickEnd('#')"
-          @click="sendBody('#')"
-          :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
-      </div>
+      <ul class="tel-number">
+        <li
+          v-for="(item, idx) in telNumber"
+          :key="idx">
+          <span
+            class="item btn"
+            @click="sendBody(item)"
+            @touchstart="longClickStart(item)"
+            @touchend="longClickEnd(item)"
+            :class="[{'btn-disable2': !cmdsKey.includes(item)},{ 'learnActive': isLearn && curLearnKey === item}]">{{item}}</span>
+        </li>
+      </ul>
       <!-- 扩展键 -->
       <app-expand-key
+        @click-fn="sendBody"
         @touchstart-fn="longClickStart"
         @touchend-fn="longClickEnd"
-        @click-fn="sendBody"
         :expandKeys="expandKeys"
-        :cmds="cmds">
+        :cmds="cmds"
+        :isLearn="isLearn"
+        :curLearnKey="curLearnKey">
       </app-expand-key>
     </div>
     <!-- learn底层提示 -->
@@ -217,57 +203,35 @@
     },
     data () {
       return {
-        telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '-/--', '0'],
         tempCmds: {
-          '0': 1,
-          '1': 2,
-          '2': 3,
-          '3': 4,
-          '4': 5,
-          '5': 6,
-          '6': 7,
-          '7': 8,
-          '8': 9,
-          '9': 10,
-          '#': 11,
-          '*': 12,
-          'back': 13,
-          'boot': 14,
-          'ch+': 15,
-          'ch-': 16,
-          'down': 17,
-          'exit': 18,
-          'left': 19,
-          'menu': 20,
-          'mute': 21,
-          'ok': 22,
-          'power': 23,
-          'right': 24,
-          'up': 25,
-          'vol+': 26,
-          'vol-': 27,
-          'signal': 28,
-          'next': 29,
-          'tv/radio': 30,
-          'screenshot': 31,
-          'green': 32,
-          'guide': 33,
-          'help': 34,
-          'info': 35,
-          'itv': 36,
-          'vv': 37,
-          'yellow': 38,
-          'search': 39,
-          'stop': 40,
-          'previous': 41,
-          'rec': 42,
-          'red': 43,
-          'rew': 44,
-          'pause': 45,
-          'play': 46,
-          'blue': 47,
-          'epg': 48,
-          'ff': 49
+          '0': 0,
+          '1': 1,
+          '2': 2,
+          '3': 3,
+          '4': 4,
+          '5': 5,
+          '6': 6,
+          '7': 7,
+          '8': 8,
+          '9': 9,
+          '-/--': 10,
+          'back': 11,
+          'ch+': 12,
+          'ch-': 13,
+          'down': 14,
+          'exit': 15,
+          'left': 16,
+          'menu': 17,
+          'mute': 18,
+          'ok': 19,
+          'power': 20,
+          'right': 21,
+          'up': 22,
+          'vol+': 23,
+          'vol-': 24,
+          'boot': 25,
+          'signal': 26
         }, // mix从这下面
         cmds: {},
         rc: JSON.parse(this.$route.query.rc),
@@ -290,7 +254,7 @@
         curIsHasR: '', // 当前是否带'_r'
         hintText: '', // 提示文字
         typeName: '', // 设备型号
-        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'up', 'down', 'left', 'right', 'ok', 'vol+', 'vol-', 'ch+', 'ch-', 'power', 'boot', 'mute', 'menu', 'info', 'back', 'exit'] // 正常的所有键
+        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-/--', 'back', 'ch+', 'ch-', 'down', 'exit', 'left', 'menu',  'mute', 'ok', 'power', 'right', 'up', 'vol+', 'vol-', 'boot', 'signal'] // 正常的所有键
       }
     },
     watch: {
@@ -367,6 +331,7 @@
           this.cmds = this.cmdList[this.rc.rid]
           console.log('cmds', this.cmds)
           console.log('cmdsKeys', Object.keys(this.cmds))
+          console.log('cmdsKeysExpand', this.expandKeys)
         } else {
           this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
             this.cmds = data.rc_command
@@ -407,7 +372,7 @@
         }
       },
       expandKeys () { // 扩展键
-        return this._.difference(this.cmdsKey, this.normalAllKey)
+        return this._.difference(this.cmdsKey, this.normalAllKey).filter(item => item.indexOf('_r') === -1)
       },
       title () {
         if (this.rc.pageType === 'matchPage') {
@@ -428,16 +393,16 @@
       ...mapActions(['getDevCodeLibAndInfo']),
       /** 下发指令 **/
       sendBody (val) {
-        console.log('sendBody', val)
         if (!this.cmdsKey.includes(val)) return
         if (this.rc.pageType === 'controlPage') {
+          console.log('sendBody_control', val)
           if (this.$isVibrate) {
             navigator.vibrate(100)
           }
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.tempCmds[val] + ''
+                controlKey: this.calcExpandControlKey(val)
               },
               deviceList: {
                 list: [this.rc]
@@ -446,6 +411,7 @@
           }
           sendBodyToDev(body)
         } else if (this.rc.pageType === 'matchPage') {
+          console.log('sendBody_match', val)
           if (this.$isVibrate) {
             navigator.vibrate(100)
           }
@@ -476,13 +442,14 @@
       sendBody2 (val) {
         if (!this.cmdsKey.includes(val)) return
         if (this.rc.pageType === 'learnPage') {
+          console.log('sendBody2_learn', val)
           if (this.$isVibrate) {
             navigator.vibrate(100)
           }
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.tempCmds[val] + ''
+                controlKey: this.calcExpandControlKey(val)
               },
               deviceList: {
                 list: [this.rc]
@@ -491,6 +458,11 @@
           }
           sendBodyToDev(body)
         }
+      },
+      /** 计算扩展键的发码位数 **/
+      calcExpandControlKey (val) {
+        let controlKey = this.expandKeys.includes(val)? (this.expandKeys.indexOf(val) + this.normalAllKey.length) : this.tempCmds[val]
+        return controlKey + ''
       },
       moreSet () {
         this.$router.push({
@@ -516,7 +488,7 @@
             let body = {
               batch: {
                 controlKey: {
-                  controlKey: this.tempCmds[val] + '',
+                  controlKey: this.calcExpandControlKey(val),
                   feedKey: 1
                 },
                 deviceList: {
@@ -913,14 +885,18 @@
           .return
             setIcon('../../assets/blue/return.png', '../../assets/white/return.png')
 
-      .tel-number
-        padding 1rem 5rem
-        setPosUseFlexInit(row, space-between, center, wrap)
-
-        .item
-          setFont(2rem, $fontColorTheme2, center)
-          margin-bottom 1rem
-          setWH(6.8rem, 6.8rem)
-          line-height 6.5rem
-          border-radius 50%
+      ul.tel-number
+        padding 1rem 4.2rem
+        display flex
+        flex-wrap wrap
+        li
+          width calc(100% / 3)
+          margin-bottom 2rem
+          setPosUseFlexInit(row, center, center, wrap)
+          span.item
+            setFont(2rem, $fontColorTheme2, center)
+            setWH(6.8rem, 6.8rem)
+            line-height 4.4rem
+            border-radius 4.4rem
+            setPosUseFlexInit(row, center, center, wrap)
 </style>

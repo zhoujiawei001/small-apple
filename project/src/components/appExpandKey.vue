@@ -4,10 +4,12 @@
       v-for="(item, idx) of expandKeysCopy"
       :key="idx">
       <span
+        v-if="cmds[item]"
         class="item btn"
         @click="sendBody(item)"
         @touchstart="longClickStart(item)"
-        @touchend="longClickEnd(item)"><i>{{cmds[item]['kn']}}</i></span>
+        @touchend="longClickEnd(item)"
+        :class="{ 'learnActive': isLearn && curLearnKey === item}"><i>{{ cmds[item]['kn']}}</i></span>
     </li>
   </ul>
 </template>
@@ -23,12 +25,21 @@
         }
       },
       cmds: {
-        type: Object
+        type: Object,
+        default: () => {
+          return {}
+        }
+      },
+      isLearn: {
+        type: Boolean
+      },
+      curLearnKey: {
+        type: String
       }
     },
     computed: {
       expandKeysCopy () {
-        return this.expandKeys.filter(item => item.indexOf('_r') === -1)
+        return this.expandKeys.filter(item => item.indexOf('_r') === -1).slice(0, 10)
       }
     },
     methods: {
@@ -52,13 +63,12 @@
     display flex
     flex-wrap wrap
     li
-      width 33.333%
+      width calc(100% / 3)
       margin-bottom 2rem
       setPosUseFlexInit(row, center, center, wrap)
       span.item
         setFont(1.5rem, $fontColorTheme2, center)
         setWH(7.6rem, 4.4rem)
-        line-height 4.4rem
         border-radius 4.4rem
         setPosUseFlexInit(row, center, center, wrap)
         i
