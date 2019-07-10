@@ -154,7 +154,8 @@
         :expandKeys="expandKeys"
         :cmds="cmds"
         :isLearn="isLearn"
-        :curLearnKey="curLearnKey">
+        :curLearnKey="curLearnKey"
+        v-if="expandKeys.length > 0">
       </app-expand-key>
     </div>
     <!-- learn底层提示 -->
@@ -253,8 +254,7 @@
         isHasR: false, // 判断码库Key键是否含有'_r'
         curIsHasR: '', // 当前是否带'_r'
         hintText: '', // 提示文字
-        typeName: '', // 设备型号
-        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-/--', 'back', 'ch+', 'ch-', 'down', 'exit', 'left', 'menu',  'mute', 'ok', 'power', 'right', 'up', 'vol+', 'vol-', 'boot', 'signal'] // 正常的所有键
+        typeName: '' // 设备型号
       }
     },
     watch: {
@@ -325,6 +325,7 @@
           this.isHasRFn(Object.keys(this.cmds))
           console.log('cmds', this.cmds)
           console.log('cmdsKeys', Object.keys(this.cmds))
+          console.log('cmdsKeysExpand', this.expandKeys)
         })
       } else {
         if (this.cmdList.hasOwnProperty(this.rc.rid)) {
@@ -338,6 +339,9 @@
             this.$store.commit('updateCmdList', {
               [this.rc.rid]: data.rc_command
             })
+            console.log('cmds', this.cmds)
+            console.log('cmdsKeys', Object.keys(this.cmds))
+            console.log('cmdsKeysExpand', this.expandKeys)
           })
         }
       }
@@ -370,6 +374,9 @@
         } else {
           return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
         }
+      },
+      normalAllKey () {
+        return Object.keys(this.tempCmds)
       },
       expandKeys () { // 扩展键
         return this._.difference(this.cmdsKey, this.normalAllKey).filter(item => item.indexOf('_r') === -1)
@@ -544,7 +551,7 @@
             let body = {
               batch: {
                 controlKey: {
-                  controlKey: this.tempCmds[val] + '',
+                  controlKey: this.calcExpandControlKey(val),
                   feedKey: 0
                 },
                 deviceList: {
@@ -580,7 +587,7 @@
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.tempCmds[this.curLearnKey] + '',
+                controlKey: this.calcExpandControlKey[this.curLearnKey],
                 feedKey: 0
               },
               deviceList: {

@@ -9,7 +9,7 @@
     <div class="banner">
       <img src="../../assets/devIcon2/6.png" alt="fan.png">
     </div>
-    <div class="container">
+    <div class="container" :style="styObjCont2">
       <div class="btn-standard">
         <div class="left" style="visibility: hidden;">
           <span>延时开机</span>
@@ -29,7 +29,7 @@
           <p>01:30</p>
         </div>
       </div>
-      <ul class="btn-extend">
+      <ul class="btn-normal">
         <li
           v-for="(item, index) in extendsList"
           @click="sendBody(item.value)"
@@ -37,9 +37,20 @@
           @touchend="longClickEnd(item.value)"
           :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]"
           :key="index">
-          {{item.text}}
+          <span>{{item.text}}</span>
         </li>
       </ul>
+      <!-- 扩展键 -->
+      <app-expand-key
+        @click-fn="sendBody"
+        @touchstart-fn="longClickStart"
+        @touchend-fn="longClickEnd"
+        :expandKeys="expandKeys"
+        :cmds="cmds"
+        :isLearn="isLearn"
+        :curLearnKey="curLearnKey"
+        v-if="expandKeys.length > 0">
+      </app-expand-key>
     </div>
     <!-- learn底层提示 -->
     <appLearnTips
@@ -71,6 +82,7 @@
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
+  import appExpandKey from '@/components/appExpandKey'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -81,7 +93,8 @@
       appTipsBox,
       appLearnTips,
       appMatchTips,
-      appLoading2
+      appLoading2,
+      appExpandKey
     },
     data () {
       return {
@@ -92,37 +105,25 @@
             value: 'fanspeed'
           },
           {
-            text: '摆头',
-            value: 'oscillation'
-          },
-          {
-            text: '风类',
+            text: '模式',
             value: 'mode'
           },
           {
-            text: '睡眠',
-            value: 'sleep'
+            text: '定时',
+            value: 'timer'
           },
           {
-            text: '灯光',
-            value: 'light'
-          },
-          {
-            text: '负离子',
-            value: 'anion'
+            text: '摇头',
+            value: 'oscillation'
           }
         ],
         tempCmds: {
-          "fanspeed": 1,
-          "mode": 2,
-          "mute": 3,
-          "oscillation": 4,
-          "power": 5,
-          "poweroff": 6,
-          "timer": 7,
-          "anion": 8,
-          "light": 9,
-          "sleep": 10
+          "power": 0,
+          "poweroff": 1,
+          "fanspeed": 2,
+          "mode": 3,
+          "timer": 4,
+          "oscillation": 5
         }
       }
     },
@@ -138,7 +139,6 @@
   @import "../../style/mixin.styl"
   .dev-fan
     setWH()
-    setPosUseFlexInit(column)
     background #F2F2F2
     -webkit-overflow-scrolling: touch
     overflow-scrolling: touch
@@ -150,9 +150,12 @@
         setWH(20rem, 20rem)
         transform translateY(1.8rem)
     .container
-      flex 1
-      padding 3.2rem 1.6rem 0 1.6rem
-      background-color #F2F2F2
+      position absolute
+      top: 28rem
+      height calc(100% - 28rem)
+      width 100%
+      padding-top 2.4rem
+      overflow scroll
       .btn-standard
         setPosUseFlex(row, space-between)
         .left
@@ -174,27 +177,25 @@
           background-color: #fff;
           img
             width 3.2rem
-      .btn-extend
-        padding 4.6rem 2.4rem 0 2.4rem
+      .btn-normal
+        padding 3.8rem 4.2rem 0 4.2rem
         display flex
         flex-wrap wrap
         justify-content space-around
         li
-          width 26.5%
-          height 3.6rem
-          background-color: #fff;
-          border-radius 3.6rem
-          line-height 3.6rem
-          text-align center
-          font-size 1.2rem
-          &:active
-            background-color rgba(0,0,0,.1)
-        li:nth-child(-n+3)
-          margin-bottom 1.8rem
-        /*li:nth-child(2)*/
-          /*margin 0 2rem 1.8rem 2rem*/
-        li:nth-child(n+4)
-          margin-top 1.8rem
-        /*li:nth-child(5)*/
-          /*margin 1.8rem 2rem 0 2rem*/
+          width 50%
+          font-size 1.4rem
+          display flex
+          justify-content center
+          span
+            display: inline-block;
+            setWH(8.6rem, 4.4rem)
+            background-color: #fff;
+            border-radius 4.4rem
+            line-height 4.4rem
+            text-align center
+            &:active
+              background-color rgba(0,0,0,.1)
+        li:nth-child(-n + 2)
+          margin-bottom 2.4rem
 </style>

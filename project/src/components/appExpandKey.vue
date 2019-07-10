@@ -1,5 +1,5 @@
 <template>
-  <ul class="expandKey">
+  <ul :class="classObj">
     <li
       v-for="(item, idx) of expandKeysCopy"
       :key="idx">
@@ -39,7 +39,13 @@
     },
     computed: {
       expandKeysCopy () {
-        return this.expandKeys.filter(item => item.indexOf('_r') === -1).slice(0, 10)
+        return this.expandKeys.filter(item => item.indexOf('_r') === -1)
+      },
+      classObj () {
+        return {
+          expandKey: this.expandKeysCopy.length > 2,
+          expandKey2: this.expandKeysCopy.length <= 2,
+        }
       }
     },
     methods: {
@@ -69,6 +75,26 @@
       span.item
         setFont(1.5rem, $fontColorTheme2, center)
         setWH(7.6rem, 4.4rem)
+        border-radius 4.4rem
+        setPosUseFlexInit(row, center, center, wrap)
+        i
+          display inline-block
+          width 6.4rem
+          height 3.6rem
+          line-height 3.6rem
+          setEllipsisOne()
+          font-style:normal
+  ul.expandKey2
+    padding 2.4rem 4.2rem
+    display flex
+    flex-wrap wrap
+    li
+      width 50%
+      margin-bottom 2rem
+      setPosUseFlexInit(row, center, center, wrap)
+      span.item
+        setFont(1.5rem, $fontColorTheme2, center)
+        setWH(8.6rem, 4.4rem)
         border-radius 4.4rem
         setPosUseFlexInit(row, center, center, wrap)
         i

@@ -116,6 +116,17 @@
             :class="[{'btn-disable2': !cmdsKey.includes('back')},{ 'learnActive': isLearn && curLearnKey === 'back'}]"></span>
         </div>
       </div>
+      <!-- 扩展键 -->
+      <app-expand-key
+        @click-fn="sendBody"
+        @touchstart-fn="longClickStart"
+        @touchend-fn="longClickEnd"
+        :expandKeys="expandKeys"
+        :cmds="cmds"
+        :isLearn="isLearn"
+        :curLearnKey="curLearnKey"
+        v-if="expandKeys.length > 0">
+      </app-expand-key>
       <!-- 额外功能 -->
       <div class="extend-fn" v-if="false">
         <div class="left">
@@ -158,6 +169,7 @@
   import appLearnTips from '@/components/appLearnTips'
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
+  import appExpandKey from '@/components/appExpandKey'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -168,26 +180,27 @@
       appTipsBox,
       appLearnTips,
       appMatchTips,
-      appLoading2
+      appLoading2,
+      appExpandKey
     },
     data () {
       return {
         tempCmds: {
-          'back': 1,
-          'boot': 2,
-          'down': 3,
-          'left': 4,
-          'menu': 5,
-          'ok': 6,
-          'power': 7,
-          'right': 8,
-          'up': 9,
-          'vol+': 10,
-          'vol-': 11,
-          'mute': 12,
-          'tvpower': 13,
-          'av/tv': 14,
-          'signal': 15
+          'power': 0,
+          'vol+': 1,
+          'vol-': 2,
+          'up': 3,
+          'down': 4,
+          'left': 5,
+          'right': 6,
+          'boot': 7,
+          'menu': 8,
+          'back': 9,
+          'ok': 10,
+          'mute': 11,
+          'tvpower': 12,
+          'av/tv': 13,
+          'signal': 14
         }
       }
     }

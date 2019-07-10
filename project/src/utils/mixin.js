@@ -94,19 +94,26 @@ export const viewsMixin = {
         this.cmds = data.rc_command
         this.cmdObj = data
         this.typeName = data.rmodel
-        console.log('cmdsKeys', Object.keys(this.cmds))
         this.defineRc(data)
+        console.log('cmds', this.cmds)
+        console.log('cmdsKeys', Object.keys(this.cmds))
+        console.log('cmdsKeysExpand', this.expandKeys)
       })
     } else {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmds = this.cmdList[this.rc.rid]
         console.log('cmds', this.cmds)
+        console.log('cmdsKeys', Object.keys(this.cmds))
+        console.log('cmdsKeysExpand', this.expandKeys)
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
+          console.log('cmds', this.cmds)
+          console.log('cmdsKeys', Object.keys(this.cmds))
+          console.log('cmdsKeysExpand', this.expandKeys)
         })
       }
     }
@@ -137,6 +144,9 @@ export const viewsMixin = {
         return this._.union(Object.keys(this.cmds), this.hasLearnCodes)
       }
     },
+    normalAllKey () {
+      return Object.keys(this.tempCmds)
+    },
     expandKeys () { // 扩展键
       return this._.difference(this.cmdsKey, this.normalAllKey)
     },
@@ -153,22 +163,27 @@ export const viewsMixin = {
         marginTop: `calc(4.8rem + ${this.statusBarHg}px)`,
         paddingBottom: this.rc.pageType === 'controlPage' ? 0 : '5.8rem'
       }
-    }
+    },
+    styObjCont2 () {
+      return {
+        paddingBottom: this.rc.pageType === 'controlPage' ? 0 : '5.8rem'
+      }
+    },
   },
   methods: {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
-      console.log('sendBody', val)
       if (!this.cmdsKey.includes(val)) return
       if (this.rc.pageType === 'controlPage') {
+        console.log('sendBody_control', val)
         if (this.$isVibrate) {
           navigator.vibrate(100)
         }
         let body = {
           batch: {
             controlKey: {
-              controlKey: this.tempCmds[val] + ''
+              controlKey: this.calcExpandControlKey(val)
             },
             deviceList: {
               list: [this.rc]
@@ -177,6 +192,7 @@ export const viewsMixin = {
         }
         sendBodyToDev(body)
       } else if (this.rc.pageType === 'matchPage') {
+        console.log('sendBody_match', val)
         if (this.$isVibrate) {
           navigator.vibrate(100)
         }
@@ -198,13 +214,14 @@ export const viewsMixin = {
     sendBody2 (val) {
       if (!this.cmdsKey.includes(val)) return
       if (this.rc.pageType === 'learnPage') {
+        console.log('sendBody2_learn', val)
         if (this.$isVibrate) {
           navigator.vibrate(100)
         }
         let body = {
           batch: {
             controlKey: {
-              controlKey: this.tempCmds[val] + ''
+              controlKey: this.calcExpandControlKey(val)
             },
             deviceList: {
               list: [this.rc]
@@ -213,6 +230,11 @@ export const viewsMixin = {
         }
         sendBodyToDev(body)
       }
+    },
+    /** 计算扩展键的发码位数 **/
+    calcExpandControlKey (val) {
+      let controlKey = this.expandKeys.includes(val)? (this.expandKeys.indexOf(val) + this.normalAllKey.length) : this.tempCmds[val]
+      return controlKey + ''
     },
     moreSet () {
       this.$router.push({
@@ -238,7 +260,7 @@ export const viewsMixin = {
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.tempCmds[val] + '',
+                controlKey: this.calcExpandControlKey(val),
                 feedKey: 1
               },
               deviceList: {
@@ -260,7 +282,6 @@ export const viewsMixin = {
         clearTimeout(this.longClickTimer);
         this.longClickTimer = null
         if (this.longClickNum === 0) {
-          console.log('longClickNum', this.longClickNum)
           this.sendBody2(val)
         }
       }
@@ -295,7 +316,7 @@ export const viewsMixin = {
           let body = {
             batch: {
               controlKey: {
-                controlKey: this.tempCmds[val] + '',
+                controlKey: this.calcExpandControlKey(val),
                 feedKey: 0
               },
               deviceList: {
@@ -331,7 +352,7 @@ export const viewsMixin = {
         let body = {
           batch: {
             controlKey: {
-              controlKey: this.tempCmds[this.curLearnKey] + '',
+              controlKey: this.calcExpandControlKey[this.curLearnKey],
               feedKey: 0
             },
             deviceList: {

@@ -172,10 +172,10 @@
           :class="[{'btn-disable2': !cmdsKey.includes(item)},{ 'learnActive': isLearn && curLearnKey === item}]">{{item}}</span>
         <span
           class="item btn"
-          @touchstart="longClickStart('*')"
-          @touchend="longClickEnd('*')"
-          @click="sendBody('*')"
-          :class="[{'btn-disable2': !cmdsKey.includes('*')},{ 'learnActive': isLearn && curLearnKey === '*'}]">*</span>
+          @touchstart="longClickStart('-/--')"
+          @touchend="longClickEnd('-/--')"
+          @click="sendBody('-/--')"
+          :class="[{'btn-disable2': !cmdsKey.includes('-/--')},{ 'learnActive': isLearn && curLearnKey === '-/--'}]">-/--</span>
         <span
           class="item btn"
           @click="sendBody('0')"
@@ -191,11 +191,14 @@
       </div>
       <!-- 扩展键 -->
       <app-expand-key
+        @click-fn="sendBody"
         @touchstart-fn="longClickStart"
         @touchend-fn="longClickEnd"
-        @click-fn="sendBody"
         :expandKeys="expandKeys"
-        :cmds="cmds">
+        :cmds="cmds"
+        :isLearn="isLearn"
+        :curLearnKey="curLearnKey"
+        v-if="expandKeys.length > 0">
       </app-expand-key>
     </div>
     <!-- 底层提示 -->
@@ -245,57 +248,40 @@
       return {
         telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
         tempCmds: {
-          '0': 1,
-          '1': 2,
-          '2': 3,
-          '3': 4,
-          '4': 5,
-          '5': 6,
-          '6': 7,
-          '7': 8,
-          '8': 9,
-          '9': 10,
-          '#': 11,
-          '*': 12,
-          'back': 13,
-          'boot': 14,
-          'ch+': 15,
-          'ch-': 16,
-          'down': 17,
-          'exit': 18,
-          'left': 19,
-          'menu': 20,
-          'mute': 21,
-          'ok': 22,
-          'pause': 23,
-          'play': 24,
-          'power': 25,
-          'right': 26,
-          'stop': 27,
-          'up': 28,
-          'vol+': 29,
-          'vol-': 30,
-          'blue': 31,
-          'vv': 32,
-          'yellow': 33,
-          'epg': 34,
-          'ff': 35,
-          'green': 36,
-          'guide': 37,
-          'help': 38,
-          'info': 39,
-          'itv': 40,
-          'next': 41,
-          'previous': 42,
-          'rec': 43,
-          'red': 44,
-          'rew': 45,
-          'search': 46,
-          'tvpower': 47,
-          'av/tv': 48,
-          'signal': 49
-        },
-        normalAllKey: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'up', 'down', 'left', 'right', 'ok', 'vol+', 'vol-', 'ch+', 'ch-', 'power', 'boot', 'mute', 'menu', 'back'] // 正常的所有键
+          '0': 0,
+          '1': 1,
+          '2': 2,
+          '3': 3,
+          '4': 4,
+          '5': 5,
+          '6': 6,
+          '7': 7,
+          '8': 8,
+          '9': 9,
+          '#': 10,
+          '-/--': 11,
+          'back': 12,
+          'boot': 13,
+          'ch+': 14,
+          'ch-': 15,
+          'down': 16,
+          'exit': 17,
+          'left': 18,
+          'menu': 19,
+          'mute': 20,
+          'ok': 21,
+          'pause': 22,
+          'play': 23,
+          'power': 24,
+          'right': 25,
+          'stop': 26,
+          'up': 27,
+          'vol+': 28,
+          'vol-': 29,
+          'tvpower': 30,
+          'av/tv': 31,
+          'signal': 32
+        }
       }
     }
   }
