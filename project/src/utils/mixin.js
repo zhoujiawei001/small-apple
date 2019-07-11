@@ -1,5 +1,5 @@
 import { mapActions, mapState } from 'vuex'
-import { sendBodyToDev, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from './pub'
+import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from './pub'
 
 export const viewsMixin = {
   data () {
@@ -21,6 +21,8 @@ export const viewsMixin = {
       matchTimer: null, // 匹配超时定时器
       matchCount: 0, // 匹配次数
       cmdObj: {},
+      isHasR: false, // 判断码库Key键是否含有'_r'
+      curIsHasR: '', // 当前是否带'_r'
       hintText: '', // 提示文字
       typeName: '' // 设备型号
     }
@@ -49,7 +51,7 @@ export const viewsMixin = {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
         console.log('watch-isFinish')
-        if (newVal === 1) {
+        if (newVal === 1 && this.rc.pageType === 'matchPage') {
           this.registerVirtualDev().then(data => {
             if (data.errcode === 0) {
               this.rc2.devId = data.devId
@@ -95,6 +97,7 @@ export const viewsMixin = {
         this.cmdObj = data
         this.typeName = data.rmodel
         this.defineRc(data)
+        this.isHasRFn(Object.keys(this.cmds))
         console.log('cmds', this.cmds)
         console.log('cmdsKeys', Object.keys(this.cmds))
         console.log('cmdsKeysExpand', this.expandKeys)
@@ -121,6 +124,9 @@ export const viewsMixin = {
   mounted () {
     if (window.localStorage.getItem(`learnCode_${this.rc.hid}`)) {
       this.hasLearnCodes = JSON.parse(window.localStorage.getItem(`learnCode_${this.rc.hid}`))
+    }
+    if ( window.localStorage.getItem('curIsHasR') === '' || window.localStorage.getItem('curIsHasR') === '_r') {
+      this.curIsHasR = window.localStorage.getItem('curIsHasR')
     }
     watchVirtualKey(true).then(bool => {
       if (bool) {
@@ -199,7 +205,7 @@ export const viewsMixin = {
         let body = {
           batch: {
             controlKey: {
-              controlKey: this.cmds[val].src
+              controlKey: this.cmds[this.isHasR? (val + this.curIsHasR) : val]? this.cmds[this.isHasR? (val + this.curIsHasR) : val].src : this.cmds[val].src
             },
             deviceList: {
               list: [{
@@ -208,7 +214,16 @@ export const viewsMixin = {
             }
           }
         }
-        sendBodyToDev(body)
+        sendBodyToDev2(body, 'setDeviceInfoCallbackIsHasR').then(data => {
+          if (!data.errcode) {
+            if (this.isHasR) {
+              let $val = (val + this.curIsHasR).indexOf('_r') !== -1? (val + this.curIsHasR) : (val + '_r')
+              if (this.cmds[$val]) {
+                this.curIsHasR = this.curIsHasR? '' : '_r'
+              }
+            }
+          }
+        })
       }
     },
     sendBody2 (val) {
@@ -394,9 +409,11 @@ export const viewsMixin = {
       this.getDevCodeLibAndInfo($rid).then(data => {
         this.cmds = data.rc_command
         this.cmdObj = data
+        this.isHasR = false
         this.typeName = data.rmodel
         console.log('cmdsKeys', Object.keys(this.cmds))
         this.defineRc(data)
+        this.isHasRFn(Object.keys(this.cmds))
       })
     },
     /** 重新定义RC **/
@@ -528,9 +545,24 @@ export const viewsMixin = {
         window.hilink.postDeviceExtendDataById(this.rc2.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback2')
       })
     },
+    /** 判断码库是否包含“_r” 的key键*/
+    isHasRFn (cmdsKey) {
+      for (let i = 0; i < cmdsKey.length; i++) {
+        if (cmdsKey[i].indexOf('_r') !== -1) {
+          this.isHasR = true
+          break
+        }
+      }
+      console.log('isHasR', this.isHasR)
+    },
+    /** 将是否包含“_r”的KEY键保存在localStorage中 **/
+    saveIsHasRToLocal () {
+      window.localStorage.setItem('curIsHasR',this.curIsHasR)
+    }
   },
   beforeDestroy () {
     this.removeTimer()
+    this.saveIsHasRToLocal()
     watchVirtualKey(false)
   }
 }

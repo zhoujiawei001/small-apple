@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     appDevId: '',
     devName: '',
+    roomName: '', // 房间名称
     appStatus: 0, // 小苹果状态 0-关，1-开
     statusBarHg: 20, // 手机状态栏高度
     screenWd: 0, // 获取屏幕宽度
@@ -112,6 +113,9 @@ export default new Vuex.Store({
     },
     setFeedKey (state, payload) {
       state.controlKey = payload
+    },
+    setRoomName (state, payload) {
+      state.roomName = payload
     }
   },
   actions: {
@@ -130,6 +134,7 @@ export default new Vuex.Store({
           let data = parseHilinkData(res)
           state.appDevId = data.devId
           commit('setDevName', data.devName)
+          commit('setRoomName', data.roomName)
           console.log('状态全集', data)
           data.services.forEach(item => {
             window.app.changeSerData(item)

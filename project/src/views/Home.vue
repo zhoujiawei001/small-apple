@@ -10,6 +10,7 @@
           :class="clsObjStatusDown"
           @handle-icon="clickSwitchIcon"
           :devName="devName"
+          :devRoomName="roomName"
           :devStatus="appStatus"
           :key="100"></appStatusBar>
         <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
@@ -59,7 +60,7 @@ export default {
     appTipsBox
   },
   computed: {
-    ...mapState(['addedDevList', 'statusBarHg', 'devName', 'appStatus']),
+    ...mapState(['addedDevList', 'statusBarHg', 'devName', 'appStatus', 'roomName']),
     ...mapGetters(['screenRem']),
     headerHg () {
       return 4.8 * this.screenRem + this.statusBarHg

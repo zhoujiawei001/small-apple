@@ -32,12 +32,12 @@
       <ul class="btn-normal">
         <li
           v-for="(item, index) in extendsList"
-          @click="sendBody(item.value)"
-          @touchstart="longClickStart(item.value)"
-          @touchend="longClickEnd(item.value)"
-          :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]"
           :key="index">
-          <span>{{item.text}}</span>
+          <span
+            @click="sendBody(item.value)"
+            @touchstart="longClickStart(item.value)"
+            @touchend="longClickEnd(item.value)"
+            :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]">{{item.text}}</span>
         </li>
       </ul>
       <!-- 扩展键 -->

@@ -663,7 +663,7 @@
         if (val === 'h') {
           return this.addZeroToBefore(Math.floor(seconds / 3600))
         } else {
-          return this.addZeroToBefore(Math.ceil((seconds % 3600) / 60))
+          return this.addZeroToBefore(Math.floor((seconds % 3600) / 60))
         }
       },
       /** 一开始就运行倒计时 **/

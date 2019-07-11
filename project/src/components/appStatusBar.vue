@@ -2,7 +2,7 @@
   <div class="appStatusBar" :style="objStyle">
     <div class="left">
       <span>夜灯{{devStatus ? '开启' : '关闭'}}</span>
-      <p>{{devName}}</p>
+      <p>{{devName}} ({{devRoomName}})</p>
     </div>
     <div class="right" @click="clickSwitch"></div>
   </div>
@@ -19,6 +19,10 @@ export default {
     devName: {
       type: String,
       default: '遥控大师小苹果'
+    },
+    devRoomName: {
+      type: String,
+      default: '默认房间'
     }
   },
   computed: {
