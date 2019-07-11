@@ -19,7 +19,9 @@ export default new Vuex.Store({
     addedDevList: [], // 已经添加的遥控设备
     brandScrollPos: null, // brand页面滚动的距离
     cmdList: {}, //码库
-    loadRes: 0, // 码库下载状态 0-未下载 1-已下载
+    loadRes: {
+      isFinish: 0 // 码库下载状态 0-未下载 1-已下载
+    },
     delay: [
       {
         id: 29,
@@ -134,7 +136,7 @@ export default new Vuex.Store({
           let data = parseHilinkData(res)
           state.appDevId = data.devId
           commit('setDevName', data.devName)
-          commit('setRoomName', data.roomName)
+          commit('setRoomName', `(${data.roomName})`)
           console.log('状态全集', data)
           data.services.forEach(item => {
             window.app.changeSerData(item)
@@ -178,53 +180,53 @@ export default new Vuex.Store({
     /** 获取设备类型数据 **/
     getDevTypeList ({ commit, getters}) {
       if (getters.typeList.length > 0) return
-      // $http.get('/huawei/l.php', {
-      //   params: {
-      //     m: 'live',
-      //     c: 'be_rc_type'
-      //   }
-      // }).then(res => {
-      //   console.log('getDevTypeList', res.data.result)
-      //   commit('setTypeData', res.data.result)
-      // })
-
-      let reqParams = {
-        domain: 'http://hwh5.yaokantv.com',
-        path: '/huawei/l.php',
-        method: 'GET',
-        param: {
+      $http.get('/huawei/l.php', {
+        params: {
           m: 'live',
           c: 'be_rc_type'
         }
-      }
-      window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'app.getRCTypeResultCallback')
+      }).then(res => {
+        console.log('getDevTypeList', res.data.result)
+        commit('setTypeData', res.data.result)
+      })
+
+      // let reqParams = {
+      //   domain: 'http://hwh5.yaokantv.com',
+      //   path: '/huawei/l.php',
+      //   method: 'GET',
+      //   param: {
+      //     m: 'live',
+      //     c: 'be_rc_type'
+      //   }
+      // }
+      // window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'app.getRCTypeResultCallback')
     },
     /** 获取设备品牌数据 **/
     getDevBrandList ({ commit, state }) {
       return new Promise(resolve => {
-        // $http.get(
-        //   `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`
-        // ).then(res => {
-        //   console.log('getDevBrandList', res.data.result)
-        //   resolve(res.data.result)
-        // })
+        $http.get(
+          `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`
+        ).then(res => {
+          console.log('getDevBrandList', res.data.result)
+          resolve(res.data.result)
+        })
 
-        let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
-          path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
-          method: 'POST',
-          param: {
-            m: 'live',
-            c: 'fname_list',
-            rc_type: state.tid
-          }
-        }
-        window.getBrandResultCallback = res => {
-          let data = parseHilinkData(res)
-          // console.log('获取设备品牌数据', data)
-          resolve(data.result)
-        }
-        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
+        // let reqParams = {
+        //   domain: 'http://hwh5.yaokantv.com',
+        //   path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
+        //   method: 'POST',
+        //   param: {
+        //     m: 'live',
+        //     c: 'fname_list',
+        //     rc_type: state.tid
+        //   }
+        // }
+        // window.getBrandResultCallback = res => {
+        //   let data = parseHilinkData(res)
+        //   // console.log('获取设备品牌数据', data)
+        //   resolve(data.result)
+        // }
+        // window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
       })
     },
     /** 获取设备型号数据 **/
@@ -339,6 +341,21 @@ export default new Vuex.Store({
           resolve(data)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')
+      })
+    },
+    /** 获取省份和市级行政单位 **/
+    getAreaList ({commit, state}, area_id) {
+      console.log('area_id', area_id)
+      return new Promise(resolve => {
+        $http.get('/huawei/l.php', {
+          params: {
+            c: 'areas',
+            area_id: area_id
+          }
+        }).then(res => {
+          // console.log('getAreaList', res.data.result)
+          resolve(res.data.result)
+        })
       })
     }
   }

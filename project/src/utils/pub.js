@@ -233,3 +233,13 @@ export function watchVirtualKey (bool) {
     }
   })
 }
+
+/** 匹配超时下发指令 **/
+export function matchTimeoutSendOrder () {
+  let body = {
+    loadRes: {
+      isFinish: 2 // 2-重新匹配
+    }
+  }
+  sendBodyToDev(body)
+}

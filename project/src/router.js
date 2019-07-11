@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Type from './views/Type.vue'
 import Brands from './views/Brands'
 import Match from './views/Match'
+import operator from './views/STB_Operator'
 const Name = name => () => import(`@/views/devices/${name}`)
 
 const Setting = () => import('@/views/Setting.vue')
@@ -26,6 +27,11 @@ export default new Router({
       path: '/brands',
       name: 'brands',
       component: Brands
+    },
+    {
+      path: '/operator',
+      name: 'operator',
+      component: operator
     },
     {
       path: '/match',

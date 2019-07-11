@@ -2,7 +2,7 @@
   <div class="appStatusBar" :style="objStyle">
     <div class="left">
       <span>夜灯{{devStatus ? '开启' : '关闭'}}</span>
-      <p>{{devName}} ({{devRoomName}})</p>
+      <p>{{devName}} {{devRoomName}}</p>
     </div>
     <div class="right" @click="clickSwitch"></div>
   </div>

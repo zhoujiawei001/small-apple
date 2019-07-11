@@ -3,6 +3,9 @@ $bgColorTheme = #f2f2f2 // 背景主色
 $bdColorTheme = #ddd // 边框主题色
 $fontColorTheme2 = rgb(26,26,26) // 主色字体
 $bgActiveColor = rgba(0,0,0,0.1) // 激活背景颜色
+$fontSmallSize = 1.2rem
+$fontMiddleSize = 1.4rem
+$fontBigSize = 1.6rem
 imgUrl($url)
   background url($url) no-repeat center
   background-size cover
@@ -17,6 +20,9 @@ setBorder($color = rgb(26,26,26), $borderwidth = 1px)
 
 setBorderBot($color = $bdColorTheme, $borderwidth = 1px)
   border-bottom $borderwidth solid $color
+
+setBorderTop($color = $bdColorTheme, $borderwidth = 1px)
+  border-top $borderwidth solid $color
 
 /*设置宽高*/
 setWH($width = 100%, $height = 100%)
