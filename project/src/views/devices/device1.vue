@@ -146,12 +146,12 @@
           @touchend="longClickEnd('rew')"
           :class="[{'btn-disable2': !cmdsKey.includes('rew')},{ 'learnActive': isLearn && curLearnKey === 'rew'}]"></span>
         <div
-          class="pause"
-          @click="sendBody('pause')"
-          @touchstart="longClickStart('pause')"
-          @touchend="longClickEnd('pause')"
-          :class="[{'btn-disable2': !cmdsKey.includes('pause')},{ 'learnActive': isLearn && curLearnKey === 'pause'}]">
-          <img src="../../assets/blue/pause.png" alt="">
+          class="play"
+          @click="sendBody('play')"
+          @touchstart="longClickStart('play')"
+          @touchend="longClickEnd('play')"
+          :class="[{'btn-disable2': !cmdsKey.includes('play')},{ 'learnActive': isLearn && curLearnKey === 'play'}]">
+          <img src="../../assets/blue/play.png" alt="">
         </div>
         <span
           class="forward"
@@ -261,26 +261,26 @@
           '#': 10,
           '-/--': 11,
           'back': 12,
-          'boot': 13,
-          'ch+': 14,
-          'ch-': 15,
-          'down': 16,
-          'exit': 17,
-          'left': 18,
-          'menu': 19,
-          'mute': 20,
-          'ok': 21,
-          'pause': 22,
-          'play': 23,
-          'power': 24,
-          'right': 25,
-          'stop': 26,
-          'up': 27,
-          'vol+': 28,
-          'vol-': 29,
-          'tvpower': 30,
-          'av/tv': 31,
-          'signal': 32
+          'ch+': 13,
+          'ch-': 14,
+          'down': 15,
+          'exit': 16,
+          'left': 17,
+          'menu': 18,
+          'mute': 19,
+          'ok': 20,
+          'play': 21,
+          'power': 22,
+          'right': 23,
+          'up': 24,
+          'vol+': 25,
+          'vol-': 26,
+          'tvpower': 27,
+          'av/tv': 28,
+          'signal': 29,
+          'ff': 30,
+          'rew': 31,
+          'boot': 32
         }
       }
     }
@@ -387,7 +387,7 @@
         padding 1rem 2rem
         .forward
           setIcon('../../assets/blue/forward.png', '../../assets/white/forward.png', 5rem)
-        .pause
+        .play
           setWH(12rem, 4rem)
           border-radius 2.5rem
           background-color: #fff;

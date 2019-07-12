@@ -56,7 +56,7 @@
 import appHeader from '@/components/appHeader'
 import appTipsBox from '@/components/appTipsBox'
 import {mapState, mapActions} from 'vuex'
-import { sendBodyToDev2, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
+import { sendBodyToDev2, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, matchTimeoutSendOrder, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
 export default {
   name: 'Match',
   data () {
@@ -87,12 +87,10 @@ export default {
     'loadRes.isFinish': {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
-        console.log('watch-isFinish')
         if (newVal === 1) {
           this.registerVirtualDev().then(data => {
             if (data.errcode === 0) {
               this.rc.devId = data.devId
-              console.log('第二个RC', this.rc)
               this.postYkDevToServe().then(data2 => {
                 if (data2.errcode === 0) {
                   postExtendToServe(this.rc).then(data3 => {
@@ -168,6 +166,9 @@ export default {
     },
     currentGroupId () {
       return this.modeList[this.currentNum - 1].group_id1
+    },
+    currentBid () {
+      return this.modeList[this.currentNum - 1].bid
     }
   },
   created () {
@@ -243,7 +244,6 @@ export default {
       }
       this.longClickNum = 0
       this.longClickTimer = setTimeout(() => {
-        console.log('长按')
         if (this.$isVibrate) {
           navigator.vibrate(100)
         }
@@ -263,7 +263,6 @@ export default {
     },
     /** 结束长按匹配 **/
     endLongHandleMatch (val) {
-      console.log('touchEnd2')
       if (val === 'plus') {
         if (this.isActiveRe) return // 防止两个按钮同时点击出现定时错乱
         this.isActivePl = false
@@ -276,12 +275,12 @@ export default {
       clearTimeout(this.longClickTimer)
       this.longClickTimer = null
       if (this.longClickNum === 0) {
-        console.log('点击')
         this.sendCode(val)
       }
     },
     nextFun () {
-      if (this.tid !== 7 && this.tid !== 1) {
+      if (this.tid !== 7) {
+        this.$store.commit('setBid', this.currentBid)
         this.getSecondLevelMatchData(this.currentGroupId).then(data => {
           this.secondModeList = data
           this.$store.commit('setSecondList', this.secondModeList)
@@ -318,7 +317,6 @@ export default {
               '',
               assembleTS(),
               this.currentZip)
-            console.log('第一个RC', this.rc)
             this.setUrlDomainToDev(this.rc)
           })
       }
@@ -369,7 +367,6 @@ export default {
           }
         }
         window.registerCallback = res => {
-          console.log('registerCallback', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
@@ -401,7 +398,6 @@ export default {
           }
         }
         window.postDeviceExtendDataByIdCallback = res => {
-          console.log('postDeviceExtendDataByIdCallback', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
@@ -439,6 +435,7 @@ export default {
     },
     /** 匹配失败处理 **/
     handleMatchFailedFun () {
+      matchTimeoutSendOrder()
       this.tips = false
       clearInterval(this.timer)
       this.timer = null
@@ -557,7 +554,7 @@ export default {
       line-height 3.6rem
       text-align center
       background-color: #fff;
-      font-size 1.2rem
+      font-size $fontMiddleSize
       &:active
         background-color rgba(0,0,0,.1)
 </style>

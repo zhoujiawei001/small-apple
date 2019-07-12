@@ -4,7 +4,7 @@
       v-for="(item, index) in itemList"
       :class="{'selectCls': curIndex === index}"
       @click="clickItem(item, index)"
-      :key="index">{{item.name}}</li>
+      :key="index">{{item.name || item.provider}}</li>
   </ul>
 </template>
 

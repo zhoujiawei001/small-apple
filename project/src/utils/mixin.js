@@ -1,5 +1,5 @@
 import { mapActions, mapState } from 'vuex'
-import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk } from './pub'
+import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk, matchTimeoutSendOrder } from './pub'
 
 export const viewsMixin = {
   data () {
@@ -31,7 +31,6 @@ export const viewsMixin = {
     'controlKey.feedKey': {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
-        console.log('返回过来了')
         if (newVal === 2) {
           window.hilink.toast('2', '学习按键成功')
           this.learnBoxText = '学习成功，可点击该按键测试是否正确，如果不对，可再次学习'
@@ -50,12 +49,10 @@ export const viewsMixin = {
     'loadRes.isFinish': {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
-        console.log('watch-isFinish')
         if (newVal === 1 && this.rc.pageType === 'matchPage') {
           this.registerVirtualDev().then(data => {
             if (data.errcode === 0) {
               this.rc2.devId = data.devId
-              console.log('第二个RC', this.rc2)
               this.postYkDevToServe().then(data2 => {
                 if (data2.errcode === 0) {
                   postExtendToServe(this.rc2).then(data3 => {
@@ -96,27 +93,19 @@ export const viewsMixin = {
         this.cmds = data.rc_command
         this.cmdObj = data
         this.typeName = data.rmodel
+        console.log('cmdObj', this.cmdObj)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
-        console.log('cmds', this.cmds)
-        console.log('cmdsKeys', Object.keys(this.cmds))
-        console.log('cmdsKeysExpand', this.expandKeys)
       })
     } else {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmds = this.cmdList[this.rc.rid]
-        console.log('cmds', this.cmds)
-        console.log('cmdsKeys', Object.keys(this.cmds))
-        console.log('cmdsKeysExpand', this.expandKeys)
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
-          console.log('cmds', this.cmds)
-          console.log('cmdsKeys', Object.keys(this.cmds))
-          console.log('cmdsKeysExpand', this.expandKeys)
         })
       }
     }
@@ -411,7 +400,6 @@ export const viewsMixin = {
         this.cmdObj = data
         this.isHasR = false
         this.typeName = data.rmodel
-        console.log('cmdsKeys', Object.keys(this.cmds))
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
       })
@@ -430,10 +418,10 @@ export const viewsMixin = {
         '',
         assembleTS(),
         this.rc.zip)
-      console.log('第一个RC', this.rc2)
     },
     /** 下发参数给设备下载码库 **/
     setUrlDomainToDev (rc) {
+      let $params = this.tid === 1? {c: 'remote_details_stb', rid: rc.rid} : {c: 'remote_details', rid: rc.rid, zip: 1, real_key: 1}
       let body = {
         batch: {
           deviceList: {
@@ -443,12 +431,7 @@ export const viewsMixin = {
             url: {
               domain: 'http://hwh5.yaokantv.com',
               path: '/huawei/l.php',
-              param: {
-                m: 'live',
-                c: 'remote_details',
-                rid: rc.rid,
-                zip: rc.zip
-              }
+              param: $params
             }
           }
         }
@@ -483,6 +466,7 @@ export const viewsMixin = {
     },
     /** 匹配失败处理 **/
     handleMatchFailedFun () {
+      matchTimeoutSendOrder()
       this.loadingFlag = false
       clearInterval(this.matchTimer)
       this.matchTimer = null
@@ -506,10 +490,8 @@ export const viewsMixin = {
           }
         }
         window.registerCallback2 = res => {
-          console.log('registerCallback2', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
-        console.log('regiterInfraredHubDevice', body)
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
       })
     },
@@ -539,7 +521,6 @@ export const viewsMixin = {
           }
         }
         window.postDeviceExtendDataByIdCallback2 = res => {
-          console.log('postDeviceExtendDataByIdCallback2', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendDataById(this.rc2.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback2')

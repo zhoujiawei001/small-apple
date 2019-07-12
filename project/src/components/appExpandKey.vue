@@ -39,7 +39,7 @@
     },
     computed: {
       expandKeysCopy () {
-        return this.expandKeys.filter(item => item.indexOf('_r') === -1)
+        return this.expandKeys.filter(item => item.slice(-2) !== '_r').slice(0, 27)
       },
       classObj () {
         return {

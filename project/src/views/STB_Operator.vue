@@ -20,10 +20,16 @@
           @handle-item="handleItemFn"
           :key="456"></appItemList>
       </section>
-      <section class="section_3"></section>
+      <section class="section_3">
+        <appItemList
+          :itemList="operatorList"
+          :curIndex="curOperatorIndex"
+          @handle-item="handleItemFn"
+          :key="789"></appItemList>
+      </section>
     </main>
     <footer>
-      <span>下一步</span>
+      <span @click="goToMatch">下一步</span>
     </footer>
   </div>
 </template>
@@ -45,7 +51,8 @@ export default {
       citiesList: [],
       operatorList: [],
       curProIndex: 0,
-      curCityIndex: 0
+      curCityIndex: 0,
+      curOperatorIndex: 0
     }
   },
   computed: {
@@ -57,32 +64,56 @@ export default {
         top: 4.8 * this.screenRem + this.statusBarHg + 'px',
         left: 0,
         width: '100%',
-        height: `calc(100% - ${10 * this.screenRem + this.statusBarHg + 'px'})`
+        height: `calc(100% - ${11 * this.screenRem + this.statusBarHg + 'px'})`
       }
-    },
+    }
   },
   created () {
     this.getAreaList(0).then(data => {
       this.provinceList = data
-      console.log('provinceList', this.provinceList)
-    })
-    this.getAreaList(1).then(data => {
-      this.citiesList = data
-      console.log('citiesList', this.citiesList)
+      this.getAreaList(this.provinceList[0].id).then(data => {
+        this.citiesList = data
+        this.getOperatorList(this.citiesList[0].id).then(data => {
+          this.operatorList = data
+        })
+      })
     })
   },
   methods: {
-    ...mapActions(['getAreaList']),
+    ...mapActions(['getAreaList', 'getOperatorList']),
     handleItemFn (item) {
       if (item.level === '1') {
         this.curProIndex = item.index
         this.getAreaList(item.id).then(data => {
           this.citiesList = data
           this.curCityIndex = 0
+          this.getOperatorList(this.citiesList[0].id).then(data => {
+            this.operatorList = data
+            this.curOperatorIndex = 0
+          })
         })
       } else if (item.level === '2') {
         this.curCityIndex = item.index
+        this.getOperatorList(item.id).then(data => {
+          this.operatorList = data
+          this.curOperatorIndex = 0
+        })
+      } else {
+        this.curOperatorIndex = item.index
       }
+    },
+    goToMatch () {
+      this.$store.commit('setBid', this.operatorList[this.curOperatorIndex].bid)
+      setTimeout(() => {
+        this.$router.push({
+          path: '/match',
+          query: {
+            bid: this.operatorList[this.curOperatorIndex].bid,
+            zh: this.operatorList[this.curOperatorIndex].area_name,
+            en: this.operatorList[this.curOperatorIndex].provider
+          }
+        })
+      }, 200)
     }
   }
 }
@@ -114,20 +145,22 @@ export default {
       .section_3
         width 46%
         left 54%
-        background-color: blue;
+        background-color: $bgColorTheme;
     footer
       position absolute
       bottom 0
       width 100%
-      height 5.2rem
+      height 6.2rem
       left 0
       setPosUseFlex()
       span
-        width 8rem
+        width 10.2rem
         height 3.6rem
         text-align center
         line-height 3.6rem
         border-radius 4.2rem
         background-color #fff
         font-size $fontMiddleSize
+        &:active
+          background-color rgba(0,0,0,.1)
 </style>

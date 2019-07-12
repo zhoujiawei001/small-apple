@@ -80,6 +80,7 @@ export default {
       if (tid === 7 && this.airIndexArr.length >= 2) {
         this.tipsBox = true
       } else if (tid === 1) {
+        this.$store.commit('setTid', tid)
         this.$router.push('/operator')
       } else {
         this.$store.commit('setTid', tid)
