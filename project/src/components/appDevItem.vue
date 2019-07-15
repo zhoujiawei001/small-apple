@@ -9,7 +9,10 @@
         <p>{{typeName(item.tid)}}</p>
       </div>
     </div>
-    <div class="right">
+    <div
+      :class="['right', {'active': isActive === true}]"
+      @touchstart="isActive = true"
+      @touchend="isActive = false">
       <img :src="require(`../assets/switch_${item.tid === 7 ? item.isSwitch : 'off'}.png`)" alt="" @click.stop.prevent="handleSwitch()">
     </div>
   </div>
@@ -20,6 +23,11 @@
   export default {
     name: 'appDevItem',
     props: ['item'],
+    data () {
+      return {
+        isActive: false
+      }
+    },
     computed: {
       typeName () {
         return val => {
@@ -50,7 +58,10 @@
         })
       },
       handleSwitch () {
-        console.log('item', this.item)
+        console.log('$isVibrate', this.$isVibrate)
+        if (this.$isVibrate) {
+          navigator.vibrate(100)
+        }
         let obj = {};
         let body = {}
         if (this.item.tid === 7) {
@@ -136,6 +147,6 @@
       border-radius 50%
       img
         width 4.8rem
-      &:active
+    .active
         background-color $bgActiveColor
 </style>

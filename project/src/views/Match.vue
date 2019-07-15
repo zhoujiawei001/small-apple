@@ -429,13 +429,13 @@ export default {
         if (this.count > 30) {
           window.hilink.toast('2', '匹配超时')
           this.handleMatchFailedFun()
+          matchTimeoutSendOrder()
         }
         console.log('time', this.count)
       }, 1000)
     },
     /** 匹配失败处理 **/
     handleMatchFailedFun () {
-      matchTimeoutSendOrder()
       this.tips = false
       clearInterval(this.timer)
       this.timer = null

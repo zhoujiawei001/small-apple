@@ -460,13 +460,13 @@ export const viewsMixin = {
         if (this.matchCount > 30) {
           window.hilink.toast('2', '匹配超时')
           this.handleMatchFailedFun()
+          matchTimeoutSendOrder()
         }
         console.log('matchCount', this.matchCount)
       }, 1000)
     },
     /** 匹配失败处理 **/
     handleMatchFailedFun () {
-      matchTimeoutSendOrder()
       this.loadingFlag = false
       clearInterval(this.matchTimer)
       this.matchTimer = null

@@ -73,12 +73,13 @@
             @touchstart="longClickStart('vol+')"
             @touchend="longClickEnd('vol+')"
             :class="[{'btn-disable2': !cmdsKey.includes('vol+')},{ 'learnActive': isLearn && curLearnKey === 'vol+'}]">＋</span>
-            <span class="text">音量</span>
-            <span
-              class="down btn"
-              @touchstart="longClickStart('vol-')"
-              @touchend="longClickEnd('vol-')"
-              :class="[{'btn-disable2': !cmdsKey.includes('vol-')},{ 'learnActive': isLearn && curLearnKey === 'vol-'}]">—</span>
+          <span class="text">音量</span>
+          <span
+            class="down btn"
+            @click="sendBody('vol-')"
+            @touchstart="longClickStart('vol-')"
+            @touchend="longClickEnd('vol-')"
+            :class="[{'btn-disable2': !cmdsKey.includes('vol-')},{ 'learnActive': isLearn && curLearnKey === 'vol-'}]">—</span>
         </div>
       </div>
       <div class="flex function">
@@ -386,7 +387,7 @@
       .btn-forward-back-off
         padding 1rem 2rem
         .forward
-          setIcon('../../assets/blue/forward.png', '../../assets/white/forward.png', 5rem)
+          setIcon('../../assets/blue/forward.png', '../../assets/white/forward.png', 4rem)
         .play
           setWH(12rem, 4rem)
           border-radius 2.5rem
@@ -399,7 +400,7 @@
           img
             width 4rem
         .back-off
-          setIcon('../../assets/blue/back-off.png', '../../assets/white/back-off.png', 5rem)
+          setIcon('../../assets/blue/back-off.png', '../../assets/white/back-off.png', 4rem)
       .tel-number
         padding 1rem 6rem
         setPosUseFlexInit(row, space-between, center, wrap)
