@@ -3,7 +3,7 @@
     <div class="container">
       <div class="text">{{loadingTxt}}</div>
       <div class="loading-svg">
-        <img src="../assets/loading3.png">
+        <img src="../assets/loading3.png" alt="">
       </div>
     </div>
   </div>

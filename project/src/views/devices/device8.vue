@@ -6,9 +6,7 @@
       :curPageType="rc.pageType"
       @back-icon="onClickBack"
       @set="moreSet"></appHeader>
-    <div class="banner">
-      <img src="../../assets/devIcon2/8.png" alt="light.png">
-    </div>
+    <appBanner></appBanner>
     <div class="container" :style="styObjCont2">
       <div class="normal_fn">
         <div class="power-box1">
@@ -35,16 +33,18 @@
         </div>
       </div>
       <!-- 扩展键 -->
-      <app-expand-key
-        @click-fn="sendBody"
-        @touchstart-fn="longClickStart"
-        @touchend-fn="longClickEnd"
-        :expandKeys="expandKeys"
-        :cmds="cmds"
-        :isLearn="isLearn"
-        :curLearnKey="curLearnKey"
-        v-if="expandKeys.length > 0">
-      </app-expand-key>
+      <div style="padding: 2.4rem 4.2rem 0 4.2rem">
+        <app-expand-key
+          @click-fn="sendBody"
+          @touchstart-fn="longClickStart"
+          @touchend-fn="longClickEnd"
+          :expandKeys="expandKeys"
+          :cmds="cmds"
+          :isLearn="isLearn"
+          :curLearnKey="curLearnKey"
+          v-if="expandKeys.length > 0">
+        </app-expand-key>
+      </div>
     </div>
     <!-- learn底层提示 -->
     <appLearnTips
@@ -77,6 +77,7 @@
   import appMatchTips from '@/components/appMatchTips'
   import appLoading2 from '@/components/appLoading2'
   import appExpandKey from '@/components/appExpandKey'
+  import appBanner from '@/components/appBanner'
   import { viewsMixin } from '@/utils/mixin'
 
   export default {
@@ -88,7 +89,8 @@
       appLearnTips,
       appMatchTips,
       appLoading2,
-      appExpandKey
+      appExpandKey,
+      appBanner
     },
     data () {
       return {
@@ -108,15 +110,6 @@
     background #F2F2F2
     -webkit-overflow-scrolling: touch
     overflow-scrolling: touch
-    .banner
-      setWH(100%, 28rem)
-      setPosUseFlex()
-      imgUrl("../../assets/background.png")
-
-      img
-        setWH(20rem, 20rem)
-        transform translateY(1.8rem)
-
     .container
       position absolute
       top: 28rem

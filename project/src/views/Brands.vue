@@ -117,6 +117,12 @@ export default {
     /** 格式化初始数据 **/
     dataFormatting (originalData) {
       this.originalList = JSON.parse(JSON.stringify(originalData))
+      if (this.tid === 40) {
+        this.originalList = this.originalList.map(item => {
+          item.common = 1
+          return item
+        })
+      }
       this.listData.com = this.originalList.filter(item => item.common === 1)
       this.letterArr.forEach(key => {
         this.listData[key] = this.originalList.filter(item => item.en.slice(0, 1).toUpperCase() === key)

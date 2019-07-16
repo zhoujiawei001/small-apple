@@ -117,16 +117,18 @@
         </div>
       </div>
       <!-- 扩展键 -->
-      <app-expand-key
-        @click-fn="sendBody"
-        @touchstart-fn="longClickStart"
-        @touchend-fn="longClickEnd"
-        :expandKeys="expandKeys"
-        :cmds="cmds"
-        :isLearn="isLearn"
-        :curLearnKey="curLearnKey"
-        v-if="expandKeys.length > 0">
-      </app-expand-key>
+      <div style="padding: 2.4rem 4.2rem 0 4.2rem">
+        <app-expand-key
+          @click-fn="sendBody"
+          @touchstart-fn="longClickStart"
+          @touchend-fn="longClickEnd"
+          :expandKeys="expandKeys"
+          :cmds="cmds"
+          :isLearn="isLearn"
+          :curLearnKey="curLearnKey"
+          v-if="expandKeys.length > 0">
+        </app-expand-key>
+      </div>
       <!-- 额外功能 -->
       <div class="extend-fn" v-if="false">
         <div class="left">

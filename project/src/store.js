@@ -66,7 +66,7 @@ export default new Vuex.Store({
       }
     },
     typeList (state) {
-      const arr = [1, 2, 6, 7, 8, 10]
+      const arr = [1, 2, 6, 7, 8, 10, 40]
       return state.typeData.filter(item => arr.includes(item.tid))
     }
   },

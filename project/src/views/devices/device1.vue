@@ -191,16 +191,18 @@
           :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
       <!-- 扩展键 -->
-      <app-expand-key
-        @click-fn="sendBody"
-        @touchstart-fn="longClickStart"
-        @touchend-fn="longClickEnd"
-        :expandKeys="expandKeys"
-        :cmds="cmds"
-        :isLearn="isLearn"
-        :curLearnKey="curLearnKey"
-        v-if="expandKeys.length > 0">
-      </app-expand-key>
+      <div style="padding: 0 4.2rem; margin-top: 1.2rem">
+        <app-expand-key
+          @click-fn="sendBody"
+          @touchstart-fn="longClickStart"
+          @touchend-fn="longClickEnd"
+          :expandKeys="expandKeys"
+          :cmds="cmds"
+          :isLearn="isLearn"
+          :curLearnKey="curLearnKey"
+          v-if="expandKeys.length > 0">
+        </app-expand-key>
+      </div>
     </div>
     <!-- 底层提示 -->
     <appLearnTips

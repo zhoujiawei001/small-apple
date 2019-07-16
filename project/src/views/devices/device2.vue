@@ -147,16 +147,18 @@
         </li>
       </ul>
       <!-- 扩展键 -->
-      <app-expand-key
-        @click-fn="sendBody"
-        @touchstart-fn="longClickStart"
-        @touchend-fn="longClickEnd"
-        :expandKeys="expandKeys"
-        :cmds="cmds"
-        :isLearn="isLearn"
-        :curLearnKey="curLearnKey"
-        v-if="expandKeys.length > 0">
-      </app-expand-key>
+      <div style="padding: 0 4.2rem">
+        <app-expand-key
+          @click-fn="sendBody"
+          @touchstart-fn="longClickStart"
+          @touchend-fn="longClickEnd"
+          :expandKeys="expandKeys"
+          :cmds="cmds"
+          :isLearn="isLearn"
+          :curLearnKey="curLearnKey"
+          v-if="expandKeys.length > 0">
+        </app-expand-key>
+      </div>
     </div>
     <!-- learn底层提示 -->
     <appLearnTips
@@ -242,7 +244,7 @@
 <style scoped lang="stylus">
   @import "../../style/mixin.styl"
   .dev-TV
-    background #F2F2F2
+    background $bgColorTheme
     setPosUseFlexInit(column)
     setWH()
     -webkit-overflow-scrolling: touch

@@ -3,11 +3,11 @@
     <div class="empty-header" :style="{height: statusBarHg + 'px'}"></div>
     <header>
       <span class="icon-back" @click="backTo()">
-        <img src="../assets/back.png">
+        <img src="../assets/back.png" alt="">
       </span>
       <div class="title">{{title}}</div>
       <span class="icon-more" @click="moreSet()">
-        <img src="../assets/more.png">
+        <img src="../assets/more.png" alt="">
       </span>
     </header>
   </div>

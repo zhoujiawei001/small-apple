@@ -1,3 +1,4 @@
+import { vibration } from '../utils/vibreate'
 export function parseHilinkData (resData) {
   try {
     return JSON.parse(resData)
@@ -12,6 +13,9 @@ export function parseHilinkData (resData) {
 
 export function sendBodyToDev (body) {
   console.log('body', body)
+  if (vibration()) {
+    navigator.vibrate(100)
+  }
   try {
     window.hilink.setDeviceInfo('0', JSON.stringify(body), 'app.setDeviceInfoCallback')
   } catch (e) {
@@ -20,6 +24,9 @@ export function sendBodyToDev (body) {
 }
 export function sendBodyToDev2 (body, callback) {
   console.log('body', body)
+  if (vibration()) {
+    navigator.vibrate(100)
+  }
   return new Promise(resolve => {
     try {
       window[callback] = res => {

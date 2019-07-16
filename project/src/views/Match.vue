@@ -134,7 +134,8 @@ export default {
         6: '风扇',
         7: '空调',
         8: '灯泡',
-        10: '电视盒子'
+        10: '电视盒子',
+        40: '热水器'
       }
       return obj[this.tid]
     },
@@ -145,7 +146,8 @@ export default {
         6: '如果风扇打开或关闭',
         7: '如果空调“滴”的一声响',
         8: '如果灯泡打开或关闭',
-        10: '如果盒子打开或关闭'
+        10: '如果盒子打开或关闭',
+        40: '如果热水器打开或关闭'
       }
       return obj[this.tid]
     },
@@ -244,15 +246,9 @@ export default {
       }
       this.longClickNum = 0
       this.longClickTimer = setTimeout(() => {
-        if (this.$isVibrate) {
-          navigator.vibrate(100)
-        }
         this.longClickNum = 1
         this.sendCode(val)
         this.longTimer = setInterval(() => {
-          if (this.$isVibrate) {
-            navigator.vibrate(100)
-          }
           this.sendCode(val)
         }, 1200)
       },1200)

@@ -69,6 +69,11 @@ export default new Router({
       component: Name('device10')
     },
     {
+      path: '/device40',
+      name: 'device40',
+      component: Name('device40')
+    },
+    {
       path: '/setting',
       name: 'setting',
       component: Setting

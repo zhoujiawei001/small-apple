@@ -131,7 +131,7 @@ export const viewsMixin = {
     })
   },
   computed: {
-    ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes']),
+    ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId']),
     cmdsKey () {
       if (this.rc.pageType === 'matchPage') {
         return Object.keys(this.cmds)
@@ -172,9 +172,6 @@ export const viewsMixin = {
       if (!this.cmdsKey.includes(val)) return
       if (this.rc.pageType === 'controlPage') {
         console.log('sendBody_control', val)
-        if (this.$isVibrate) {
-          navigator.vibrate(100)
-        }
         let body = {
           batch: {
             controlKey: {
@@ -188,9 +185,6 @@ export const viewsMixin = {
         sendBodyToDev(body)
       } else if (this.rc.pageType === 'matchPage') {
         console.log('sendBody_match', val)
-        if (this.$isVibrate) {
-          navigator.vibrate(100)
-        }
         let body = {
           batch: {
             controlKey: {
@@ -219,9 +213,6 @@ export const viewsMixin = {
       if (!this.cmdsKey.includes(val)) return
       if (this.rc.pageType === 'learnPage') {
         console.log('sendBody2_learn', val)
-        if (this.$isVibrate) {
-          navigator.vibrate(100)
-        }
         let body = {
           batch: {
             controlKey: {
@@ -257,9 +248,6 @@ export const viewsMixin = {
         if (this.isLearn) return
         this.longClickNum = 0
         this.longClickTimer = setTimeout(() => {
-          if (this.$isVibrate) {
-            navigator.vibrate(100)
-          }
           this.learnBoxText = '将遥控器正对准小苹果在1米以内，按一下相应按键，等待学习完成'
           let body = {
             batch: {
@@ -346,9 +334,6 @@ export const viewsMixin = {
     /** 结束学习 **/
     handleEnd () {
       if (this.isLearn) {
-        if (this.$isVibrate) {
-          navigator.vibrate(100)
-        }
         clearInterval(this.learnTimeoutTimer)
         this.learnTimeoutTimer = null
         this.isLearn = false
@@ -375,17 +360,11 @@ export const viewsMixin = {
     handleLeft () {
       if (this.curNum === 1) return
       this.curNum--
-      if (this.$isVibrate) {
-        navigator.vibrate(100)
-      }
       this.pubFun()
     },
     handleRight () {
       if (this.curNum === this.secondListTotal) return
       this.curNum++
-      if (this.$isVibrate) {
-        navigator.vibrate(100)
-      }
       this.pubFun()
     },
     handleMid () {
@@ -520,6 +499,7 @@ export const viewsMixin = {
             }
           }
         }
+        console.log('postYkDevToServe', body)
         window.postDeviceExtendDataByIdCallback2 = res => {
           resolve(parseHilinkData(res))
         }

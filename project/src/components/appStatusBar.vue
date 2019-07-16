@@ -4,7 +4,13 @@
       <span>夜灯{{devStatus ? '开启' : '关闭'}}</span>
       <p>{{devName}} {{devRoomName}}</p>
     </div>
-    <div class="right" @click="clickSwitch"></div>
+    <div
+      :class="['right', {'bgActive': isActive === true}]"
+      @touchstart="isActive = true"
+      @touchend="isActive = false"
+      @click="clickSwitch">
+      <img src="../assets/switch.png" alt="light.png">
+    </div>
   </div>
 </template>
 
@@ -23,6 +29,11 @@ export default {
     devRoomName: {
       type: String,
       default: '默认房间'
+    }
+  },
+  data () {
+    return {
+      isActive: false
     }
   },
   computed: {
@@ -53,11 +64,13 @@ export default {
     .right
       width 4.8rem
       height 4.8rem
-      imgUrl2('../assets/switch.png')
       position absolute
+      border-radius 50%
       top 50%
       right 1.6rem
       transform translateY(-50%)
+      img
+        width 4.8rem
     .left
       color #fff
       letter-spacing: 1px

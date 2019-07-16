@@ -16,12 +16,18 @@ export default {
   props: ['curNum', 'total', 'typeName'],
   methods: {
     leftFn () {
+      if (this.$isVibrate) {
+        navigator.vibrate(100)
+      }
       this.$emit('handle-left')
     },
     midFn () {
       this.$emit('handle-mid')
     },
     rightFn () {
+      if (this.$isVibrate) {
+        navigator.vibrate(100)
+      }
       this.$emit('handle-right')
     }
   }

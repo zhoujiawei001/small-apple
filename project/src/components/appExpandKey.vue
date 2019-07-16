@@ -65,7 +65,7 @@
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
   ul.expandKey
-    padding 2.4rem 4.2rem
+    /*padding 2.4rem 4.2rem*/
     display flex
     flex-wrap wrap
     li
@@ -85,7 +85,7 @@
           setEllipsisOne()
           font-style:normal
   ul.expandKey2
-    padding 2.4rem 4.2rem
+    /*padding 2.4rem 4.2rem*/
     display flex
     flex-wrap wrap
     li

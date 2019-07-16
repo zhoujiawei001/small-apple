@@ -27,6 +27,7 @@
       @handle-icon="clickSwitchIcon"
       :devName="devName"
       :devStatus="appStatus"
+      :devRoomName="roomName"
       :key="101"></appStatusBar>
     <div class="mask-line" :class="clsObjStatusUp" :style="objMaskLine"></div>
     <transition name="fade">
