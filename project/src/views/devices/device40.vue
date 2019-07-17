@@ -84,10 +84,11 @@
     },
     data () {
       return {
-        tempCmds: {
-          power: 0,
-          'temp-':1,
-          'temp+':2
+        tempCmds: ['power','temp-','temp+'],
+        oldTempCmds: {
+          'power': 1,
+          'temp-': 2,
+          'temp+': 3
         }
       }
     }

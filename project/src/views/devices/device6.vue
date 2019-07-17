@@ -121,13 +121,15 @@
             value: 'oscillation'
           }
         ],
-        tempCmds: {
-          "power": 0,
-          "poweroff": 1,
-          "fanspeed": 2,
-          "mode": 3,
-          "timer": 4,
-          "oscillation": 5
+        tempCmds: ['power', 'poweroff','fanspeed','mode','timer','oscillation'],
+        oldTempCmds: {
+          'fanspeed': 1,
+          'mode': 2,
+          'mute': 3,
+          'oscillation': 4,
+          'power': 5,
+          'poweroff': 6,
+          'timer': 7
         }
       }
     },

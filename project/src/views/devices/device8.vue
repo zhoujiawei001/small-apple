@@ -94,9 +94,11 @@
     },
     data () {
       return {
-        tempCmds: {
+        tempCmds: ['power','poweroff','powerOnOff'],
+        oldTempCmds: {
           'power': 1,
-          'poweroff': 2
+          'poweroff': 2,
+          'powerOnOff': 3
         }
       }
     }

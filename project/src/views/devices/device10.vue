@@ -187,22 +187,24 @@
     },
     data () {
       return {
-        tempCmds: {
-          'power': 0,
-          'vol+': 1,
-          'vol-': 2,
-          'up': 3,
-          'down': 4,
-          'left': 5,
-          'right': 6,
-          'boot': 7,
-          'menu': 8,
-          'back': 9,
-          'ok': 10,
-          'mute': 11,
-          'tvpower': 12,
-          'av/tv': 13,
-          'signal': 14
+        tempCmds: ['back','boot','down','left','menu','ok','power','right','up','vol+','vol-',
+          'mute','tvpower','av/tv','signal'],
+        oldTempCmds: {
+          'back': 1,
+          'boot': 2,
+          'down': 3,
+          'left': 4,
+          'menu': 5,
+          'ok': 6,
+          'power': 7,
+          'right': 8,
+          'up': 9,
+          'vol+': 10,
+          'vol-': 11,
+          'mute': 12,
+          'tvpower': 13,
+          'av/tv': 14,
+          'signal': 15
         }
       }
     }

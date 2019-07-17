@@ -22,7 +22,7 @@
           @click="sendBody('tvpower')"
           @touchstart="longClickStart('tvpower')"
           @touchend="longClickEnd('tvpower')"
-          :class="[{'btn-disable2': !cmdsKey.includes('tvpower')},{ 'learnActive': isLearn && curLearnKey === 'tvpower'}]">
+          :class="[{'btn-disable2': !cmdsKey.includes('tvpower') && !cmdsKey.includes('av/tv')},{ 'learnActive': isLearn && curLearnKey === 'tvpower'}]">
           <span class="img-box"></span>
           <span class="text">电视机开关</span>
         </div>
@@ -171,24 +171,6 @@
           @touchstart="longClickStart(item)"
           @touchend="longClickEnd(item)"
           :class="[{'btn-disable2': !cmdsKey.includes(item)},{ 'learnActive': isLearn && curLearnKey === item}]">{{item}}</span>
-        <span
-          class="item btn"
-          @touchstart="longClickStart('-/--')"
-          @touchend="longClickEnd('-/--')"
-          @click="sendBody('-/--')"
-          :class="[{'btn-disable2': !cmdsKey.includes('-/--')},{ 'learnActive': isLearn && curLearnKey === '-/--'}]">-/--</span>
-        <span
-          class="item btn"
-          @click="sendBody('0')"
-          @touchstart="longClickStart('0')"
-          @touchend="longClickEnd('0')"
-          :class="[{'btn-disable2': !cmdsKey.includes('0')},{ 'learnActive': isLearn && curLearnKey === '0'}]">0</span>
-        <span
-          class="item btn"
-          @touchstart="longClickStart('#')"
-          @touchend="longClickEnd('#')"
-          @click="sendBody('#')"
-          :class="[{'btn-disable2': !cmdsKey.includes('#')},{ 'learnActive': isLearn && curLearnKey === '#'}]">#</span>
       </div>
       <!-- 扩展键 -->
       <div style="padding: 0 4.2rem; margin-top: 1.2rem">
@@ -249,41 +231,61 @@
     },
     data () {
       return {
-        telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-        tempCmds: {
-          '0': 0,
-          '1': 1,
-          '2': 2,
-          '3': 3,
-          '4': 4,
-          '5': 5,
-          '6': 6,
-          '7': 7,
-          '8': 8,
-          '9': 9,
-          '#': 10,
-          '-/--': 11,
-          'back': 12,
-          'ch+': 13,
-          'ch-': 14,
-          'down': 15,
-          'exit': 16,
-          'left': 17,
-          'menu': 18,
-          'mute': 19,
-          'ok': 20,
-          'play': 21,
-          'power': 22,
-          'right': 23,
-          'up': 24,
-          'vol+': 25,
-          'vol-': 26,
-          'tvpower': 27,
-          'av/tv': 28,
-          'signal': 29,
-          'ff': 30,
-          'rew': 31,
-          'boot': 32
+        telNumber: ['1', '2', '3', '4', '5', '6', '7', '8', '9','*','0','#'],
+        tempCmds: ['0','1','2','3','4','5','6','7','8','9','#',
+          '*','back','ch+','ch-','down','exit','left','menu',
+          'mute','ok','play','power','right','up','vol+','vol-',
+          'tvpower', 'av/tv','signal','ff','rew','boot'],
+        oldTempCmds: {
+          '0': 1,
+          '1': 2,
+          '2': 3,
+          '3': 4,
+          '4': 5,
+          '5': 6,
+          '6': 7,
+          '7': 8,
+          '8': 9,
+          '9': 10,
+          '#': 11,
+          '*': 12,
+          'back': 13,
+          'boot': 14,
+          'ch+': 15,
+          'ch-': 16,
+          'down': 17,
+          'exit': 18,
+          'left': 19,
+          'menu': 20,
+          'mute': 21,
+          'ok': 22,
+          'pause': 23,
+          'play': 24,
+          'power': 25,
+          'right': 26,
+          'stop': 27,
+          'up': 28,
+          'vol+': 29,
+          'vol-': 30,
+          'blue': 31,
+          'vv': 32,
+          'yellow': 33,
+          'epg': 34,
+          'ff': 35,
+          'green': 36,
+          'guide': 37,
+          'help': 38,
+          'info': 39,
+          'itv': 40,
+          'next': 41,
+          'previous': 42,
+          'rec': 43,
+          'red': 44,
+          'rew': 45,
+          'search': 46,
+          'tvpower': 47,
+          'av/tv': 48,
+          'signal': 49
         }
       }
     }

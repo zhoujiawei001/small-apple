@@ -31,6 +31,7 @@ export const viewsMixin = {
     'controlKey.feedKey': {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
+        if (this.rc.pageType !== 'learnPage') return
         if (newVal === 2) {
           window.hilink.toast('2', '学习按键成功')
           this.learnBoxText = '学习成功，可点击该按键测试是否正确，如果不对，可再次学习'
@@ -49,7 +50,8 @@ export const viewsMixin = {
     'loadRes.isFinish': {
       handler(newVal, oldVal) {
         console.log(newVal, oldVal)
-        if (newVal === 1 && this.rc.pageType === 'matchPage') {
+        if (this.rc.pageType !== 'matchPage') return
+        if (newVal === 1) {
           this.registerVirtualDev().then(data => {
             if (data.errcode === 0) {
               this.rc2.devId = data.devId
@@ -93,16 +95,18 @@ export const viewsMixin = {
         this.cmds = data.rc_command
         this.cmdObj = data
         this.typeName = data.rmodel
-        console.log('cmdObj', this.cmdObj)
+        console.log('cmds', this.cmds)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
       })
     } else {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmds = this.cmdList[this.rc.rid]
+        console.log('cmds', this.cmds)
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
+          console.log('cmds', this.cmds)
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
@@ -140,10 +144,25 @@ export const viewsMixin = {
       }
     },
     normalAllKey () {
-      return Object.keys(this.tempCmds)
+      return this.tempCmds
     },
-    expandKeys () { // 扩展键
+    oldKeyArr () {
+      return Object.keys(this.oldTempCmds)
+    },
+    len () {
+      return 60 - this.oldKeyArr.length
+    },
+    extraExpandKeys () { // 额外扩展健
+      return this._.difference(this.cmdsKey, this.oldKeyArr).filter(item => item.slice(-2) !== '_r')
+    },
+    dropExtraExpandKeys () { // 需要丢弃的扩展键
+      return this.extraExpandKeys.slice(this.len, this.extraExpandKeys.length)
+    },
+    expandKeys0 () { // 所有扩展键0
       return this._.difference(this.cmdsKey, this.normalAllKey)
+    },
+    expandKeys () { // 所有扩展键
+      return this._.difference(this.expandKeys0, this.dropExtraExpandKeys)
     },
     title () {
       if (this.rc.pageType === 'matchPage') {
@@ -169,44 +188,85 @@ export const viewsMixin = {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
-      if (!this.cmdsKey.includes(val)) return
-      if (this.rc.pageType === 'controlPage') {
-        console.log('sendBody_control', val)
-        let body = {
-          batch: {
-            controlKey: {
-              controlKey: this.calcExpandControlKey(val)
-            },
-            deviceList: {
-              list: [this.rc]
-            }
-          }
-        }
-        sendBodyToDev(body)
-      } else if (this.rc.pageType === 'matchPage') {
-        console.log('sendBody_match', val)
-        let body = {
-          batch: {
-            controlKey: {
-              controlKey: this.cmds[this.isHasR? (val + this.curIsHasR) : val]? this.cmds[this.isHasR? (val + this.curIsHasR) : val].src : this.cmds[val].src
-            },
-            deviceList: {
-              list: [{
-                zip: this.cmdObj.zip + ''
-              }]
-            }
-          }
-        }
-        sendBodyToDev2(body, 'setDeviceInfoCallbackIsHasR').then(data => {
-          if (!data.errcode) {
-            if (this.isHasR) {
-              let $val = (val + this.curIsHasR).indexOf('_r') !== -1? (val + this.curIsHasR) : (val + '_r')
-              if (this.cmds[$val]) {
-                this.curIsHasR = this.curIsHasR? '' : '_r'
+      if (val === 'tvpower' && this.cmdsKey.includes('av/tv')) {
+        if (this.rc.pageType === 'controlPage') {
+          console.log('sendBody_control', 'av/tv')
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.oldTempCmds['av/tv'] + ''
+              },
+              deviceList: {
+                list: [this.rc]
               }
             }
           }
-        })
+          sendBodyToDev(body)
+        } else if (this.rc.pageType === 'matchPage') {
+          console.log('sendBody_match', 'av/tv')
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.cmds[this.isHasR? ('av/tv' + this.curIsHasR) : 'av/tv']? this.cmds[this.isHasR? ('av/tv' + this.curIsHasR) : 'av/tv'].src : this.cmds['av/tv'].src
+              },
+              deviceList: {
+                list: [{
+                  zip: this.cmdObj.zip + ''
+                }]
+              }
+            }
+          }
+          sendBodyToDev2(body, 'setDeviceInfoCallbackIsHasR').then(data => {
+            if (!data.errcode) {
+              if (this.isHasR) {
+                let $val = ('av/tv' + this.curIsHasR).indexOf('_r') !== -1? ('av/tv' + this.curIsHasR) : ('av/tv' + '_r')
+                if (this.cmds[$val]) {
+                  this.curIsHasR = this.curIsHasR? '' : '_r'
+                }
+              }
+            }
+          })
+        }
+      } else {
+        if (!this.cmdsKey.includes(val)) return
+        if (this.rc.pageType === 'controlPage') {
+          console.log('sendBody_control', val)
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.calcExpandControlKey(val)
+              },
+              deviceList: {
+                list: [this.rc]
+              }
+            }
+          }
+          sendBodyToDev(body)
+        } else if (this.rc.pageType === 'matchPage') {
+          console.log('sendBody_match', val)
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.cmds[this.isHasR? (val + this.curIsHasR) : val]? this.cmds[this.isHasR? (val + this.curIsHasR) : val].src : this.cmds[val].src
+              },
+              deviceList: {
+                list: [{
+                  zip: this.cmdObj.zip + ''
+                }]
+              }
+            }
+          }
+          sendBodyToDev2(body, 'setDeviceInfoCallbackIsHasR').then(data => {
+            if (!data.errcode) {
+              if (this.isHasR) {
+                let $val = (val + this.curIsHasR).indexOf('_r') !== -1? (val + this.curIsHasR) : (val + '_r')
+                if (this.cmds[$val]) {
+                  this.curIsHasR = this.curIsHasR? '' : '_r'
+                }
+              }
+            }
+          })
+        }
       }
     },
     sendBody2 (val) {
@@ -228,8 +288,13 @@ export const viewsMixin = {
     },
     /** 计算扩展键的发码位数 **/
     calcExpandControlKey (val) {
-      let controlKey = this.expandKeys.includes(val)? (this.expandKeys.indexOf(val) + this.normalAllKey.length) : this.tempCmds[val]
-      return controlKey + ''
+      if (this.oldKeyArr.includes(val)) {
+        return this.oldTempCmds[val] + ''
+      } else {
+        console.log('extraExpandKeys', this.extraExpandKeys)
+        let controlKey = this.extraExpandKeys.indexOf(val) + this.oldKeyArr.length + 1
+        return  controlKey + ''
+      }
     },
     moreSet () {
       this.$router.push({

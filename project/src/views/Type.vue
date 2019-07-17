@@ -18,7 +18,7 @@
       </ul>
     </main>
     <transition name="fade">
-      <appTipsBox hintText="添加的空调设备不能超过2个" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox :hintText="hintText" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
   </div>
 </template>
@@ -36,7 +36,8 @@ export default {
   },
   data () {
     return {
-      tipsBox: false
+      tipsBox: false,
+      hintText: '添加的空调设备不能超过2个'
     }
   },
   computed: {
@@ -78,6 +79,7 @@ export default {
     },
     handleItem (tid) {
       if (tid === 7 && this.airIndexArr.length >= 2) {
+        this.hintText = '添加的空调设备不能超过2个'
         this.tipsBox = true
       } else if (tid === 1) {
         this.$store.commit('setTid', tid)
@@ -116,9 +118,9 @@ export default {
           flex-direction column
           font-size 1.2rem
           img
-            width 5.4rem
+            width 6.4rem
           p
-            margin-top 1.8rem
+            margin-top 1rem
         .removeRgBd
           border-right none
 </style>
