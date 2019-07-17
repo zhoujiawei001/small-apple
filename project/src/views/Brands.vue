@@ -222,7 +222,7 @@ export default {
         padding-left .8rem
         color rgb(26,26,26)
         font-size 1.2rem
-        setBorderBot()
+        setBorderBot($borderColor2)
     div.noData
       position absolute
       top 42%

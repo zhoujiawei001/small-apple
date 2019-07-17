@@ -753,13 +753,13 @@
       .change-temperature
         width 100%
         background #fff
-        height 6rem
-        border-radius 3rem
+        height 7.2rem
+        border-radius 3.6rem
         span
-          setWH(3rem, 3rem)
-          line-height 3rem
+          setWH(3.6rem, 3.6rem)
+          line-height 3.6rem
           setBorder()
-          setFont(2rem, rgb(26,26,26), center)
+          setFont(3rem, rgb(26,26,26), center)
           border-radius 100%
           &:active
             background-color rgba(0,0,0,.1)
@@ -768,7 +768,7 @@
         .btn-plus
           margin-right 1.6rem
         .text
-          setFont(1.2rem, rgb(26,26,26), center)
+          setFont($fontMiddleSize, rgb(26,26,26), center)
       .timer-switch
         width 100%
         setPosUseFlex(row, space-between)

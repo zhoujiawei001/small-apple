@@ -12,7 +12,7 @@
           :key="i"
           :class="{removeRgBd: (i + 1)%3 === 0}"
           @click="handleItem(item.tid)">
-          <img :src="require(`../assets/devIcon/${item.tid}.png`)" alt="">
+          <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
           <p>{{item.name}}</p>
         </li>
       </ul>
@@ -97,18 +97,18 @@ export default {
     setWH()
     position relative
     .wrapper
-      background-color #f2f2f2
+      background-color $bgColorTheme
       .content
         display flex
         flex-wrap wrap
-        background-color #f2f2f2
+        background-color $bgColorTheme
         box-sizing border-box
-        border-top 1px solid #ddd
+        border-top 1px solid $borderColor2
         li
           width calc(100% / 3)
           height calc(100vw / 3)
-          border-right 1px solid #ddd
-          border-bottom 1px solid #ddd
+          border-right 1px solid $borderColor2
+          border-bottom 1px solid $borderColor2
           box-sizing border-box
           display flex
           align-items: center
@@ -116,7 +116,7 @@ export default {
           flex-direction column
           font-size 1.2rem
           img
-            width 4.2rem
+            width 5.4rem
           p
             margin-top 1.8rem
         .removeRgBd

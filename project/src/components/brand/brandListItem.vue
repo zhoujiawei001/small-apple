@@ -40,7 +40,7 @@ export default {
     display: block;
     padding-left .8rem
     font-size 1.4rem
-    setBorderBot()
+    setBorderBot($borderColor2)
   ul
     li
       height 5.2rem
@@ -48,5 +48,5 @@ export default {
       padding-left .8rem
       color rgb(26,26,26)
       font-size 1.2rem
-      setBorderBot()
+      setBorderBot($borderColor2)
 </style>
