@@ -58,6 +58,7 @@
     <appLearnTips
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
+      :stage="learnStage"
       :btnText="isLearn? '结束' : '完成'"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->

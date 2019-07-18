@@ -8,26 +8,23 @@
       <main>
         <appStatusBar
           :class="clsObjStatusDown"
-          @handle-icon="clickSwitchIcon"
           :devName="devName"
-          :devRoomName="roomName"
-          :devStatus="appStatus"
           :key="100"></appStatusBar>
-        <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
+        <appIndicatorBar
+          :devStatus="appStatus"
+          @handle-item="clickSwitchIcon"></appIndicatorBar>
         <appDevItem
           :item="item" v-for="(item, i) in addedDevList"
           :key="i"
           @handle-icon="handleIconSwitch"></appDevItem>
+        <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>
     <appStatusBar
       :style="styObjStatus"
       :class="clsObjStatusUp"
-      @handle-icon="clickSwitchIcon"
       :devName="devName"
-      :devStatus="appStatus"
-      :devRoomName="roomName"
       :key="101"></appStatusBar>
     <div class="mask-line" :class="clsObjStatusUp" :style="objMaskLine"></div>
     <transition name="fade">
@@ -47,6 +44,7 @@ import appStatusBar from '@/components/appStatusBar'
 import appAddDev from '@/components/appAddDev'
 import appDevItem from '@/components/appDevItem'
 import appTipsBox from '@/components/appTipsBox'
+import appIndicatorBar from '@/components/appIndicatorBar'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
 import { sendBodyToDev, modifyDevSwitchByHid, watchVirtualKey } from '../utils/pub'
@@ -58,7 +56,8 @@ export default {
     appStatusBar,
     appAddDev,
     appDevItem,
-    appTipsBox
+    appTipsBox,
+    appIndicatorBar
   },
   computed: {
     ...mapState(['addedDevList', 'statusBarHg', 'devName', 'appStatus', 'roomName']),

@@ -14,6 +14,7 @@ export const viewsMixin = {
       isLearn: false, // true-正在学习
       tipsBox: false, // 提示框显示隐藏
       learnBoxText: '长按要学习的按键，进入学习状态，此键会闪烁，等待学习',
+      learnStage: 0, // 学习阶段 0-开始学习/学习失败/学习成功， 1-正在学习
       learnTimeoutTimer: null, // 学习超时定时器
       learnTimeoutCount: 0, // 学习时间
       curNum: 1,
@@ -35,9 +36,11 @@ export const viewsMixin = {
         if (newVal === 2) {
           window.hilink.toast('2', '学习按键成功')
           this.learnBoxText = '学习成功，可点击该按键测试是否正确，如果不对，可再次学习'
+          this.learnStage = 0
           this.addHasLearnCodeToLocal()
         } else if (newVal === 3) {
           this.learnBoxText = '学习失败，请再次长按你想学习的按键，重新学习'
+          this.learnStage = 0
           window.hilink.toast('2', '学习按键失败')
         }
         this.isLearn = false
@@ -314,6 +317,7 @@ export const viewsMixin = {
         this.longClickNum = 0
         this.longClickTimer = setTimeout(() => {
           this.learnBoxText = '将遥控器正对准小苹果在1米以内，按一下相应按键，等待学习完成'
+          this.learnStage = 1
           let body = {
             batch: {
               controlKey: {
@@ -383,6 +387,7 @@ export const viewsMixin = {
           }
           sendBodyToDev(body)
           this.learnBoxText = '学习失败，请再次长按你想学习的按键，重新学习'
+          this.learnStage = 0
           window.hilink.toast('2', '学习按键失败')
         }
       }, 1000)
@@ -416,6 +421,7 @@ export const viewsMixin = {
         }
         sendBodyToDev(body)
         this.learnBoxText = '长按要学习的按键，进入学习状态，此键会闪烁，等待学习'
+        this.learnStage = 0
         window.hilink.toast('2', '学习按键结束')
       } else {
         this.$router.go(-1)

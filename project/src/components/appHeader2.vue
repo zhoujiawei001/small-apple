@@ -1,21 +1,14 @@
 <template>
-  <div class="header">
-    <div class="empty-header" :style="{height: statusBarHg + 'px'}"></div>
-    <header>
-      <span class="icon-back" @click="backTo()">
-        <img src="../assets/back.png" alt="">
-      </span>
-      <div class="title">{{title}}</div>
-      <span class="icon-more" @click="moreSet()">
-        <img src="../assets/more.png" alt="">
-      </span>
-    </header>
+  <div class="appHeader2" :style="styObj">
+    <div class="back" @click="back">
+      <span></span>
+    </div>
+    <div class="text">{{title}}</div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-
   export default {
     name: 'appHeader2',
     props: {
@@ -23,40 +16,54 @@
         type: String
       }
     },
-    data () {
-      return {}
-    },
     computed: {
-      ...mapState(['statusBarHg'])
+      ...mapState(['statusBarHg']),
+      styObj () {
+        return {
+          paddingTop: this.statusBarHg + 'px'
+        }
+      }
     },
     methods: {
-      backTo() {
-        // this.$emit('backTo')
-        this.$router.go(-1)
+      back () {
+        if (this.$route.path !== '/') {
+          this.$emit('back-icon')
+        } else {
+          window.hilink.finishDeviceActivity()
+        }
       },
-      moreSet() {
-        this.$emit('moreSet')
-      }
     }
   }
 </script>
 
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
-  .header
-    position fixed
-    top 0
-    width 100%
-    header
-      setPosUseFlexInit(row, space-between, center)
-      .title
-        setFont(1.8rem, black, center)
-        setEllipsisOne()
-      >span
-        setHeight(4.8rem)
-        padding 0 1.6rem
-        img
-          setWH(2rem,2rem)
-          vertical-align middle
+  .appHeader2
+    display: flex
+    height: 4.8rem
+    align-items center
+    flex-direction row
+    padding 0 1rem
+    position: fixed
+    top: 0
+    left: 0
+    width calc(100% - 2rem)
+    z-index: 9;
+    box-sizing initial
+    .back
+      height 4rem
+      width 3.2rem
+      display: flex
+      justify-content center
+      align-items center
+      span
+        height 2rem
+        width 2rem
+        imgUrl('../assets/back.png')
+    .text
+      font-size 1.6rem
+      max-width 16rem
+      margin-left 1rem
+      setEllipsisOne()
 
 </style>

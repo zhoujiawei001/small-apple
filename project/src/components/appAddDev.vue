@@ -1,7 +1,6 @@
 <template>
   <div class="appAddDev">
     <img src="../assets/add.png" alt="" @click="clickAdd">
-    <span>遥控器 {{devNum}} 个</span>
   </div>
 </template>
 

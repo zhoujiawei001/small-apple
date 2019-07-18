@@ -1,27 +1,28 @@
 <template>
   <div class="setting">
-    <div :style="{background:'#f2f2f2',height: statusBarHg + 'px'}"></div>
-    <header>
-      <div class="img-box" @click="goBack()"><img src="../assets/back.png"></div>
-      <div class="text">设置</div>
-    </header>
-    <div class="name flex scale-1px" @click="showInput()">
-      <span class="left">设备名称</span>
-      <span class="right">{{devName}}</span>
-      <span class="arrow-right"></span>
-    </div>
-    <div class="delete flex scale-1px" @click="delFlag=true">
-      <span class="left">删除设备</span>
-      <span class="arrow-right"></span>
-    </div>
-    <div
-      class="delete flex"
-      style="border: none"
-      :class="{'btn-disable': $route.query.tid === 7}"
-      @click="goToLearnPage">
-      <span class="left" >遥控器按键学习</span>
-      <span class="arrow-right"></span>
-    </div>
+    <!-- 头部 -->
+    <appHeader2 style="background-color: #f2f2f2" @back-icon="$router.go(-1)" title="设置"></appHeader2>
+    <!-- 中部 -->
+    <main>
+      <div class="name flex scale-1px" @click="showInput()">
+        <span class="left">设备名称</span>
+        <span class="right">{{devName}}</span>
+        <span class="arrow-right"></span>
+      </div>
+      <div class="delete flex scale-1px" @click="delFlag=true">
+        <span class="left">删除设备</span>
+        <span class="arrow-right"></span>
+      </div>
+      <div
+        class="delete flex"
+        style="border: none"
+        :class="{'btn-disable': $route.query.tid === 7}"
+        @click="goToLearnPage">
+        <span class="left" >遥控器按键学习</span>
+        <span class="arrow-right"></span>
+      </div>
+    </main>
+    <!-- 弹出框部分 -->
     <div class="modify-devName" v-if="modifyFlag">
       <div class="container">
         <div class="title">设备名称</div>
@@ -59,13 +60,15 @@
 
 <script>
   import appLoading from '@/components/appLoading'
-  import { mapState } from 'vuex'
+  import appHeader2 from '@/components/appHeader2'
+  import { mapState,mapGetters } from 'vuex'
   import { modifyDevName, getExtendToServe, delAddedDev } from '@/utils/pub'
 
   export default {
     name: 'Setting',
     components: {
       appLoading,
+      appHeader2
     },
     data () {
       return {
@@ -118,10 +121,17 @@
     },
     computed: {
       ...mapState(['statusBarHg', 'addedDevList']),
+      ...mapGetters(['screenRem']),
       queryObj () {
         let newList = this.addedDevList.filter(item => item.hid === this.hid)
         newList[0].pageType = 'learnPage'
         return newList[0]
+      },
+      styObj () {
+        return {
+          top: 4.8 * this.screenRem + this.statusBarHg + 'px',
+          height: `calc(100% - ${4.8 * this.screenRem + this.statusBarHg + 'px'})`
+        }
       }
     },
     methods: {
@@ -161,9 +171,6 @@
           this.$refs.input.focus()
         }, 500)
       },
-      goBack () {
-        this.$router.go(-1)
-      },
       /** 跳去学习页面 **/
       goToLearnPage () {
         this.$router.push({
@@ -188,52 +195,45 @@
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
   .setting
-    header
-      setPosUseFlexInit(row, flex-start, center)
-      height 4.8rem
-      padding 0 1.6rem
-      display flex
-      background $bgColorTheme
+    position relative
+    height 100%
+    width 100%
+    main
+      position absolute
+      top: 6.8rem
+      left: 0
+      width 100%
+      height calc(100% - 6.8rem)
+      overflow scroll
+      -webkit-overflow-scrolling: touch
+      .name, .delete
+        position relative
+        margin 0 1.6rem
+        border-bottom 1px solid #ddd
+        setHeight(4.6rem)
 
-      .img-box
-        setWH(2rem, 2rem)
-        margin-right 1.2rem
+        .left
+          setFont($fontMiddleSize)
 
-        img
-          setWH()
+        .right
+          setFont($fontSmallSize, rgba(0,0,0,.4))
+          margin-right 1.3rem
 
-      .text
-        setFont($fontBigSize)
-        margin-left .5rem
-
-    .name, .delete
-      position relative
-      margin 0 1.6rem
-      border-bottom 1px solid #ddd
-      setHeight(4.6rem)
-
-      .left
-        setFont($fontMiddleSize)
-
-      .right
-        setFont($fontSmallSize, rgba(0,0,0,.4))
-        margin-right 1.3rem
-
-      .arrow-right
-        border 1px solid #c8c8cd
-        border-bottom-width 0
-        border-left-width 0
-        content ""
-        top 38%
-        right 0
-        position absolute
-        width 1rem
-        height 1rem
-        transform rotate(45deg)
-
+        .arrow-right
+          border 1px solid #c8c8cd
+          border-bottom-width 0
+          border-left-width 0
+          content ""
+          top 38%
+          right 0
+          position absolute
+          width 1rem
+          height 1rem
+          transform rotate(45deg)
     .modify-devName
       position absolute
-      background rgba(0, 0, 0, .3)
+      background rgba(0, 0, 0, .2)
+      z-index: 99;
       setWH()
       top 0
 
@@ -272,6 +272,7 @@
     .del-dev
       position absolute
       background rgba(0, 0, 0, .2)
+      z-index: 99;
       setWH()
       top 0
 

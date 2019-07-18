@@ -15,7 +15,7 @@
           @touchend="longClickEnd('power')"
           :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <span class="img-box"></span>
-          <span class="text">机顶盒开关</span>
+          <span class="text">电源开关</span>
         </div>
         <div
           class="input-choose"
@@ -164,6 +164,7 @@
     <appLearnTips
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
+      :stage="learnStage"
       :btnText="isLearn? '结束' : '完成'"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->

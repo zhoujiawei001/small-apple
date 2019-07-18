@@ -1,9 +1,8 @@
 <template>
   <div class="dev-match">
-    <appHeader
+    <appHeader2
       title="逐个匹配"
-      :hiddenMore="true"
-      @back-icon="onClickBack"></appHeader>
+      @back-icon="onClickBack"></appHeader2>
     <div class="mt-section_1">
       <div class="icon-text">
         <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">
@@ -53,7 +52,7 @@
 </template>
 
 <script>
-import appHeader from '@/components/appHeader'
+import appHeader2 from '@/components/appHeader2'
 import appTipsBox from '@/components/appTipsBox'
 import {mapState, mapActions} from 'vuex'
 import { sendBodyToDev2, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, matchTimeoutSendOrder, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
@@ -80,7 +79,7 @@ export default {
     }
   },
   components: {
-    appHeader,
+    appHeader2,
     appTipsBox
   },
   watch: {

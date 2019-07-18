@@ -1,10 +1,9 @@
 <template>
   <div class="STB-Operator">
-    <appHeader
+    <appHeader2
       style="background-color: #f2f2f2"
       title="选择电视运营商"
-      :hiddenMore="true"
-      @back-icon="$router.go(-1)"></appHeader>
+      @back-icon="$router.go(-1)"></appHeader2>
     <main :style="styObj" class="container">
       <section class="section_1">
         <appItemList
@@ -35,14 +34,14 @@
 </template>
 
 <script>
-import appHeader from '@/components/appHeader'
+import appHeader2 from '@/components/appHeader2'
 import appItemList from '@/components/appItemList'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "operator",
   components: {
-    appHeader,
+    appHeader2,
     appItemList
   },
   data () {

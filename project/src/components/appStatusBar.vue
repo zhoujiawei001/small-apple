@@ -1,15 +1,8 @@
 <template>
-  <div class="appStatusBar" :style="objStyle">
+  <div class="appStatusBar">
     <div class="left">
-      <span>夜灯{{devStatus ? '开启' : '关闭'}}</span>
-      <p>{{devName}} {{devRoomName}}</p>
-    </div>
-    <div
-      :class="['right', {'bgActive': isActive === true}]"
-      @touchstart="isActive = true"
-      @touchend="isActive = false"
-      @click="clickSwitch">
-      <img src="../assets/switch.png" alt="light.png">
+      <span>在线</span>
+      <p>{{devName}}</p>
     </div>
   </div>
 </template>
@@ -18,31 +11,14 @@
 export default {
   name: 'appStatusBar',
   props: {
-    devStatus: {
-      type: Number,
-      default: 1
-    },
     devName: {
       type: String,
       default: '遥控大师小苹果'
-    },
-    devRoomName: {
-      type: String,
-      default: '默认房间'
     }
   },
   data () {
     return {
       isActive: false
-    }
-  },
-  computed: {
-    objStyle () {
-      return {
-        // background: `url(${require(`../assets/appStatus_${this.devStatus}.png`)}) no-repeat center`,
-        // backgroundSize: '100%'
-        background: this.devStatus? 'radial-gradient(#6EC1FE, #3E9FE9)' : '#B5B5B5'
-      }
     }
   },
   methods: {
@@ -61,6 +37,7 @@ export default {
     position relative
     box-sizing initial
     border-radius: .4rem
+    background: radial-gradient(#6EC1FE, #3E9FE9)
     .right
       width 4.8rem
       height 4.8rem

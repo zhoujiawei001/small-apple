@@ -1,6 +1,6 @@
 <template>
   <div class="bot-tips">
-    <div class="left"></div>
+    <img :src="require(`../assets/learn-apple_${stage}.png`)" class="left" alt="">
     <div class="middle">
       {{learnBoxText}}
     </div>
@@ -21,6 +21,9 @@
       btnText: {
         type: String,
         default: ''
+      },
+      stage: {
+        type: Number
       }
     },
     methods: {
@@ -48,8 +51,9 @@
     .left
       width 24%
       height 100%
-      background: url("../assets/learn-apple .png") no-repeat center
-      background-size: contain
+      object-fit: contain;
+      /*background: url("../assets/learn-apple_1.png") no-repeat center*/
+      /*background-size: contain*/
     .middle
       width 52%
       padding 0 1.2rem

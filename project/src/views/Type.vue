@@ -1,10 +1,9 @@
 <template>
   <div class="dev-tp">
-    <appHeader
+    <appHeader2
       style="background-color: #f2f2f2"
       title="选择遥控设备类型"
-      :hiddenMore="true"
-      @back-icon="$router.go(-1)"></appHeader>
+      @back-icon="$router.go(-1)"></appHeader2>
     <main :style="styObj" class="wrapper">
       <ul class="content">
         <li
@@ -24,14 +23,14 @@
 </template>
 
 <script>
-import appHeader from '@/components/appHeader'
+import appHeader2 from '@/components/appHeader2'
 import appTipsBox from '@/components/appTipsBox'
 import { mapState, mapGetters } from 'vuex'
 import BScroll from 'better-scroll'
 export default {
   name: 'type',
   components: {
-    appHeader,
+    appHeader2,
     appTipsBox
   },
   data () {

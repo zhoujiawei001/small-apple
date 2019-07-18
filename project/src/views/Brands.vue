@@ -1,10 +1,9 @@
 <template>
   <div class="dev-brands">
-    <appHeader
+    <appHeader2
       style="background-color: #f2f2f2"
       title="选择设备品牌"
-      :hiddenMore="true"
-      @back-icon="backFn"></appHeader>
+      @back-icon="backFn"></appHeader2>
     <brandSearch
       id="input"
       @handle-search="searchFn"></brandSearch>
@@ -40,7 +39,7 @@
 </template>
 
 <script>
-import appHeader from '@/components/appHeader'
+import appHeader2 from '@/components/appHeader2'
 import brandList from '@/components/brand/brandList'
 import letterList from '@/components/brand/letterList'
 import brandSearch from '@/components/brand/brandSearch'
@@ -49,7 +48,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Brands',
   components: {
-    appHeader,
+    appHeader2,
     brandList,
     letterList,
     brandSearch
@@ -211,7 +210,7 @@ export default {
     top: 10.4rem
     left: 0
     width 100%
-    height calc(100% - 6.8rem)
+    height calc(100% - 10.4rem)
     overflow scroll
     -webkit-overflow-scrolling: touch
     ul.searchList
