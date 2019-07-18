@@ -24,7 +24,7 @@
         <span class="btn" @click="changeMode">模式</span>
         <span class="btn" @click="changeWind">风量</span>
         <span class="btn" @click="changeUpDown">上下</span>
-        <span class="btn" @click="changeLeftRight">左右</span>
+        <span class="btn" :class="{'btn-disable': !isHorizontalSwing}" @click="changeLeftRight">左右</span>
       </div>
       <div class="change-temperature flex" :class="{'btn-disable2': isSwitch === 'off'}">
         <span class="btn-reduce" @click="changeTemp('-')">—</span>
@@ -76,7 +76,7 @@
         isSwitch: JSON.parse(this.$route.query.rc).isSwitch,
         rc: JSON.parse(this.$route.query.rc),
         currentTemp: 26,
-        currentState: 'r_s0_26_u1_l1_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风开_睡眠关
+        currentState: 'r_s0_26_u1_l0_p0', // 制冷_风量自动_26度_上下扫风开_左右扫风关_睡眠关
         isHasStar: false, // 判断码库是否包含星星
         isOpenAirTemp: false,
         cmdskeys: [], // 码库Key键集合
@@ -91,7 +91,10 @@
         delayBodyTimer: null, // 下发指令定时器
         copyDelayBody: {},
         clickCounts: 0, // 点击次数
-        listMin: [10, 20, 30]
+        listMin: [10, 20, 30],
+        mode: [], // 当前空调支持的功能
+        attr: {}, // 当前功能所对应的
+        isHorizontalSwing: true // 是否有上下扫风
       }
     },
     created () {
@@ -119,6 +122,12 @@
           })
         })
       }
+      this.getACFnList(this.rc.rid).then(data => {
+        console.log('qiqibaba', data.attributes.cold.swing)
+        let swingArrs = data.attributes.cold.swing
+        this.isHorizontalSwing = swingArrs.includes('horizontalOn')
+        console.log('isHorizontalSwing', this.isHorizontalSwing)
+      })
     },
     mounted () {
       // if (window.localStorage.getItem(`ac-switch__${this.rc.hid}`)) {
@@ -209,7 +218,7 @@
       }
     },
     methods: {
-      ...mapActions(['getDevCodeLibAndInfo']),
+      ...mapActions(['getDevCodeLibAndInfo', 'getACFnList']),
       /** 页面跳转 **/
       moreSet () {
         this.$router.push({

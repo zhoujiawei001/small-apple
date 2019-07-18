@@ -44,13 +44,13 @@
             @touchstart="longClickStart('ch+')"
             @touchend="longClickEnd('ch+')"
             :class="[{'btn-disable2': !cmdsKey.includes('ch+')},{ 'learnActive': isLearn && curLearnKey === 'ch+'}]">＋</span>
-            <span class="text">频道</span>
-            <span
-              class="down btn"
-              @click="sendBody('ch-')"
-              @touchstart="longClickStart('ch-')"
-              @touchend="longClickEnd('ch-')"
-              :class="[{'btn-disable2': !cmdsKey.includes('ch-')},{ 'learnActive': isLearn && curLearnKey === 'ch-'}]">—</span>
+          <span class="text">频道</span>
+          <span
+            class="down btn"
+            @click="sendBody('ch-')"
+            @touchstart="longClickStart('ch-')"
+            @touchend="longClickEnd('ch-')"
+            :class="[{'btn-disable2': !cmdsKey.includes('ch-')},{ 'learnActive': isLearn && curLearnKey === 'ch-'}]">—</span>
         </div>
         <div class="function">
           <span

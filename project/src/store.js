@@ -398,6 +398,37 @@ export default new Vuex.Store({
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getOperatorListResultCallback')
       })
+    },
+    /** 获取空调支持的功能有哪些 **/
+    getACFnList ({commit, state}, rid) {
+      console.log('rid', rid)
+      return new Promise(resolve => {
+        // $http.get('/huawei/l.php', {
+        //   params: {
+        //     c: 'remote_props',
+        //     rid: rid
+        //   }
+        // }).then(res => {
+        //   console.log('getACFnList', res.data)
+        //   resolve(res.data)
+        // })
+
+        let reqParams = {
+          domain: 'http://hwh5.yaokantv.com',
+          path: `/huawei/l.php?c=remote_props&rid=${rid}`,
+          method: 'POST',
+          param: {
+            c: 'remote_props',
+            rid: rid
+          }
+        }
+        window.getACFnListResultCallback = res => {
+          let data = parseHilinkData(res)
+          console.log('getACFnListResultCallback', data)
+          resolve(data)
+        }
+        window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getACFnListResultCallback')
+      })
     }
   }
 })

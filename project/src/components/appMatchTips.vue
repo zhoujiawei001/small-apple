@@ -2,7 +2,7 @@
   <div class="appMatchTips">
     <span class="left" @click="leftFn"></span>
     <div class="middle" @click="midFn">
-      <span>{{curNum}}/{{total}} {{typeName}}</span>
+      <span>{{curNum}}/{{total}}</span>
       &nbsp;
       <span>好用，用这个</span>
     </div>

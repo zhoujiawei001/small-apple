@@ -2,7 +2,7 @@
   <div class="appTipsBox">
     <div class="content">
       <h5>提示</h5>
-      <p>{{hintText}}</p>
+      <p class="scale-1px">{{hintText}}</p>
       <div class="sure" @click="clickSure">
         确定
       </div>
@@ -52,7 +52,6 @@ export default {
       font-size 1.6rem
       line-height 4.6rem
       text-align center
-      border-top: 1px solid $bdColorTheme
       color $fontColorTheme
       &:active
         background-color rgba(0,0,0,.1)!important

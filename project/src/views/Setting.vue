@@ -1,6 +1,6 @@
 <template>
   <div class="setting">
-    <div :style="{background:'#F3F3F3',height: statusBarHg + 'px'}"></div>
+    <div :style="{background:'#f2f2f2',height: statusBarHg + 'px'}"></div>
     <header>
       <div class="img-box" @click="goBack()"><img src="../assets/back.png"></div>
       <div class="text">设置</div>
@@ -15,10 +15,11 @@
       <span class="arrow-right"></span>
     </div>
     <div
-      class="delete flex scale-1px"
+      class="delete flex"
+      style="border: none"
       :class="{'btn-disable': $route.query.tid === 7}"
       @click="goToLearnPage">
-      <span class="left">遥控器按键学习</span>
+      <span class="left" >遥控器按键学习</span>
       <span class="arrow-right"></span>
     </div>
     <div class="modify-devName" v-if="modifyFlag">
@@ -43,7 +44,7 @@
       <div class="container">
         <div class="title">删除设备</div>
         <div class="info">
-          此操作会清楚手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，许重新添加。
+          此操作会清除手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，需重新添加。
         </div>
         <div class="btn-groups">
           <span class="left" @click="delFlag=false">取消</span>
@@ -192,7 +193,7 @@
       height 4.8rem
       padding 0 1.6rem
       display flex
-      background #F3F3F3
+      background $bgColorTheme
 
       .img-box
         setWH(2rem, 2rem)
@@ -202,20 +203,20 @@
           setWH()
 
       .text
-        setFont(1.8rem, #000, left, 600)
-        margin-left .8rem
+        setFont($fontBigSize)
+        margin-left .5rem
 
     .name, .delete
       position relative
       margin 0 1.6rem
       border-bottom 1px solid #ddd
-      setHeight(4.8rem)
+      setHeight(4.6rem)
 
       .left
-        setFont(1.5rem)
+        setFont($fontMiddleSize)
 
       .right
-        setFont(1.3rem, rgba(0, 0, 0, .5))
+        setFont($fontSmallSize, rgba(0,0,0,.4))
         margin-right 1.3rem
 
       .arrow-right
@@ -248,7 +249,7 @@
         padding 1rem 2rem
 
         .title
-          setFont(1.5rem, black, left, 600)
+          setFont(1.6rem, black, left)
 
         .input-box
           margin 2rem 0 1.5rem 0
@@ -270,7 +271,7 @@
 
     .del-dev
       position absolute
-      background rgba(0, 0, 0, .3)
+      background rgba(0, 0, 0, .2)
       setWH()
       top 0
 
@@ -286,10 +287,10 @@
         padding 1rem 2rem
 
         .title
-          setFont(1.7rem, black, left, 600)
+          setFont(1.6rem, black, left)
 
         .info
-          setFont(1.5rem, black, left)
+          setFont(1.3rem, black, left)
           padding 1.5rem 0
   @keyframes fadeIn
     0%
@@ -308,7 +309,7 @@
       setFont(1.5rem, rgb(0, 91, 186), center)
     span.middle
       width 1px!important
-      height 3.2rem
+      height 2.4rem
       background-color: #ddd;
       transform scaleX(.5)
 </style>
