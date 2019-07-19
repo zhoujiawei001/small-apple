@@ -53,6 +53,9 @@ export default {
     },
     airIndexArr () {
       return this.addedDevList.filter(item => item.index > 28)
+    },
+    otherDevNum () {
+      return this.addedDevList.length
     }
   },
   created () {
@@ -77,8 +80,11 @@ export default {
       scroll.on('scroll', pos => {})
     },
     handleItem (tid) {
-      if (tid === 7 && this.airIndexArr.length >= 2) {
-        this.hintText = '添加的空调设备不能超过2个'
+      if (this.otherDevNum >= 15) {
+        this.hintText = '添加的遥控设备个数不能超过15个'
+        this.tipsBox = true
+      } else if (tid === 7 && this.airIndexArr.length >= 2) {
+        this.hintText = '添加的空调遥控个数不能超过2个'
         this.tipsBox = true
       } else if (tid === 1) {
         this.$store.commit('setTid', tid)

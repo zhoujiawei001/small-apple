@@ -5,21 +5,27 @@
       title="选择电视运营商"
       @back-icon="$router.go(-1)"></appHeader2>
     <main :style="styObj" class="container">
-      <section class="section_1">
+      <section
+        class="section_1"
+        ref="part_1">
         <appItemList
           :itemList="provinceList"
           :curIndex="curProIndex"
           @handle-item="handleItemFn"
           :key="123"></appItemList>
       </section>
-      <section class="section_2">
+      <section
+        class="section_2"
+        ref="part_2">
         <appItemList
           :itemList="citiesList"
           :curIndex="curCityIndex"
           @handle-item="handleItemFn"
           :key="456"></appItemList>
       </section>
-      <section class="section_3">
+      <section
+        class="section_3"
+        ref="part_3">
         <appItemList
           :itemList="operatorList"
           :curIndex="curOperatorIndex"
@@ -49,13 +55,13 @@ export default {
       provinceList: [],
       citiesList: [],
       operatorList: [],
-      curProIndex: 0,
-      curCityIndex: 0,
+      curProIndex: 18,
+      curCityIndex: 14,
       curOperatorIndex: 0
     }
   },
   computed: {
-    ...mapState(['statusBarHg']),
+    ...mapState(['statusBarHg', 'proIndex', 'citiesIndex', 'operatorIndex']),
     ...mapGetters(['screenRem']),
     styObj () {
       return {
@@ -65,21 +71,45 @@ export default {
         width: '100%',
         height: `calc(100% - ${11 * this.screenRem + this.statusBarHg + 'px'})`
       }
+    },
+    scrollTopPro () {
+      return this.curProIndex * this.screenRem * 4.2
+    },
+    scrollToCity () {
+      return this.curCityIndex * this.screenRem * 4.2
+    },
+    scrollToOperator () {
+      return this.curOperatorIndex * this.screenRem * 4.2
     }
   },
   created () {
-    this.getAreaList(0).then(data => {
-      this.provinceList = data
-      this.getAreaList(this.provinceList[0].id).then(data => {
-        this.citiesList = data
-        this.getOperatorList(this.citiesList[0].id).then(data => {
-          this.operatorList = data
-        })
-      })
+    this.enterPageExecuteFn()
+  },
+  updated () {
+    this.$nextTick(() => {
+      this.$refs['part_1'].scrollTop = this.scrollTopPro
+      this.$refs['part_2'].scrollTop = this.scrollToCity
+      this.$refs['part_3'].scrollTop = this.scrollToOperator
     })
   },
   methods: {
     ...mapActions(['getAreaList', 'getOperatorList']),
+    /** 进入页面所执行的方法 **/
+    enterPageExecuteFn () {
+      this.curProIndex = this.proIndex
+      this.curCityIndex = this.citiesIndex
+      this.curOperatorIndex = this.operatorIndex
+
+      this.getAreaList(0).then(data => {
+        this.provinceList = data
+        this.getAreaList(this.provinceList[this.curProIndex].id).then(data => {
+          this.citiesList = data
+          this.getOperatorList(this.citiesList[this.curCityIndex].id).then(data => {
+            this.operatorList = data
+          })
+        })
+      })
+    },
     handleItemFn (item) {
       if (item.level === '1') {
         this.curProIndex = item.index
@@ -108,12 +138,21 @@ export default {
           path: '/match',
           query: {
             bid: this.operatorList[this.curOperatorIndex].bid,
-            zh: this.operatorList[this.curOperatorIndex].area_name,
+            zh: this.operatorList[this.curOperatorIndex].provider,
             en: this.operatorList[this.curOperatorIndex].provider
           }
         })
       }, 200)
+    },
+    /** 离开页面所执行的方法 **/
+    leavePageStorageFn () {
+      this.$store.commit('setProIndex', this.curProIndex)
+      this.$store.commit('setCitiesIndex', this.curCityIndex)
+      this.$store.commit('setOperatorIndex', this.curOperatorIndex)
     }
+  },
+  beforeDestroy() {
+    this.leavePageStorageFn()
   }
 }
 </script>

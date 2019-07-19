@@ -101,7 +101,6 @@
         }
       }
       window.deleteInfraredHubDeviceCallback = (res) => {
-        this.loadingFlag = false
         const _res = JSON.parse(res)
         if (!_res.errcode) {
           delAddedDev(this.hid).then(data => {
@@ -109,6 +108,7 @@
               getExtendToServe().then(data => {
                 this.$store.commit('setAddedDevList', data)
                 this.delLocalData()
+                this.loadingFlag = false
                 this.$router.push('/')
               })
             }

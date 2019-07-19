@@ -1,22 +1,12 @@
 <template>
   <div class="appAddDev">
-    <img src="../assets/add.png" alt="" @click="clickAdd">
+    <img src="../assets/add.png" alt="" @click="$router.push('./type')">
   </div>
 </template>
 
 <script>
 export default {
-  name: 'appAddDev',
-  props: ['devNum'],
-  methods: {
-    clickAdd () {
-      if (this.devNum >= 15) {
-        this.$emit('handle-icon')
-      } else {
-        this.$router.push('./type')
-      }
-    }
-  }
+  name: 'appAddDev'
 }
 </script>
 

@@ -23,7 +23,7 @@
     background rgba(0, 0, 0, .3)
     setWH()
     top 0
-
+    z-index: 99;
     .container
       position absolute
       background #fff

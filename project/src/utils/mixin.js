@@ -460,7 +460,7 @@ export const viewsMixin = {
         data.rid,
         data.name,
         this.rc.index,
-        this.rc.code,
+        data.rc_command.power.src,
         data.be_rmodel,
         data.rmodel,
         data.bid,

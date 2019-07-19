@@ -46,7 +46,10 @@ export default new Vuex.Store({
       feedKey: 0
     }, // 学习返回码 0-学习失败/超时， 1-开始学习，2-学习成功
     secondListTotal: '--', // 二级匹配总数
-    secondList: [] // 二级匹配rid集合
+    secondList: [],// 二级匹配rid集合
+    proIndex: 0, // 省的位置
+    citiesIndex: 0, // 市的位置
+    operatorIndex: 0 // 运营商的位置
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px
@@ -71,6 +74,15 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setProIndex (state, payload) {
+      state.proIndex = payload
+    },
+    setCitiesIndex (state, payload) {
+      state.citiesIndex = payload
+    },
+    setOperatorIndex (state, payload) {
+      state.operatorIndex = payload
+    },
     setSecondList (state, payload) {
       state.secondList = payload
     },

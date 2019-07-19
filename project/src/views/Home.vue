@@ -14,10 +14,11 @@
           :devStatus="appStatus"
           @handle-item="clickSwitchIcon"></appIndicatorBar>
         <appDevItem
-          :item="item" v-for="(item, i) in addedDevList"
+          v-for="(item, i) in addedDevList"
+          :item="item"
           :key="i"
           @handle-icon="handleIconSwitch"></appDevItem>
-        <appAddDev :devNum="addedDevList.length" @handle-icon="tipsBox = true"></appAddDev>
+        <appAddDev></appAddDev>
       </main>
     </div>
     <appHeader id="app-hd" :style="styObjHd" @set="jumpToSetting()"></appHeader>

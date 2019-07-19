@@ -177,6 +177,7 @@ export default {
       .then(data => {
         this.total = data.length
         this.modeList = data
+        console.log('getDevModeList', data)
       })
     this.initSomeData()
     watchVirtualKey(true).then(bool => {
@@ -362,6 +363,7 @@ export default {
           }
         }
         window.registerCallback = res => {
+          console.log('注册虚拟设备返回码', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
