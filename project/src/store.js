@@ -47,8 +47,8 @@ export default new Vuex.Store({
     }, // 学习返回码 0-学习失败/超时， 1-开始学习，2-学习成功
     secondListTotal: '--', // 二级匹配总数
     secondList: [],// 二级匹配rid集合
-    proIndex: 0, // 省的位置
-    citiesIndex: 0, // 市的位置
+    proIndex: 18, // 省的位置
+    citiesIndex: 14, // 市的位置
     operatorIndex: 0 // 运营商的位置
   },
   getters: {

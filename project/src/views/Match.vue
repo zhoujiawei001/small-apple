@@ -37,7 +37,7 @@
           <img src="../assets/match_plus.png" alt="">
         </div>
       </div>
-      <div class="info">长按左右键头，可以逐个连续匹配</div>
+      <div class="info">长按左右键，可以逐个连续匹配</div>
       <div class="text">
         <span v-if="tips">正在匹配请勿离开</span>
       </div>
@@ -177,7 +177,6 @@ export default {
       .then(data => {
         this.total = data.length
         this.modeList = data
-        console.log('getDevModeList', data)
       })
     this.initSomeData()
     watchVirtualKey(true).then(bool => {

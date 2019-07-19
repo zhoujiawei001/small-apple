@@ -450,6 +450,7 @@ export const viewsMixin = {
         this.cmdObj = data
         this.isHasR = false
         this.typeName = data.rmodel
+        console.log('cmds', this.cmds)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
       })

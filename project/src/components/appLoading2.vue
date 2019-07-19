@@ -17,7 +17,7 @@
   @import "../style/mixin.styl"
   .loading2
     position absolute
-    background rgba(0, 0, 0, .3)
+    background rgba(0, 0, 0, .2)
     setWH()
     pointer-events none
     top 0
