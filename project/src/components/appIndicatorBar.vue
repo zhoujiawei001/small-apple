@@ -1,10 +1,12 @@
 <template>
   <div class="indicator" @click="clickItem">
-    <div class="left" :style="{color: devStatus? '#3EA0EA' : 'rgb(26,26,26)'}">
+    <div class="left" :style="{color: devStatus? '#007dff' : 'rgb(26,26,26)'}">
       <span>指示灯</span>
       <p>{{ devStatus ? '已开启' : '' }}</p>
     </div>
-    <img class="right" :src="require(`../assets/indicator_${devStatus}.png`)" alt="">
+    <div class="right">
+      <img :src="require(`../assets/indicator_${devStatus}.png`)" alt="">
+    </div>
   </div>
 </template>
 
@@ -28,20 +30,27 @@ export default {
 <style scoped lang="stylus">
  @import "../style/mixin.styl"
  .indicator
-    height 7.6rem
-    padding 0 1.6rem
+    height 6.4rem
+    padding 0 .6rem 0 1.6rem
     position relative
     box-sizing initial
     border-radius .4rem
     background-color: #fff;
-    margin-top 1.2rem
+    margin-top .8rem
     .right
-      width 3.8rem
-      height 3.8rem
+      width 4.8rem
+      height 4.8rem
       position absolute
       top 50%
-      right 2rem
+      right .6rem
       transform translateY(-50%)
+      border-radius 50%
+      img
+        position absolute
+        top 50%
+        left 50%
+        transform translate(-50%, -50%)
+        width 2.8rem
     .left
       color #fff
       position absolute
@@ -49,9 +58,9 @@ export default {
       left 1.6rem
       transform translateY(-50%)
       span
-        font-size 1.6rem
+        font-size $fontBigSize
       p
-        font-size 1.2rem
+        font-size $fontSmallSize
         margin-top .4rem
         color $fontColorTheme
 </style>

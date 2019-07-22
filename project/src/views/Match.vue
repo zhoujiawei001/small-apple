@@ -38,22 +38,22 @@
         </div>
       </div>
       <div class="info">长按左右键，可以逐个连续匹配</div>
-      <div class="text">
-        <span v-if="tips">正在匹配请勿离开</span>
-      </div>
       <div class="btn-next" :class="{'btn-disable': tips || tips2 || total === '--'}" @click="nextFun">
         下一步
       </div>
     </div>
+    <!-- 弹出框提示 -->
     <transition name="fade">
       <appTipsBox hintText="正在匹配，请勿离开!" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
+    <app-loading2 loadingTxt="正在匹配中..." v-if="tips"></app-loading2>
   </div>
 </template>
 
 <script>
 import appHeader2 from '@/components/appHeader2'
 import appTipsBox from '@/components/appTipsBox'
+import appLoading2 from '@/components/appLoading2'
 import {mapState, mapActions} from 'vuex'
 import { sendBodyToDev2, RC, numArr, removeRegisteredVirtualDevYk, parseHilinkData, matchTimeoutSendOrder, postExtendToServe, assembleTS, watchVirtualKey } from '../utils/pub'
 export default {
@@ -80,7 +80,8 @@ export default {
   },
   components: {
     appHeader2,
-    appTipsBox
+    appTipsBox,
+    appLoading2
   },
   watch: {
     'loadRes.isFinish': {
@@ -528,17 +529,6 @@ export default {
       width 100%
       text-align center
       font-size 1.2rem
-    .text
-      position absolute
-      bottom 8.4rem
-      left 50%
-      transform translateX(-50%)
-      color $fontColorTheme
-      font-weight bold
-      height 1.6rem
-      font-size 1.2rem
-      span
-        animation fadeInOut 3s infinite
     .btn-next
       position absolute
       bottom 2.4rem

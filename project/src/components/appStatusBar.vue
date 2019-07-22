@@ -37,17 +37,7 @@ export default {
     position relative
     box-sizing initial
     border-radius: .4rem
-    background: radial-gradient(#6EC1FE, #3E9FE9)
-    .right
-      width 4.8rem
-      height 4.8rem
-      position absolute
-      border-radius 50%
-      top 50%
-      right 1.6rem
-      transform translateY(-50%)
-      img
-        width 4.8rem
+    background: radial-gradient(#71c2ff, #3b9ee9)
     .left
       color #fff
       letter-spacing: 1px
@@ -56,8 +46,8 @@ export default {
       left 1.6rem
       transform translateY(-50%)
       span
-        font-size 1.4rem
+        font-size $fontBigSize
       p
-        font-size 1.2rem
-        margin-top .4rem
+        font-size $fontSmallSize
+        margin-top .5rem
 </style>

@@ -39,14 +39,13 @@ export default {
     line-height 5.2rem
     display: block;
     padding-left .8rem
-    font-size 1.4rem
+    font-size $fontMiddleSize
     setBorderBot($borderColor2)
   ul
     li
       height 5.2rem
       line-height 5.2rem
       padding-left .8rem
-      color rgb(26,26,26)
-      font-size 1.2rem
+      font-size $fontSmallSize
       setBorderBot($borderColor2)
 </style>

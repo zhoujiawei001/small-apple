@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <appHeader2 style="background-color: #f2f2f2" @back-icon="$router.go(-1)" title="设置"></appHeader2>
     <!-- 中部 -->
-    <main>
+    <main :style="styObj">
       <div class="name flex scale-1px" @click="showInput()">
         <span class="left">设备名称</span>
         <span class="right">{{devName}}</span>

@@ -1,6 +1,7 @@
 <template>
-  <div class="appAddDev">
-    <img src="../assets/add.png" alt="" @click="$router.push('./type')">
+  <div class="appAddDev" @click="$router.push('./type')">
+    <img src="../assets/add.png" alt="">
+    <p>添加遥控器</p>
   </div>
 </template>
 
@@ -13,21 +14,18 @@ export default {
 <style scoped lang="stylus">
 @import "../style/mixin.styl"
 .appAddDev
-  margin-top 1.2rem
-  height 7.2rem
+  margin-top .8rem
+  height 6.4rem
   background-color: #fff;
   border-radius 4px
-  position relative
+  display: flex
+  flex-direction column
+  align-items center
+  justify-content center
   img
-    height 4.8rem
-    position absolute
-    top 50%
-    left 50%
-    transform translate(-50%, -50%)
-  span
-    color $fontColorTheme
-    position absolute
-    right 1.2rem
-    bottom 1.2rem
-    font-size 1.2rem
+    height 2.4rem
+    width 2.4rem
+  p
+    font-size $fontSmallSize
+    margin-top .8rem
 </style>

@@ -114,35 +114,40 @@
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
   .appDevItem
-    height 7.2rem
-    margin-top 1.2rem
+    height 6.4rem
+    margin-top .8rem
     display flex
     justify-content space-between
     align-items center
     background-color: #fff
     border-radius 4px
-    padding 0 1.6rem
+    padding 0 .6rem 0 .8rem
     .left
       width 68%
       display flex
-      justify-content space-between
       align-items: center
       img
-        width 32%
+        width 6.4rem
+        height 6.4rem
       .info
         width 68%
-        padding-left 2.4rem
+        padding-left .8rem
         .info-txt
-          font-size 1.4rem
+          font-size $fontBigSize
           setEllipsisOne()
         p
           margin-top .4rem
-          font-size 1.2rem
-          color $fontColorTheme
+          font-size $fontSmallSize
+          color $fontColorHalfTrans
     .right
       width 4.8rem
       height 4.8rem
       border-radius 50%
+      position relative
       img
-        width 4.8rem
+        position absolute
+        top 50%
+        left 50%
+        transform translate(-50%, -50%)
+        width 2.8rem
 </style>
