@@ -30,5 +30,5 @@ export default {
     position absolute
     bottom 2.4rem
     right 2.4rem
-    width 10rem
+    height 1.6rem
 </style>

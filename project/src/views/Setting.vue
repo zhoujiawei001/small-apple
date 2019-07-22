@@ -3,9 +3,10 @@
     <!-- 头部 -->
     <appHeader2 style="background-color: #f2f2f2" @back-icon="$router.go(-1)" title="设置"></appHeader2>
     <!-- 中部 -->
-    <main :style="styObj">
+    <main
+      :style="styObj">
       <div class="name flex scale-1px" @click="showInput()">
-        <span class="left">设备名称</span>
+        <span class="left">遥控器名称</span>
         <span class="right">{{devName}}</span>
         <span class="arrow-right"></span>
       </div>
@@ -25,7 +26,7 @@
     <!-- 弹出框部分 -->
     <div class="modify-devName" v-if="modifyFlag">
       <div class="container">
-        <div class="title">设备名称</div>
+        <div class="title">遥控器名称</div>
         <div class="input-box">
           <input ref="input"
                  type="text"
