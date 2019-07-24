@@ -22,7 +22,7 @@
           @touchend="longClickEnd('power')"
           :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <img src="../../assets/fan-switch-off.png" alt="">
-          <p>电源</p>
+          <p>{{$t('pub.power')}}</p>
         </div>
         <div class="right" style="visibility: hidden;">
           <span>开机时长</span>
@@ -31,13 +31,13 @@
       </div>
       <ul class="btn-normal">
         <li
-          v-for="(item, index) in extendsList"
+          v-for="(item, index) in fnList"
           :key="index">
           <span
             @click="sendBody(item.value)"
             @touchstart="longClickStart(item.value)"
             @touchend="longClickEnd(item.value)"
-            :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]">{{item.text}}</span>
+            :class="[{'btn-disable2': !cmdsKey.includes(item.value)},{ 'learnActive': isLearn && curLearnKey === item.value}]">{{$t(`dev_fan.${item.value}`)}}</span>
         </li>
       </ul>
       <!-- 扩展键 -->
@@ -59,7 +59,7 @@
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :stage="learnStage"
-      :btnText="isLearn? '结束' : '完成'"
+      :btnText="isLearn? $t('component.end') : $t('component.finish')"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->
     <appMatchTips
@@ -103,11 +103,10 @@
     },
     data () {
       return {
-        // extendsList: ['风速', '摆头', '风类', '睡眠', '灯光', '负离子'],
-        extendsList: [
+        fnList: [
           {
             text: '风速',
-            value: 'fanspeed'
+            value: 'speed'
           },
           {
             text: '模式',

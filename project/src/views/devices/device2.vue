@@ -15,7 +15,7 @@
           @touchend="longClickEnd('power')"
           :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <span class="img-box"></span>
-          <span class="text">电源开关</span>
+          <span class="text">{{$t('dev_tv.power')}}</span>
         </div>
         <div
           class="input-choose"
@@ -24,7 +24,7 @@
           @touchend="longClickEnd('signal')"
           :class="[{'btn-disable2': !cmdsKey.includes('signal')},{ 'learnActive': isLearn && curLearnKey === 'signal'}]">
           <span class="img-box"></span>
-          <span class="text">输入选项</span>
+          <span class="text">{{$t('pub.source')}}</span>
         </div>
         <div
           class="home"
@@ -33,7 +33,7 @@
           @touchend="longClickEnd('boot')"
           :class="[{'btn-disable2': !cmdsKey.includes('boot')},{ 'learnActive': isLearn && curLearnKey === 'boot'}]">
           <span class="img-box"></span>
-          <span class="text">主页</span>
+          <span class="text">{{$t('dev_tv.boot')}}</span>
         </div>
       </div>
       <div class="channel-voice flex">
@@ -44,7 +44,7 @@
             @touchstart="longClickStart('ch+')"
             @touchend="longClickEnd('ch+')"
             :class="[{'btn-disable2': !cmdsKey.includes('ch+')},{ 'learnActive': isLearn && curLearnKey === 'ch+'}]">＋</span>
-          <span class="text">频道</span>
+          <span class="text">{{$t('pub.ch')}}</span>
           <span
             class="down btn"
             @click="sendBody('ch-')"
@@ -64,7 +64,7 @@
             @click="sendBody('exit')"
             @touchstart="longClickStart('exit')"
             @touchend="longClickEnd('exit')"
-            :class="[{'btn-disable2': !cmdsKey.includes('exit')},{ 'learnActive': isLearn && curLearnKey === 'exit'}]">退出</span>
+            :class="[{'btn-disable2': !cmdsKey.includes('exit')},{ 'learnActive': isLearn && curLearnKey === 'exit'}]">{{$t('pub.exit')}}</span>
         </div>
         <div class="voice">
           <span
@@ -73,7 +73,7 @@
             @touchstart="longClickStart('vol+')"
             @touchend="longClickEnd('vol+')"
             :class="[{'btn-disable2': !cmdsKey.includes('vol+')},{ 'learnActive': isLearn && curLearnKey === 'vol+'}]">＋</span>
-          <span class="text">音量</span>
+          <span class="text">{{$t('pub.vol')}}</span>
           <span
             class="down btn"
             @click="sendBody('vol-')"
@@ -165,7 +165,7 @@
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :stage="learnStage"
-      :btnText="isLearn? '结束' : '完成'"
+      :btnText="isLearn? $t('component.end') : $t('component.finish')"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->
     <appMatchTips

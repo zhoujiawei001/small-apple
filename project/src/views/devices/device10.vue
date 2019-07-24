@@ -15,7 +15,7 @@
           @touchend="longClickEnd('power')"
           :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">
           <span class="img-box"></span>
-          <span class="text">电视盒子开关</span>
+          <span class="text">{{$t('dev_tvBox.tvBox_power')}}</span>
         </div>
         <div
           class="tv-switch"
@@ -24,7 +24,7 @@
           @touchend="longClickEnd('tvpower')"
           :class="[{'btn-disable2': !cmdsKey.includes('tvpower')},{ 'learnActive': isLearn && curLearnKey === 'tvpower'}]">
           <span class="img-box"></span>
-          <span class="text">电视机开关</span>
+          <span class="text">{{$t('pub.tv_power')}}</span>
         </div>
         <div
           class="input-choose"
@@ -33,7 +33,7 @@
           @touchend="longClickEnd('signal')"
           :class="[{'btn-disable2': !cmdsKey.includes('signal')},{ 'learnActive': isLearn && curLearnKey === 'signal'}]">
           <span class="img-box"></span>
-          <span class="text">输入选项</span>
+          <span class="text">{{$t('pub.source')}}</span>
         </div>
       </div>
       <div class="volume">
@@ -44,7 +44,7 @@
             @touchstart="longClickStart('vol+')"
             @touchend="longClickEnd('vol+')"
             :class="[{'btn-disable2': !cmdsKey.includes('vol+')},{ 'learnActive': isLearn && curLearnKey === 'vol+'}]">＋</span>
-          <span class="text">音量</span>
+          <span class="text">{{$t('pub.vol')}}</span>
           <span
             class="sub btn"
             @click="sendBody('vol-')"
@@ -146,7 +146,7 @@
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :stage="learnStage"
-      :btnText="isLearn? '结束' : '完成'"
+      :btnText="isLearn? $t('component.end') : $t('component.finish')"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->
     <appMatchTips

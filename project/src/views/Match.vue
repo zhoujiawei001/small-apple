@@ -6,7 +6,7 @@
     <div class="mt-section_1">
       <div class="icon-text">
         <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">
-        <p class="text">{{$route.query.zh}} {{$route.query.en}} {{typeName}}</p>
+        <p class="text">{{$route.query.zh}} {{$route.query.en}} {{$t(`pub.${typeName}`)}}</p>
       </div>
       <div class="dec" v-if="lang === 'zh'">
         <p>匹配前，请将{{$t(`pub.${typeName}`)}}电源打开</p>
@@ -106,24 +106,24 @@ export default {
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
                     } else {
-                      window.hilink.toast('2', '添加遥控失败')
+                      window.hilink.toast('2', this.$t('component.added_failed'))
                       removeRegisteredVirtualDevYk(this.rc.devId)
                       this.handleMatchFailedFun()
                     }
                   })
                 } else {
-                  window.hilink.toast('2', '添加遥控失败')
+                  window.hilink.toast('2', this.$t('component.added_failed'))
                   removeRegisteredVirtualDevYk(this.rc.devId)
                   this.handleMatchFailedFun()
                 }
               })
             } else {
-              window.hilink.toast('2', '添加遥控失败')
+              window.hilink.toast('2', this.$t('component.added_failed'))
               this.handleMatchFailedFun()
             }
           })
         } else {
-          window.hilink.toast('2', '下载码库失败')
+          window.hilink.toast('2', this.$t('component.download_failed'))
           this.handleMatchFailedFun()
         }
       },
@@ -300,7 +300,7 @@ export default {
           this.rc = {
             rid: this.secondModeList[0].rid,
             pageType: 'matchPage',
-            hname: this.$route.query.zh + this.typeName,
+            hname: this.$route.query.zh + this.$t(`pub.${this.typeName}`),
             code: this.currentCode,
             zip: this.currentZip,
             index: this.allowIndexArr[0]
@@ -440,7 +440,7 @@ export default {
       this.timer = setInterval(() => {
         this.count++
         if (this.count > 30) {
-          window.hilink.toast('2', '匹配超时')
+          window.hilink.toast('2', this.$t('component.match_timeout'))
           this.handleMatchFailedFun()
           matchTimeoutSendOrder()
         }

@@ -1,17 +1,17 @@
 <template>
   <div class="setting">
     <!-- 头部 -->
-    <appHeader2 style="background-color: #f2f2f2" @back-icon="$router.go(-1)" title="设置"></appHeader2>
+    <appHeader2 style="background-color: #f2f2f2" @back-icon="$router.go(-1)" :title="$t('setting.set')"></appHeader2>
     <!-- 中部 -->
     <main
       :style="styObj">
       <div class="name flex scale-1px" @click="showInput()">
-        <span class="left">遥控器名称</span>
+        <span class="left">{{$t('setting.control_name')}}</span>
         <span class="right">{{devName}}</span>
         <span class="arrow-right"></span>
       </div>
       <div class="delete flex scale-1px" @click="delFlag=true">
-        <span class="left">删除设备</span>
+        <span class="left">{{$t('setting.remove_dev')}}</span>
         <span class="arrow-right"></span>
       </div>
       <div
@@ -19,43 +19,41 @@
         style="border: none"
         :class="{'btn-disable': $route.query.tid === 7}"
         @click="goToLearnPage">
-        <span class="left" >遥控器按键学习</span>
+        <span class="left" >{{$t('setting.learn')}}</span>
         <span class="arrow-right"></span>
       </div>
     </main>
     <!-- 弹出框部分 -->
     <div class="modify-devName" v-if="modifyFlag">
       <div class="container">
-        <div class="title">遥控器名称</div>
+        <div class="title">{{$t('setting.control_name')}}</div>
         <div class="input-box">
           <input ref="input"
                  type="text"
-                 placeholder="请输入设备名称"
+                 :placeholder="$t('setting.form_placeholder')"
                  v-model="inputValue"
                  @input="handleInput()">
-          <div class="warn" v-show="warnFlag">请输入1-64个字符</div>
+          <div class="warn" v-show="warnFlag">{{$t('setting.form_tips')}}</div>
         </div>
         <div class="btn-groups">
-          <span class="left" @click="cancelModify()">取消</span>
+          <span class="left" @click="cancelModify()">{{$t('pub.cancel')}}</span>
           <span class="middle"></span>
-          <span class="right" @click="confirmModify()">确定</span>
+          <span class="right" @click="confirmModify()">{{$t('pub.sure')}}</span>
         </div>
       </div>
     </div>
     <div class="del-dev" v-show="delFlag">
       <div class="container">
-        <div class="title">删除设备</div>
-        <div class="info">
-          此操作会清除手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，需重新添加。
-        </div>
+        <div class="title">{{$t('setting.remove_dev')}}</div>
+        <div class="info">{{$t('setting.remove_tips')}}</div>
         <div class="btn-groups">
-          <span class="left" @click="delFlag=false">取消</span>
+          <span class="left" @click="delFlag=false">{{$t('pub.cancel')}}</span>
           <span class="middle"></span>
-          <span class="right" @click="confirmDel()">删除</span>
+          <span class="right" @click="confirmDel()">{{$t('pub.sure')}}</span>
         </div>
       </div>
     </div>
-    <appLoading loadingTxt="正在删除..." v-show="loadingFlag"></appLoading>
+    <appLoading :loadingTxt="$t('setting.removing')" v-show="loadingFlag"></appLoading>
   </div>
 </template>
 
@@ -95,7 +93,7 @@
                 this.modifyFlag = false
                 this.devName = this.inputValue
                 this.$store.commit('setAddedDevList', data)
-                window.hilink.toast('2', '修改成功')
+                window.hilink.toast('2', this.$t('component.modified_success'))
               })
             }
           })

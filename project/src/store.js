@@ -50,8 +50,8 @@ export default new Vuex.Store({
     proIndex: 18, // 省的位置
     citiesIndex: 14, // 市的位置
     operatorIndex: 0, // 运营商的位置
-    // lang: window.navigator.language.split('-')[0] || 'zh'
-    lang: 'en'
+    lang: window.navigator.language.split('-')[0] || 'zh'
+    // lang: 'en'
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px

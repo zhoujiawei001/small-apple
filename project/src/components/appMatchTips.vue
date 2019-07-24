@@ -4,7 +4,7 @@
     <div class="middle" @click="midFn">
       <span>{{curNum}}/{{total}}</span>
       &nbsp;
-      <span>好用，用这个</span>
+      <span>{{$t('pub.use_this')}}</span>
     </div>
     <span class="right" @click="rightFn"></span>
   </div>

@@ -24,6 +24,58 @@ const en = {
     title: 'Order',
     longPress: 'Long press the left and right keys to continuously match one by one'
   },
+  dev_stbBox: {
+    stbBox_power: 'Setbox Power'
+  },
+  dev_tv: {
+    power: 'Power',
+    boot: 'Boot'
+  },
+  dev_fan: {
+    speed: 'Speed',
+    mode: 'Mode',
+    timer: 'Timer',
+    oscillation: 'Oscillation'
+  },
+  dev_ac: {
+    mode: 'Mode',
+    speed: 'Speed',
+    v_swing: 'V.S',
+    h_swing: 'H.S',
+    temp: 'Temp',
+    cancel_delay: 'CANCEL',
+    delay_off: 'Delay Off'
+  },
+  dev_tvBox: {
+    tvBox_power: 'TV box Power'
+  },
+  setting: {
+    set: 'Set',
+    control_name: 'Remote name',
+    remove_dev: 'Remove device',
+    learn: 'Learning',
+    remove_tips: 'This will erase all data for this device from the device and cloud.You will need to add the device again to continue using it.',
+    form_tips: 'Please enter 1-64 characters',
+    form_placeholder: 'Please enter name',
+    removing: 'deleting...'
+  },
+  component: {
+    finish: 'OK',
+    end: 'Cancel',
+    learn_txt1: 'Long press the button to learn, this key will flash, waiting to learn',
+    learn_txt2: 'Aim the remote control at the little apple within 1 meter, wait for the study to be completed.',
+    learn_txt3: 'Learning successful, you can click the button to test whether it is correct, and if not, you can learn again.',
+    learn_txt4: 'Learning failure, please press the button you want to learn again, re-learn.',
+    beginDelay: 'Delay Started',
+    cancelDelay: 'Delay cancelled',
+    learn_success: 'Learn Successfully',
+    learn_failed: 'Learn Failed',
+    learn_end: 'Learn End',
+    added_failed: 'Added Failed',
+    download_failed: 'Failed to download',
+    match_timeout: 'Match the timeout',
+    modified_success: 'Modified Successfully'
+  },
   pub: {
     set_box: 'Setbox',
     tv: 'TV',
@@ -33,9 +85,21 @@ const en = {
     light: 'Light',
     next: 'Next',
     match_leave: 'Matching, don\'t leave!',
+    learn_leave: 'Learning, do\'t leave!',
     match_now: 'Matching...',
     hint: 'Hint',
-    sure: 'Done'
+    sure: 'OK',
+    cancel: 'CANCEL',
+    remove: 'REMOVE',
+    tv_power: 'TV Power',
+    source: 'Source',
+    ch: 'CH',
+    vol: 'Vol',
+    exit: 'Exit',
+    power: 'Power',
+    use_this: 'It works. Use this',
+    on: 'ON',
+    off: 'OFF'
   }
 }
 export default en

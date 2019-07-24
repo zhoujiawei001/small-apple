@@ -24,6 +24,58 @@ const zh = {
     title: '逐个匹配',
     longPress: '长按左右键，可以逐个连续匹配'
   },
+  dev_stbBox: {
+    stbBox_power: '机顶盒开关'
+  },
+  dev_tv: {
+    power: '电源开关',
+    boot: '主页'
+  },
+  dev_fan: {
+    speed: '风速',
+    mode: '模式',
+    timer: '定时',
+    oscillation: '摇头'
+  },
+  dev_ac: {
+    mode: '模式',
+    speed: '风量',
+    v_swing: '上下',
+    h_swing: '左右',
+    temp: '温度',
+    cancel_delay: '取消倒计时',
+    delay_off: '倒计时关'
+  },
+  dev_tvBox: {
+    tvBox_power: '电视盒子开关'
+  },
+  setting: {
+    set: '设置',
+    control_name: '遥控器名称',
+    remove_dev: '删除设备',
+    learn: '遥控器按键学习',
+    remove_tips: '此操作会清除手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，需重新添加。',
+    form_tips: '请输入1-64个字符',
+    form_placeholder: '请输入遥控器名称',
+    removing: '正在删除...'
+  },
+  component: {
+    finish: '完成',
+    end: '结束',
+    learn_txt1: '长按要学习的按键，进入学习状态，此键会闪烁，等待学习',
+    learn_txt2: '将遥控器对准小苹果在1米以内，按一下相应的按键，等待学习完成',
+    learn_txt3: '学习成功，可点击该按键测试是否正确，如果不对，可再次学习',
+    learn_txt4: '学习失败，请再次长按你想要学习的按键，重新学习',
+    beginDelay: '倒计时已开启',
+    cancelDelay: '倒计时已取消',
+    learn_success: '学习按键成功',
+    learn_failed: '学习按键失败',
+    learn_end: '学习按键结束',
+    added_failed: '添加遥控器失败',
+    download_failed: '下载码库失败',
+    match_timeout: '匹配超时',
+    modified_success: '修改成功'
+  },
   pub: {
     set_box: '电视机顶盒',
     tv: '电视机',
@@ -33,9 +85,21 @@ const zh = {
     light: '灯',
     next: '下一步',
     match_leave: '正在匹配，请勿离开!',
+    learn_leave: '正在学习，请勿离开',
     match_now: '正在匹配中...',
     hint: '提示',
-    sure: '确定'
+    sure: '确定',
+    cancel: '取消',
+    remove: '删除',
+    tv_power: '电视机开关',
+    source: '输入选项',
+    ch: '频道',
+    vol: '音量',
+    exit: '退出',
+    power: '电源',
+    use_this: '好用，用这个',
+    on: '开',
+    off: '关'
   }
 }
 export default zh

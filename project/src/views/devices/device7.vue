@@ -21,33 +21,33 @@
     </div>
     <div class="container">
       <div class="btn-function flex" :class="{'btn-disable2': isSwitch === 'off'}">
-        <span class="btn" @click="changeMode">模式</span>
-        <span class="btn" @click="changeWind">风量</span>
-        <span class="btn" @click="changeUpDown">上下</span>
-        <span class="btn" :class="{'btn-disable': !isHorizontalSwing}" @click="changeLeftRight">左右</span>
+        <span class="btn" @click="changeMode">{{$t('dev_ac.mode')}}</span>
+        <span class="btn" @click="changeWind">{{$t('dev_ac.speed')}}</span>
+        <span class="btn" @click="changeUpDown">{{$t('dev_ac.v_swing')}}</span>
+        <span class="btn" :class="{'btn-disable': !isHorizontalSwing}" @click="changeLeftRight">{{$t('dev_ac.h_swing')}}</span>
       </div>
       <div class="change-temperature flex" :class="{'btn-disable2': isSwitch === 'off'}">
         <span class="btn-reduce" @click="changeTemp('-')">—</span>
-        <div class="text">温度</div>
+        <div class="text">{{$t('dev_ac.temp')}}</div>
         <span class="btn-plus" @click="changeTemp('+')">＋</span>
       </div>
       <div class="timer-switch flex">
         <div
           class="left"
           @click="closeDelayTime">
-          <span class="text">取消倒计时</span>
+          <span class="text">{{$t('dev_ac.cancel_delay')}}</span>
         </div>
         <div
           class="middle"
           @click="clickSwitch"
           :style="switchObj">
           <span :style="switchIconObj"></span>
-          <p class="text">电源</p>
+          <p class="text">{{$t('pub.power')}}</p>
         </div>
         <div
           class="right"
           @click="setDelayTime(2)">
-          <span class="text">倒计时关</span>
+          <span class="text">{{$t('dev_ac.delay_off')}}</span>
           <!--<p class="detail">{{currentDelayTime}}</p>-->
           <p
             class="detail"
@@ -618,7 +618,7 @@
           }
           sendBodyToDev2(body, 'setDelayCallback').then(res => {
             if (!res.errcode) {
-              window.hilink.toast('2', '倒计时已开始')
+              window.hilink.toast('2', this.$t('component.beginDelay'))
             }
           })
         }, 3000)
@@ -642,7 +642,7 @@
         }
         sendBodyToDev2(body, 'cancelDelayCallback').then(res => {
           if (!res.errcode) {
-            window.hilink.toast('2', '倒计时已取消')
+            window.hilink.toast('2', this.$t('component.cancelDelay'))
           }
         })
       },

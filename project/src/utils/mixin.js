@@ -13,7 +13,7 @@ export const viewsMixin = {
       hasLearnCodes: [], // 已经学过的码库
       isLearn: false, // true-正在学习
       tipsBox: false, // 提示框显示隐藏
-      learnBoxText: '长按要学习的按键，进入学习状态，此键会闪烁，等待学习',
+      learnBoxText: this.$t('component.learn_txt1'),
       learnStage: 0, // 学习阶段 0-开始学习/学习失败/学习成功， 1-正在学习
       learnTimeoutTimer: null, // 学习超时定时器
       learnTimeoutCount: 0, // 学习时间
@@ -34,14 +34,14 @@ export const viewsMixin = {
         console.log(newVal, oldVal)
         if (this.rc.pageType !== 'learnPage') return
         if (newVal === 2) {
-          window.hilink.toast('2', '学习按键成功')
-          this.learnBoxText = '学习成功，可点击该按键测试是否正确，如果不对，可再次学习'
+          window.hilink.toast('2', this.$t('component.learn_success'))
+          this.learnBoxText = this.$t('component.learn_txt3')
           this.learnStage = 0
           this.addHasLearnCodeToLocal()
         } else if (newVal === 3) {
-          this.learnBoxText = '学习失败，请再次长按你想学习的按键，重新学习'
+          this.learnBoxText = this.$t('component.learn_txt4')
           this.learnStage = 0
-          window.hilink.toast('2', '学习按键失败')
+          window.hilink.toast('2', this.$t('component.failed'))
         }
         this.isLearn = false
         clearInterval(this.learnTimeoutTimer)
@@ -68,24 +68,24 @@ export const viewsMixin = {
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
                     } else {
-                      window.hilink.toast('2', '添加遥控失败')
+                      window.hilink.toast('2', this.$t('component.added_failed'))
                       removeRegisteredVirtualDevYk(this.rc2.devId)
                       this.handleMatchFailedFun()
                     }
                   })
                 } else {
-                  window.hilink.toast('2', '添加遥控失败')
+                  window.hilink.toast('2', this.$t('component.added_failed'))
                   removeRegisteredVirtualDevYk(this.rc2.devId)
                   this.handleMatchFailedFun()
                 }
               })
             } else {
-              window.hilink.toast('2', '添加遥控失败')
+              window.hilink.toast('2', this.$t('component.added_failed'))
               this.handleMatchFailedFun()
             }
           })
         } else {
-          window.hilink.toast('2', '下载码库失败')
+          window.hilink.toast('2', this.$t('component.download_failed'))
           this.handleMatchFailedFun()
         }
       },
@@ -128,7 +128,7 @@ export const viewsMixin = {
       if (bool) {
         window.goBack = () => {
           if (this.isLearn || this.loadingFlag) {
-            this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
+            this.hintText = this.isLearn? this.$t('pub.learn_leave') : this.$t('pub.match_leave')
             this.tipsBox = true
           } else {
             this.$router.go(-1)
@@ -316,7 +316,7 @@ export const viewsMixin = {
         if (this.isLearn) return
         this.longClickNum = 0
         this.longClickTimer = setTimeout(() => {
-          this.learnBoxText = '将遥控器正对准小苹果在1米以内，按一下相应按键，等待学习完成'
+          this.learnBoxText = this.$t('component.learn_txt2')
           this.learnStage = 1
           let body = {
             batch: {
@@ -359,7 +359,7 @@ export const viewsMixin = {
     /** 点击返回 **/
     onClickBack () {
       if (this.isLearn || this.loadingFlag) {
-        this.hintText = this.isLearn? '正在学习，请勿离开!' : '正在匹配, 请勿离开!'
+        this.hintText = this.isLearn? this.$t('pub.learn_leave') : this.$t('pub.match_leave')
         this.tipsBox = true
       } else {
         this.$router.go(-1)
@@ -386,9 +386,9 @@ export const viewsMixin = {
             }
           }
           sendBodyToDev(body)
-          this.learnBoxText = '学习失败，请再次长按你想学习的按键，重新学习'
+          this.learnBoxText = this.$t('component.learn_txt4')
           this.learnStage = 0
-          window.hilink.toast('2', '学习按键失败')
+          window.hilink.toast('2', this.$t('component.learn_failed'))
         }
       }, 1000)
     },
@@ -420,9 +420,9 @@ export const viewsMixin = {
           }
         }
         sendBodyToDev(body)
-        this.learnBoxText = '长按要学习的按键，进入学习状态，此键会闪烁，等待学习'
+        this.learnBoxText = this.$t('component.learn_txt1')
         this.learnStage = 0
-        window.hilink.toast('2', '学习按键结束')
+        window.hilink.toast('2', this.$t('component.learn_end'))
       } else {
         this.$router.go(-1)
       }
@@ -509,7 +509,7 @@ export const viewsMixin = {
       this.matchTimer = setInterval(() => {
         this.matchCount++
         if (this.matchCount > 30) {
-          window.hilink.toast('2', '匹配超时')
+          window.hilink.toast('2', this.$t('component.match_timeout'))
           this.handleMatchFailedFun()
           matchTimeoutSendOrder()
         }

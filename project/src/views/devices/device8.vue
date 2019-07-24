@@ -15,13 +15,13 @@
             @click="sendBody('power')"
             @touchstart="longClickStart('power')"
             @touchend="longClickEnd('power')"
-            :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">开</span>
+            :class="[{'btn-disable2': !cmdsKey.includes('power')},{ 'learnActive': isLearn && curLearnKey === 'power'}]">{{$t('pub.on')}}</span>
           <span
             class="switch-off btn"
             @click="sendBody('poweroff')"
             @touchstart="longClickStart('poweroff')"
             @touchend="longClickEnd('poweroff')"
-            :class="[{'btn-disable2': !cmdsKey.includes('poweroff')},{ 'learnActive': isLearn && curLearnKey === 'poweroff'}]">关</span>
+            :class="[{'btn-disable2': !cmdsKey.includes('poweroff')},{ 'learnActive': isLearn && curLearnKey === 'poweroff'}]">{{$t('pub.off')}}</span>
         </div>
         <div class="power-box2">
           <span
@@ -51,7 +51,7 @@
       v-if="rc.pageType === 'learnPage'"
       :learnBoxText="learnBoxText"
       :stage="learnStage"
-      :btnText="isLearn? '结束' : '完成'"
+      :btnText="isLearn? $t('component.end') : $t('component.finish')"
       @handle-end="handleEnd"></appLearnTips>
     <!-- match底层提示 -->
     <appMatchTips
