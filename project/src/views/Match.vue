@@ -1,17 +1,22 @@
 <template>
   <div class="dev-match">
     <appHeader2
-      title="逐个匹配"
+      :title="$t('match.title')"
       @back-icon="onClickBack"></appHeader2>
     <div class="mt-section_1">
       <div class="icon-text">
         <img :src="require(`../assets/devIcon/${tid}.png`)" alt="">
         <p class="text">{{$route.query.zh}} {{$route.query.en}} {{typeName}}</p>
       </div>
-      <div class="dec">
-        <p>匹配前，请将{{typeName}}电源打开</p>
+      <div class="dec" v-if="lang === 'zh'">
+        <p>匹配前，请将{{$t(`pub.${typeName}`)}}电源打开</p>
         <p>{{typeDec}}</p>
         <p>表示匹配成功， 点击 “下一步”</p>
+      </div>
+      <div class="dec" v-else>
+        <p>Please turn on the power of the {{$t(`pub.${typeName}`)}}</p>
+        <p>{{typeDecEn}}</p>
+        <p>To indicate successful match, click "next"</p>
       </div>
     </div>
     <div class="mt-section_2">
@@ -37,16 +42,16 @@
           <img src="../assets/match_plus.png" alt="">
         </div>
       </div>
-      <div class="info">长按左右键，可以逐个连续匹配</div>
+      <div class="info">{{$t('match.longPress')}}</div>
       <div class="btn-next" :class="{'btn-disable': tips || tips2 || total === '--'}" @click="nextFun">
-        下一步
+        {{$t('pub.next')}}
       </div>
     </div>
     <!-- 弹出框提示 -->
     <transition name="fade">
-      <appTipsBox hintText="正在匹配，请勿离开!" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox :hintText="$t('pub.match_leave')" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
-    <app-loading2 loadingTxt="正在匹配中..." v-if="tips"></app-loading2>
+    <app-loading2 v-if="tips"></app-loading2>
   </div>
 </template>
 
@@ -126,16 +131,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tid','appDevId', 'addedDevList', 'loadRes']),
+    ...mapState(['tid','appDevId', 'addedDevList', 'loadRes', 'lang']),
     typeName () {
       let obj = {
-        1: '电视机顶盒',
-        2: '电视机',
-        6: '风扇',
-        7: '空调',
-        8: '灯泡',
-        10: '电视盒子',
-        40: '热水器'
+        1: 'set_box',
+        2: 'tv',
+        6: 'fan',
+        7: 'ac',
+        8: 'light',
+        10: 'tv_box'
       }
       return obj[this.tid]
     },
@@ -148,6 +152,18 @@ export default {
         8: '如果灯泡打开或关闭',
         10: '如果盒子打开或关闭',
         40: '如果热水器打开或关闭'
+      }
+      return obj[this.tid]
+    },
+    typeDecEn () {
+      let obj = {
+        1: 'If the volume icon appears on the TV',
+        2: 'If the TV is on or off',
+        6: 'If the fan is on or off',
+        7: 'If the air conditioner "drips" a sound',
+        8: 'If the bulb is on or off',
+        10: 'If the box is open or closed',
+        40: 'If the water heater is on or off'
       }
       return obj[this.tid]
     },
@@ -526,7 +542,7 @@ export default {
       top 24rem
       left 50%
       transform translateX(-50%)
-      width 100%
+      width calc(100% - 10rem)
       text-align center
       font-size 1.2rem
     .btn-next

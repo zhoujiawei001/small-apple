@@ -1,19 +1,19 @@
 <template>
-  <div class="appDevItem" @click="onclickItem">
-    <div class="left">
+  <div class="appDevItem">
+    <div class="left" @click="onclickItem">
       <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
       <div class="info">
         <div class="info-txt">
           {{ item.hname || item.name}}
         </div>
-        <p>{{typeName(item.tid)}}</p>
+        <p>{{$t(`pub.${typeName(item.tid)}`)}}</p>
       </div>
     </div>
     <div
       :class="['right', {'bgActive': isActive === true}]"
       @touchstart="isActive = true"
       @touchend="isActive = false">
-      <img :src="require(`../assets/switch_${item.tid === 7 ? item.isSwitch : 'off'}.png`)" alt="" @click.stop.prevent="handleSwitch()">
+      <img :src="require(`../assets/switch_${item.tid === 7 ? item.isSwitch : 'off'}.png`)" alt="" @click="handleSwitch">
     </div>
   </div>
 </template>
@@ -32,12 +32,12 @@
       typeName () {
         return val => {
           let obj = {
-            1: '电视机顶盒',
-            2: '电视机',
-            6: '风扇',
-            7: '空调',
-            8: '灯泡',
-            10: '电视盒子'
+            1: 'set_box',
+            2: 'tv',
+            6: 'fan',
+            7: 'ac',
+            8: 'light',
+            10: 'tv_box'
           }
           return obj[val]
         }
@@ -123,7 +123,7 @@
     border-radius 4px
     padding 0 .6rem 0 .8rem
     .left
-      width 68%
+      width calc(100% - 4.8rem)
       display flex
       align-items: center
       img

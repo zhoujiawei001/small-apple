@@ -207,7 +207,7 @@
       <appTipsBox :hintText="hintText" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
     <!-- 加载中 -->
-    <app-loading2 loadingTxt="正在匹配中..." v-if="loadingFlag"></app-loading2>
+    <app-loading2 v-if="loadingFlag"></app-loading2>
   </div>
 </template>
 

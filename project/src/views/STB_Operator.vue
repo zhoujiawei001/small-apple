@@ -2,7 +2,7 @@
   <div class="STB-Operator">
     <appHeader2
       style="background-color: #f2f2f2"
-      title="选择电视运营商"
+      :title="$t('operator.select_operator')"
       @back-icon="$router.go(-1)"></appHeader2>
     <main :style="styObj" class="container">
       <section
@@ -34,7 +34,7 @@
       </section>
     </main>
     <footer>
-      <span @click="goToMatch">下一步</span>
+      <span @click="goToMatch">{{$t('pub.next')}}</span>
     </footer>
   </div>
 </template>

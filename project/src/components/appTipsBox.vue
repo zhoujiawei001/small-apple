@@ -1,10 +1,10 @@
 <template>
   <div class="appTipsBox">
     <div class="content">
-      <h5>提示</h5>
+      <h5>{{$t('pub.hint')}}</h5>
       <p class="scale-1px">{{hintText}}</p>
       <div class="sure" @click="clickSure">
-        确定
+        {{$t('pub.sure')}}
       </div>
     </div>
     <div class="mask"></div>

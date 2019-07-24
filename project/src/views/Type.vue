@@ -2,7 +2,7 @@
   <div class="dev-tp">
     <appHeader2
       style="background-color: #f2f2f2"
-      title="选择遥控设备类型"
+      :title="$t('type.select_dev')"
       @back-icon="$router.go(-1)"></appHeader2>
     <main :style="styObj" class="wrapper">
       <ul class="content">
@@ -12,12 +12,12 @@
           :class="{removeRgBd: (i + 1)%3 === 0}"
           @click="handleItem(item.tid)">
           <img :src="require(`../assets/devIcon2/${item.tid}.png`)" alt="">
-          <p>{{item.name}}</p>
+          <p>{{$t(`pub.${typeName(item.tid)}`)}}</p>
         </li>
       </ul>
     </main>
     <transition name="fade">
-      <appTipsBox :hintText="hintText" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
+      <appTipsBox :hintText="$t(`type.${hintText}`)" v-if="tipsBox" @handle-sure="tipsBox = false"></appTipsBox>
     </transition>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   data () {
     return {
       tipsBox: false,
-      hintText: '添加的空调设备不能超过2个'
+      hintText: 'ac_tips'
     }
   },
   computed: {
@@ -56,6 +56,19 @@ export default {
     },
     otherDevNum () {
       return this.addedDevList.length
+    },
+    typeName () {
+      return val => {
+        let obj = {
+          1: 'set_box',
+          2: 'tv',
+          6: 'fan',
+          7: 'ac',
+          8: 'light',
+          10: 'tv_box'
+        }
+        return obj[val]
+      }
     }
   },
   created () {
@@ -81,10 +94,10 @@ export default {
     },
     handleItem (tid) {
       if (this.otherDevNum >= 15) {
-        this.hintText = '添加的遥控设备个数不能超过15个'
+        this.hintText = 'dev_tips'
         this.tipsBox = true
       } else if (tid === 7 && this.airIndexArr.length >= 2) {
-        this.hintText = '添加的空调遥控个数不能超过2个'
+        this.hintText = 'ac_tips'
         this.tipsBox = true
       } else if (tid === 1) {
         this.$store.commit('setTid', tid)

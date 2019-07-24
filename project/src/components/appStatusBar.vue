@@ -1,7 +1,7 @@
 <template>
   <div class="appStatusBar">
     <div class="left">
-      <span>在线</span>
+      <span>{{$t('home.online')}}</span>
       <p>{{devName}}</p>
     </div>
   </div>
@@ -49,5 +49,5 @@ export default {
         font-size $fontBigSize
       p
         font-size $fontSmallSize
-        margin-top .5rem
+        margin-top .2rem
 </style>

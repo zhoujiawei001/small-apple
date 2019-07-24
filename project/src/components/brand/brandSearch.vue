@@ -7,7 +7,7 @@
       ref="input"
       v-model="value"
       type="text"
-      placeholder="搜索">
+      :placeholder="$t('brand.search')">
     <img class="icon" src="../../assets/search.png" alt="">
   </div>
 </template>

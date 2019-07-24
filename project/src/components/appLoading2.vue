@@ -2,7 +2,7 @@
   <div class="loading2">
     <div class="container">
       <img src="../assets/loading3.png" alt="">
-      <p>正在匹配中...</p>
+      <p>{{$t('pub.match_now')}}</p>
     </div>
   </div>
 </template>

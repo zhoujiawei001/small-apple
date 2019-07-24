@@ -1,6 +1,6 @@
 <template>
   <div class="brandListItem">
-    <span class="title">{{title === 'com' ? '常用品牌' : title}}</span>
+    <span class="title">{{title === 'com' ? $t('brand.common') : title}}</span>
     <ul>
       <li
         v-for="(item, i) in itemArr" :key="i"

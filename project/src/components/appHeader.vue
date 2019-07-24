@@ -1,10 +1,22 @@
 <template>
   <div class="appHeader" :style="styObj">
-    <div class="back" @click="back">
-      <span></span>
+<!--    <div class="back" @click="back">-->
+<!--      <span></span>-->
+<!--    </div>-->
+<!--    <span class="title">{{title}}</span>-->
+<!--    <div class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}">-->
+<!--      <span></span>-->
+<!--    </div>-->
+    <div class="left">
+      <div class="back" @click="back">
+        <span class="icon"></span>
+      </div>
+      <span class="title">{{title}}</span>
     </div>
-    <span class="title">{{title}}</span>
-    <div class="more" @click="handleMore" :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}">
+    <div
+      class="right"
+      @click="handleMore"
+      :class="{hiddenEle: hiddenMore || curPageType === 'learnPage' || curPageType === 'matchPage'}">
       <span></span>
     </div>
   </div>
@@ -69,21 +81,27 @@ export default {
   width calc(100% - 2rem)
   z-index: 9;
   box-sizing initial
-  .back
-    height 4rem
-    width 3.2rem
-    display: flex
-    justify-content center
+  .left
+    width calc(100% - 3.2rem)
+    display flex
+    justify-content left
     align-items center
-    span
-      height 2rem
-      width 2rem
-      imgUrl('../assets/back.png')
-  .title
-    font-size 1.6rem
-    max-width 16rem
-    setEllipsisOne()
-  .more
+    .back
+      height 4rem
+      width 3.2rem
+      display: flex
+      justify-content center
+      align-items center
+      .icon
+        height 2rem
+        width 2rem
+        imgUrl('../assets/back.png')
+    .title
+      font-size 1.6rem
+      max-width 16rem
+      margin-left 1rem
+      setEllipsisOne()
+  .right
     height 4rem
     width 3.2rem
     display: flex

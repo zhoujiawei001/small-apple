@@ -1,7 +1,7 @@
 <template>
   <div class="appAddDev" @click="$router.push('./type')">
     <img src="../assets/add.png" alt="">
-    <p>添加遥控器</p>
+    <p>{{$t('home.add_control')}}</p>
   </div>
 </template>
 

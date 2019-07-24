@@ -1,8 +1,8 @@
 <template>
   <div class="indicator" @click="clickItem">
-    <div class="left" :style="{color: devStatus? '#007dff' : 'rgb(26,26,26)'}">
-      <span>指示灯</span>
-      <p>{{ devStatus ? '已开启' : '' }}</p>
+    <div class="left" :style="{color: devStatus? '#007dff' : '#000'}">
+      <span>{{$t('home.indicator')}}</span>
+      <p>{{ devStatus ? $t('home.opened') : '' }}</p>
     </div>
     <div class="right">
       <img :src="require(`../assets/indicator_${devStatus}.png`)" alt="">
@@ -50,7 +50,8 @@ export default {
         top 50%
         left 50%
         transform translate(-50%, -50%)
-        width 2.8rem
+        width 3rem
+        height 3rem
     .left
       color #fff
       position absolute
@@ -61,6 +62,6 @@ export default {
         font-size $fontBigSize
       p
         font-size $fontSmallSize
-        margin-top .4rem
+        margin-top .2rem
         color $fontColorTheme
 </style>

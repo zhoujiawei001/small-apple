@@ -2,7 +2,7 @@
   <div class="dev-brands">
     <appHeader2
       style="background-color: #f2f2f2"
-      title="选择设备品牌"
+      :title="$t('brand.select_brand')"
       @back-icon="backFn"></appHeader2>
     <brandSearch
       id="input"
@@ -25,7 +25,7 @@
         class="noData"
         v-show="keyword && keywordList.length === 0">
         <img src="../assets/noData.png" alt="">
-        <p>没有匹配结果</p>
+        <p>{{$t('brand.no_match')}}</p>
       </div>
     </main>
     <letterList

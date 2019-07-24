@@ -21,14 +21,14 @@ export default {
   position: relative
   .app_img
     position absolute
-    bottom 2rem
+    bottom .8rem
     left 50%
     margin-left -9rem
     width 18rem
     height 18rem
   .app_logo
     position absolute
-    bottom 2.4rem
-    right 2.4rem
+    bottom 1.6rem
+    right 1.6rem
     height 1.6rem
 </style>
