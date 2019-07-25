@@ -98,18 +98,15 @@ export const viewsMixin = {
         this.cmds = data.rc_command
         this.cmdObj = data
         this.typeName = data.rmodel
-        console.log('cmds', this.cmds)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
       })
     } else {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmds = this.cmdList[this.rc.rid]
-        console.log('cmds', this.cmds)
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
-          console.log('cmds', this.cmds)
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
@@ -139,6 +136,17 @@ export const viewsMixin = {
   },
   computed: {
     ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId']),
+    typesName () {
+      let obj = {
+        1: 'set_box',
+        2: 'tv',
+        6: 'fan',
+        7: 'ac',
+        8: 'light',
+        10: 'tv_box'
+      }
+      return obj[this.tid]
+    },
     cmdsKey () {
       if (this.rc.pageType === 'matchPage') {
         return Object.keys(this.cmds)
@@ -450,6 +458,7 @@ export const viewsMixin = {
         this.cmdObj = data
         this.isHasR = false
         this.typeName = data.rmodel
+        console.log('cmdObj', this.cmdObj)
         console.log('cmds', this.cmds)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
@@ -459,7 +468,7 @@ export const viewsMixin = {
     defineRc (data) {
       this.rc2 = new RC(
         data.rid,
-        data.name,
+        data.name + ' ' + this.$t(`pub.${this.typesName}`),
         this.rc.index,
         data.rc_command.power.src,
         data.be_rmodel,
@@ -529,7 +538,7 @@ export const viewsMixin = {
         let body = {
           devInfo: {
             sn: this.rc2.hid,
-            model: this.rc2.name,
+            model: this.rc2.rmodel || 'setBox',
             devType: '06C',
             manu: '092',
             prodId: this.selectRightProdId(this.tid),
@@ -540,7 +549,9 @@ export const viewsMixin = {
             swv: '1.0'
           }
         }
+        console.log('register_body', body)
         window.registerCallback2 = res => {
+          console.log('register_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
@@ -571,8 +582,9 @@ export const viewsMixin = {
             }
           }
         }
-        console.log('postYkDevToServe', body)
+        console.log('postYkDevToServe_body', body)
         window.postDeviceExtendDataByIdCallback2 = res => {
+          console.log('postYkDevToServe_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendDataById(this.rc2.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback2')

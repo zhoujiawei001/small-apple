@@ -93,7 +93,7 @@ export function getExtendToServe() {
   return new Promise(resolve => {
     try {
       window.getDeviceExtendDataCallback = res => {
-        console.log('getExtendToServe', parseHilinkData(res))
+        console.log('getExtendToServe_result', parseHilinkData(res))
         let data = parseHilinkData(res)
         if (JSON.stringify(data) === '{}') {
           resolve([])
@@ -120,15 +120,12 @@ export function postExtendToServe(rc) {
           list: list
         }
       }
-      try {
-        window.postDeviceExtendDataCallback = res => {
-          console.log('postDeviceExtendDataCallback', parseHilinkData(res))
-          resolve(parseHilinkData(res))
-        }
-        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
-      } catch (e) {
-        console.warn('无上报接口')
+      console.log('postDeviceExtendData_body', body)
+      window.postDeviceExtendDataCallback4 = res => {
+        console.log('postDeviceExtendData_result', parseHilinkData(res))
+        resolve(parseHilinkData(res))
       }
+      window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback4')
     })
   })
 }
@@ -152,11 +149,12 @@ export function modifyDevName(hid, newName) {
         }
       }
       try {
-        window.postDeviceExtendDataCallback = res => {
-          console.log('postDeviceExtendDataCallback', parseHilinkData(res))
+        console.log('postDeviceExtendData_body', body)
+        window.postDeviceExtendDataCallback3= res => {
+          console.log('postDeviceExtendData_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
-        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
+        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback3')
       } catch (e) {
         console.warn('无上报接口')
       }
@@ -183,8 +181,9 @@ export function modifyDevSwitchByHid (hid, isSwitch) {
         }
       }
       try {
+        console.log('postDeviceExtentData_body', body)
         window.postDeviceExtendDataCallback2 = res => {
-          console.log('postDeviceExtendDataCallback2', parseHilinkData(res))
+          console.log('postDeviceExtentData_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback2')
@@ -206,15 +205,12 @@ export function delAddedDev(hid) {
           list: newList
         }
       }
-      try {
-        window.postDeviceExtendDataCallback = res => {
-          console.log('postDeviceExtendDataCallback', parseHilinkData(res))
-          resolve(parseHilinkData(res))
-        }
-        window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
-      } catch (e) {
-        console.warn('无上报接口')
+      console.log('postDeviceExtendData_body', body)
+      window.postDeviceExtendDataCallback = res => {
+        console.log('postDeviceExtendData_result', body)
+        resolve(parseHilinkData(res))
       }
+      window.hilink.postDeviceExtendData(JSON.stringify(body), 'postDeviceExtendDataCallback')
     })
   })
 }
@@ -222,8 +218,9 @@ export function delAddedDev(hid) {
 /** 删除已注册的虚拟遥控器 **/
 export function removeRegisteredVirtualDevYk(devId) {
   return new Promise(resolve => {
+    console.log('removeRegistered_body', devId)
     window.delInfraredHubDeviceCallback = res => {
-      console.log('删除已注册的虚拟遥控器', JSON.parse(res))
+      console.log('removeRegistered_result', JSON.parse(res))
       resolve(JSON.parse(res))
     }
     window.hilink.deleteInfraredHubDevice(devId, 'delInfraredHubDeviceCallback')

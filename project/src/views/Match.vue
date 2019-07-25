@@ -300,7 +300,7 @@ export default {
           this.rc = {
             rid: this.secondModeList[0].rid,
             pageType: 'matchPage',
-            hname: this.$route.query.zh + this.$t(`pub.${this.typeName}`),
+            hname: this.$route.query[this.lang] + ' ' + this.$t(`pub.${this.typeName}`),
             code: this.currentCode,
             zip: this.currentZip,
             index: this.allowIndexArr[0]
@@ -319,7 +319,7 @@ export default {
           .then(data => {
             this.rc = new RC(
               data.rid,
-              data.name,
+              data.name + ' ' + this.$t(`pub.${this.typeName}`),
               this.allowIndexArr[0],
               this.currentCode,
               data.be_rmodel,
@@ -343,7 +343,7 @@ export default {
           },
           cmdList: {
             url: {
-              domain: 'http://hwh5.yaokantv.com',
+              domain: 'http://hwapi.yaokantv.com',
               path: '/huawei/l.php',
               param: {
                 m: 'live',

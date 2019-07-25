@@ -225,7 +225,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
           method: 'POST',
           param: {
@@ -241,7 +241,7 @@ export default new Vuex.Store({
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')
       })
     },
-    /** 获取设备型号数据 **/
+    /** 获取一级匹配数据 **/
     getDevModeList ({commit, state}, bid) {
       return new Promise(resolve => {
         // $http.get('/huawei/l.php', {
@@ -256,36 +256,48 @@ export default new Vuex.Store({
         //     console.log('getDevModeList', res.data.result)
         //     resolve(res.data.result)
         // })
-        let reqParams = {}
-        if (state.tid === 7) {
-          reqParams = {
-            domain: 'http://hwh5.yaokantv.com',
-            path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`,
-            method: 'POST',
-            param: {
-              m: 'live',
-              c: 'area_fname',
-              bid: bid,
-              rc_type: state.tid,
-              zip: 1
-            }
-          }
-        } else {
-          reqParams = {
-            domain: 'http://hwh5.yaokantv.com',
-            path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
-            method: 'POST',
-            param: {
-              c: 'matching1',
-              bid: bid,
-              be_rc_type: state.tid,
-              zip: 1,
-              vl: 1
-            }
+        // let reqParams = {}
+        // if (state.tid === 7) {
+        //   reqParams = {
+        //     domain: 'http://hwapi.yaokantv.com',
+        //     path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`,
+        //     method: 'POST',
+        //     param: {
+        //       m: 'live',
+        //       c: 'area_fname',
+        //       bid: bid,
+        //       rc_type: state.tid,
+        //       zip: 1
+        //     }
+        //   }
+        // } else {
+        //   reqParams = {
+        //     domain: 'http://hwapi.yaokantv.com',
+        //     path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
+        //     method: 'POST',
+        //     param: {
+        //       c: 'matching1',
+        //       bid: bid,
+        //       be_rc_type: state.tid,
+        //       zip: 1,
+        //       vl: 1
+        //     }
+        //   }
+        // }
+        let reqParams = {
+          domain: 'http://hwapi.yaokantv.com',
+          path: `/huawei/l.php?c=matching1&be_rc_type=${state.tid}&bid=${bid}`,
+          method: 'POST',
+          param: {
+            c: 'matching1',
+            bid: bid,
+            be_rc_type: state.tid
           }
         }
+        console.log('getDevModeList_body', reqParams)
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
+          console.log('getDevModeList_result', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
@@ -308,7 +320,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: `/huawei/l.php?c=matching2&bid=${state.bid}&be_rc_type=${state.tid}&group_id=${groupId}&zip=1&vl=1`,
           method: 'POST',
           param: {
@@ -330,7 +342,7 @@ export default new Vuex.Store({
     /** 获取设备码库和基本信息 **/
     getDevCodeLibAndInfo ({commit, state}, rid) {
       return new Promise(resolve => {
-        let $url = state.tid === 1? `/huawei/l.php?c=remote_details_stb&rid=${rid}` : `/huawei/l.php?c=remote_details&rid=${rid}&zip=1&real_key=1`
+        let $url = state.tid === 1? `/huawei/l.php?c=remote_details_stb&rid=${rid}&lang=${state.lang}` : `/huawei/l.php?c=remote_details&rid=${rid}&zip=1&real_key=1&lang=${state.lang}`
         // $http.get(
         //   $url
         // ).then(res => {
@@ -338,15 +350,17 @@ export default new Vuex.Store({
         //   resolve(res.data)
         // })
 
-        let $params = state.tid === 1? {c: 'remote_details_stb', rid: rid} : {c: 'remote_details', rid: rid, zip: 1, real_key: 1}
+        let $params = state.tid === 1? {c: 'remote_details_stb', rid: rid, lang: state.lang} : {c: 'remote_details', rid: rid, zip: 1, real_key: 1, lang: state.lang}
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: $url,
           method: 'POST',
           param: $params
         }
+        console.log('getDevCodeLib_body', reqParams)
         window.getRCResultCallback = res => {
           let data = parseHilinkData(res)
+          console.log('getDevCodeLib_result', data)
           resolve(data)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getRCResultCallback')
@@ -369,7 +383,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: `/huawei/l.php?c=areas&area_id=${area_id}`,
           method: 'POST',
           param: {
@@ -398,7 +412,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: `/huawei/l.php?c=providers_area_id&area_id=${area_id}`,
           method: 'POST',
           param: {
@@ -428,7 +442,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwh5.yaokantv.com',
+          domain: 'http://hwapi.yaokantv.com',
           path: `/huawei/l.php?c=remote_props&rid=${rid}`,
           method: 'POST',
           param: {

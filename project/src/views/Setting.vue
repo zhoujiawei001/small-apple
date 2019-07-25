@@ -101,6 +101,7 @@
       }
       window.deleteInfraredHubDeviceCallback = (res) => {
         const _res = JSON.parse(res)
+        console.log('deleteInfrared_result', _res)
         if (!_res.errcode) {
           delAddedDev(this.hid).then(data => {
             if (data.errcode === 0) {
@@ -110,6 +111,9 @@
                 this.loadingFlag = false
                 this.$router.push('/')
               })
+            } else {
+              this.loadingFlag = false
+              window.hilink.toast('2', this.$t('component.delete_failed'))
             }
           })
         }
@@ -153,6 +157,7 @@
       confirmDel () {
         this.loadingFlag = true
         this.delFlag = false
+        console.log('deleteInfrared_body', this.devId)
         window.hilink.deleteInfraredHubDevice(
           this.devId,
           'deleteInfraredHubDeviceCallback'

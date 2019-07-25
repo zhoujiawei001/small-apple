@@ -74,7 +74,8 @@ const en = {
     added_failed: 'Added Failed',
     download_failed: 'Failed to download',
     match_timeout: 'Match the timeout',
-    modified_success: 'Modified Successfully'
+    modified_success: 'Modified Successfully',
+    delete_failed: 'Delete Failed'
   },
   pub: {
     set_box: 'Setbox',

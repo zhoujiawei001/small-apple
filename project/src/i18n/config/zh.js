@@ -74,7 +74,8 @@ const zh = {
     added_failed: '添加遥控器失败',
     download_failed: '下载码库失败',
     match_timeout: '匹配超时',
-    modified_success: '修改成功'
+    modified_success: '修改成功',
+    delete_failed: '删除失败'
   },
   pub: {
     set_box: '电视机顶盒',
