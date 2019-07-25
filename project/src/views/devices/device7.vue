@@ -34,6 +34,7 @@
       <div class="timer-switch flex">
         <div
           class="left"
+          :class="{'btn-disable3': isSwitch === 'off'}"
           @click="closeDelayTime">
           <span class="text">{{$t('dev_ac.cancel_delay')}}</span>
         </div>
@@ -46,9 +47,9 @@
         </div>
         <div
           class="right"
-          @click="setDelayTime(2)">
+          :class="{'btn-disable3': isSwitch === 'off'}"
+          @click="setDelayTime()">
           <span class="text">{{$t('dev_ac.delay_off')}}</span>
-          <!--<p class="detail">{{currentDelayTime}}</p>-->
           <p
             class="detail"
             v-if="clickTimes > 0">
@@ -579,7 +580,7 @@
       /** 设置延时
        * @param val 1-是延时开， 2是延时关
        * **/
-      setDelayTime (val) {
+      setDelayTime () {
         this.clickTimes += this.listMin[this.clickCounts] * 60
         if (this.clickTimes >= 12 * 3600) { // 延时时间最大不得超过12个小时
           this.clickTimes = 12 * 3600
