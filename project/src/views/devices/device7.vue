@@ -7,7 +7,7 @@
       @set="moreSet"></appHeader>
     <div
       class="banner"
-      :class="{'btn-disable2': isSwitch === 'off'}"
+      :class="{'btn-disable': isSwitch === 'off'}"
       :style="bannerObj">
       <div class="temp-box">
         {{currentTemp}}<span class="circle">°</span><span style="font-size: 7rem">c</span>
@@ -20,13 +20,13 @@
       </div>
     </div>
     <div class="container">
-      <div class="btn-function flex" :class="{'btn-disable2': isSwitch === 'off'}">
+      <div class="btn-function flex" :class="{'btn-disable': isSwitch === 'off'}">
         <span class="btn" @click="changeMode">{{$t('dev_ac.mode')}}</span>
         <span class="btn" @click="changeWind">{{$t('dev_ac.speed')}}</span>
         <span class="btn" @click="changeUpDown">{{$t('dev_ac.v_swing')}}</span>
         <span class="btn" :class="{'btn-disable': !isHorizontalSwing}" @click="changeLeftRight">{{$t('dev_ac.h_swing')}}</span>
       </div>
-      <div class="change-temperature flex" :class="{'btn-disable2': isSwitch === 'off'}">
+      <div class="change-temperature flex" :class="{'btn-disable': isSwitch === 'off'}">
         <span class="btn-reduce" @click="changeTemp('-')">—</span>
         <div class="text">{{$t('dev_ac.temp')}}</div>
         <span class="btn-plus" @click="changeTemp('+')">＋</span>
@@ -151,7 +151,7 @@
             this.delayTimer = setInterval(() => {
               this.clickTimes = arr[0].endTime - Date.parse(new Date()) / 1000
               console.log('clickTimes', this.clickTimes )
-              if (this.clickTimes < 0) {
+              if (this.clickTimes <= 0) {
                 this.clearDelayTimer()
                 this.clickCounts = 0
                 this.clickTimes = 0

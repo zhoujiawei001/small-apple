@@ -33,7 +33,8 @@
                  :placeholder="$t('setting.form_placeholder')"
                  v-model="inputValue"
                  @input="handleInput()">
-          <div class="warn" v-show="warnFlag">{{$t('setting.form_tips')}}</div>
+          <div class="warn" v-show="warnFlag && !warnFlag2">{{$t('setting.form_tips')}}</div>
+          <div class="warn" v-show="warnFlag2">{{$t('setting.form_tips2')}}</div>
         </div>
         <div class="btn-groups">
           <span class="left" @click="cancelModify()">{{$t('pub.cancel')}}</span>
@@ -62,7 +63,7 @@
   import appHeader2 from '@/components/appHeader2'
   import { mapState,mapGetters } from 'vuex'
   import { modifyDevName, getExtendToServe, delAddedDev } from '@/utils/pub'
-
+  const regEn = /[/""{}\\]/;
   export default {
     name: 'Setting',
     components: {
@@ -76,6 +77,7 @@
         modifyFlag: false,
         delFlag: false,
         warnFlag: false,
+        warnFlag2: false,
         loadingFlag: false,
         devId: this.$route.query.devId,
         hid: this.$route.query.hid
@@ -141,7 +143,10 @@
       // 确定改名
       confirmModify () {
         // !this.warnFlag && (this.$emit('modifyDevName', this.inputValue))
-        if (!this.warnFlag) {
+        const val = this.$refs.input.value.trim()
+        this.warnFlag = val.length === 0 || val.length > 64
+        this.warnFlag2 = regEn.test(val)
+        if (!this.warnFlag && !this.warnFlag2) {
           window.hilink.modifyDeviceNameByDevId(
             this.devId,
             this.inputValue,
@@ -150,8 +155,8 @@
         }
       },
       handleInput () {
-        const val = this.$refs.input.value.trim()
-        this.warnFlag = val.length === 0 || val.length > 64
+        this.warnFlag = false
+        this.warnFlag2 = false
       },
       // 确定删除
       confirmDel () {
@@ -168,6 +173,7 @@
         this.inputValue = this.devName
         this.modifyFlag = false
         this.warnFlag = false
+        this.warnFlag2= false
       },
       showInput () {
         this.modifyFlag = true
@@ -268,10 +274,12 @@
 
             &:focus
               outline-color transparent
+            &::-webkit-input-placeholder
+              color: rgba(0,0,0,.2)
 
           .warn
             margin-top .2rem
-            setFont(1rem, red, left, 600)
+            setFont(1.2rem, rgb(255,51,32), left)
 
     .del-dev
       position absolute

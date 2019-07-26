@@ -55,7 +55,8 @@ const zh = {
     remove_dev: '删除设备',
     learn: '遥控器按键学习',
     remove_tips: '此操作会清除手机和智能家居云中有关该设备的所有数据。设备删除后，若再次使用，需重新添加。',
-    form_tips: '请输入1-64个字符',
+    form_tips: '请输入1-64位字符',
+    form_tips2: '遥控器名称不能包含特殊字符',
     form_placeholder: '请输入遥控器名称',
     removing: '正在删除...'
   },
