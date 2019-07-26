@@ -6,6 +6,7 @@
         <img src="../assets/loading3.png" alt="">
       </div>
     </div>
+    <div class="mask"></div>
   </div>
 </template>
 
@@ -20,10 +21,10 @@
   @import "../style/mixin.styl"
   .loading
     position absolute
-    background rgba(0, 0, 0, .3)
     setWH()
     top 0
-    z-index: 99;
+    left 0
+    z-index: 9;
     .container
       position absolute
       background #fff
@@ -33,6 +34,7 @@
       left 50%
       transform translateX(-50%)
       padding 1rem 1.6rem
+      z-index: 9;
       setPosUseFlexInit(row, space-between, center)
       .text
         setFont(1.4rem)

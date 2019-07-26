@@ -4,6 +4,7 @@
       <img src="../assets/loading3.png" alt="">
       <p>{{$t('pub.match_now')}}</p>
     </div>
+    <div class="mask"></div>
   </div>
 </template>
 
@@ -16,16 +17,17 @@
 <style scoped lang="stylus">
   @import "../style/mixin.styl"
   .loading2
-    position absolute
-    background rgba(0, 0, 0, .2)
+    position fixed
     setWH()
-    pointer-events none
     top 0
+    left 0
+    z-index 9
     .container
       position absolute
       padding 1.6rem
       top 50%
       left 50%
+      z-index: 9
       transform translate(-50%, -50%)
       background-color: #fff;
       display: flex

@@ -313,7 +313,6 @@ export default {
           })
         })
       } else {
-        this.tips = true
         this.handleMatchTimeout()
         this.getDevCodeLibAndInfo(this.currentRid)
           .then(data => {
@@ -329,6 +328,7 @@ export default {
               '',
               assembleTS(),
               this.currentZip)
+            this.tips = true
             this.setUrlDomainToDev(this.rc)
           })
       }
@@ -355,7 +355,7 @@ export default {
           }
         }
       }
-      this.sendBodyInMatch(body).then(data => {
+      sendBodyToDev2(body, 'setDeviceInfoCallbackInMatch1').then(data => {
         if (data.errcode) {
           this.handleMatchFailedFun()
         }
@@ -367,7 +367,7 @@ export default {
         let body = {
           devInfo: {
             sn: this.rc.hid,
-            model: this.rc.name,
+            model: this.rc.rmodel || 'ac',
             devType: '06C',
             manu: '092',
             prodId: this.selectRightProdId(this.rc.tid),
@@ -378,8 +378,9 @@ export default {
             swv: '1.0'
           }
         }
+        console.log('register_body', body)
         window.registerCallback = res => {
-          console.log('注册虚拟设备返回码', parseHilinkData(res))
+          console.log('register_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
@@ -410,21 +411,12 @@ export default {
             }
           }
         }
+        console.log('postYkDevToServe_body', body)
         window.postDeviceExtendDataByIdCallback = res => {
+          console.log('postYkDevToServe_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
         window.hilink.postDeviceExtendDataById(this.rc.devId, JSON.stringify(body), 'postDeviceExtendDataByIdCallback')
-      })
-    },
-    /** match页面的下发数据 **/
-    sendBodyInMatch (body) {
-      console.log('body', body)
-      return new Promise(resolve => {
-        window.setDeviceInfoCallbackInMatch = res => {
-          console.log('setDeviceInfoCallbackInMatch', JSON.parse(res))
-          resolve(JSON.parse(res))
-        }
-        window.hilink.setDeviceInfo('0', JSON.stringify(body), 'setDeviceInfoCallbackInMatch')
       })
     },
     /** 点击返回 **/

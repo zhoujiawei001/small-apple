@@ -496,21 +496,10 @@ export const viewsMixin = {
           }
         }
       }
-      this.sendBodyInMatch(body).then(data => {
+      sendBodyToDev2(body, 'setDeviceInfoCallbackInMatch2').then(data => {
         if (data.errcode) {
           this.handleMatchFailedFun()
         }
-      })
-    },
-    /** match页面的下发数据 **/
-    sendBodyInMatch (body) {
-      console.log('body', body)
-      return new Promise(resolve => {
-        window.setDeviceInfoCallbackInMatch = res => {
-          console.log('setDeviceInfoCallbackInMatch', JSON.parse(res))
-          resolve(JSON.parse(res))
-        }
-        window.hilink.setDeviceInfo('0', JSON.stringify(body), 'setDeviceInfoCallbackInMatch')
       })
     },
     /** 匹配超时处理 **/
