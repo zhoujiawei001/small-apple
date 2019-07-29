@@ -582,8 +582,8 @@
        * **/
       setDelayTime () {
         this.clickTimes += this.listMin[this.clickCounts] * 60
-        if (this.clickTimes >= 12 * 3600) { // 延时时间最大不得超过12个小时
-          this.clickTimes = 12 * 3600
+        if (this.clickTimes >= 24 * 3600) { // 延时时间最大不得超过12个小时
+          this.clickTimes = 24 * 3600
         }
         this.clickCounts++
         if (this.clickTimes)

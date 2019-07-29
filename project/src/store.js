@@ -256,44 +256,44 @@ export default new Vuex.Store({
         //     console.log('getDevModeList', res.data.result)
         //     resolve(res.data.result)
         // })
-        // let reqParams = {}
-        // if (state.tid === 7) {
-        //   reqParams = {
-        //     domain: 'http://hwapi.yaokantv.com',
-        //     path: `/huawei/l.php?m=live&c=area_fname&bid=${bid}&rc_type=${state.tid}&zip=1`,
-        //     method: 'POST',
-        //     param: {
-        //       m: 'live',
-        //       c: 'area_fname',
-        //       bid: bid,
-        //       rc_type: state.tid,
-        //       zip: 1
-        //     }
-        //   }
-        // } else {
-        //   reqParams = {
-        //     domain: 'http://hwapi.yaokantv.com',
-        //     path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
-        //     method: 'POST',
-        //     param: {
-        //       c: 'matching1',
-        //       bid: bid,
-        //       be_rc_type: state.tid,
-        //       zip: 1,
-        //       vl: 1
-        //     }
-        //   }
-        // }
-        let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
-          path: `/huawei/l.php?c=matching1&be_rc_type=${state.tid}&bid=${bid}`,
-          method: 'POST',
-          param: {
-            c: 'matching1',
-            bid: bid,
-            be_rc_type: state.tid
+        let reqParams = {}
+        if (state.tid === 7) {
+          reqParams = {
+            domain: 'http://hwapi.yaokantv.com',
+            path: `/huawei/l.php?c=area_fname&rc_type=7&bid=${bid}&zip=1&lang=${state.lang}`,
+            method: 'POST',
+            param: {
+              c: 'area_fname',
+              rc_type: state.tid,
+              bid: bid,
+              zip: 1,
+              lang: state.lang
+            }
+          }
+        } else {
+          reqParams = {
+            domain: 'http://hwapi.yaokantv.com',
+            path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
+            method: 'POST',
+            param: {
+              c: 'matching1',
+              bid: bid,
+              be_rc_type: state.tid,
+              zip: 1,
+              vl: 1
+            }
           }
         }
+        // let reqParams = {
+        //   domain: 'http://hwapi.yaokantv.com',
+        //   path: `/huawei/l.php?c=matching1&be_rc_type=${state.tid}&bid=${bid}`,
+        //   method: 'POST',
+        //   param: {
+        //     c: 'matching1',
+        //     bid: bid,
+        //     be_rc_type: state.tid
+        //   }
+        // }
         console.log('getDevModeList_body', reqParams)
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)

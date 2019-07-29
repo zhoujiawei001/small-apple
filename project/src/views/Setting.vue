@@ -50,7 +50,7 @@
         <div class="btn-groups">
           <span class="left" @click="delFlag=false">{{$t('pub.cancel')}}</span>
           <span class="middle"></span>
-          <span class="right" @click="confirmDel()">{{$t('pub.sure')}}</span>
+          <span class="right" @click="confirmDel()">{{$t('pub.remove')}}</span>
         </div>
       </div>
     </div>
