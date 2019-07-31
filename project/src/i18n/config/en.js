@@ -51,10 +51,10 @@ const en = {
   },
   setting: {
     set: 'Set',
-    control_name: 'Remote name',
-    remove_dev: 'Remove device',
+    control_name: 'Remote control name',
+    remove_dev: 'Remove remote control',
     learn: 'Learning',
-    remove_tips: 'This will erase all data for this device from the device and cloud.You will need to add the device again to continue using it.',
+    remove_tips: 'This will erase all data for this device from the remote control and cloud.You will need to add the device again to continue using it.',
     form_tips: 'Must be 1-64 characters',
     form_tips2: 'Name cannot contain special characters',
     form_placeholder: 'Please enter name',

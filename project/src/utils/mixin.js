@@ -199,6 +199,7 @@ export const viewsMixin = {
     ...mapActions(['getDevCodeLibAndInfo']),
     /** 下发指令 **/
     sendBody (val) {
+      console.log('触发了click')
       if (val === 'tvpower' && this.cmdsKey.includes('av/tv')) {
         if (this.rc.pageType === 'controlPage') {
           console.log('sendBody_control', 'av/tv')
@@ -277,6 +278,19 @@ export const viewsMixin = {
               }
             }
           })
+        } else if (this.rc.pageType === 'learnPage') {
+          console.log('sendBody_learn', val)
+          let body = {
+            batch: {
+              controlKey: {
+                controlKey: this.calcExpandControlKey(val)
+              },
+              deviceList: {
+                list: [this.rc]
+              }
+            }
+          }
+          sendBodyToDev(body)
         }
       }
     },
@@ -351,7 +365,7 @@ export const viewsMixin = {
         clearTimeout(this.longClickTimer);
         this.longClickTimer = null
         if (this.longClickNum === 0) {
-          this.sendBody2(val)
+          // this.sendBody2(val)
         }
       }
     },

@@ -32,7 +32,7 @@
         <div class="btn-switch"
           :class="{'btn-disable': tips || total === '--'}"
           @click="sendCode('switch')">
-          <img src="../assets/blue/fan-switch.png" alt="">
+          <img :src="matchIcon" alt="">
         </div>
         <div class="btn-plus"
            :class="[{'btn-disable': tips || total === '--'}, {'active': isActivePl}]"
@@ -187,6 +187,9 @@ export default {
     },
     currentBid () {
       return this.modeList[this.currentNum - 1].bid
+    },
+    matchIcon () {
+      return this.tid === 1? require('../assets/black/icon_vol.png') : require('../assets/blue/fan-switch.png')
     }
   },
   created () {
