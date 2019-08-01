@@ -57,6 +57,7 @@ const zh = {
     remove_tips: '此操作会清除手机和智能家居云中有关该遥控器的所有数据。遥控器删除后，若再次使用，需重新添加。',
     form_tips: '请输入1-64位字符',
     form_tips2: '遥控器名称不能包含特殊字符',
+    form_tips3: '遥控器名称不能全为空格',
     form_placeholder: '请输入遥控器名称',
     removing: '正在删除...'
   },

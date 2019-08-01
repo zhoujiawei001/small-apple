@@ -57,6 +57,7 @@ const en = {
     remove_tips: 'This will erase all data for this device from the remote control and cloud.You will need to add the device again to continue using it.',
     form_tips: 'Must be 1-64 characters',
     form_tips2: 'Name cannot contain special characters',
+    form_tips3: 'Remote control name cannot be empty. ',
     form_placeholder: 'Please enter name',
     removing: 'deleting...'
   },

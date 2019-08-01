@@ -33,8 +33,9 @@
                  :placeholder="$t('setting.form_placeholder')"
                  v-model="inputValue"
                  @input="handleInput()">
-          <div class="warn" v-show="warnFlag && !warnFlag2">{{$t('setting.form_tips')}}</div>
-          <div class="warn" v-show="warnFlag2">{{$t('setting.form_tips2')}}</div>
+          <div class="warn" v-show="warnValue === 1">{{$t('setting.form_tips')}}</div>
+          <div class="warn" v-show="warnValue === 2">{{$t('setting.form_tips2')}}</div>
+          <div class="warn" v-show="warnValue === 3">{{$t('setting.form_tips3')}}</div>
         </div>
         <div class="btn-groups">
           <span class="left" @click="cancelModify()">{{$t('pub.cancel')}}</span>
@@ -64,6 +65,7 @@
   import { mapState,mapGetters } from 'vuex'
   import { modifyDevName, getExtendToServe, delAddedDev } from '@/utils/pub'
   const regEn = /[/""{}\\]/;
+  const regAllSpace = /^[ ]+$/;
   export default {
     name: 'Setting',
     components: {
@@ -76,8 +78,7 @@
         inputValue: '',
         modifyFlag: false,
         delFlag: false,
-        warnFlag: false,
-        warnFlag2: false,
+        warnValue: 0, // 0-输入字符格式正确，1-请输入1-64位字符，2-遥控器名称不能包含特殊字符，3-遥控器名称不能全为空格
         loadingFlag: false,
         devId: this.$route.query.devId,
         hid: this.$route.query.hid
@@ -142,11 +143,18 @@
     methods: {
       // 确定改名
       confirmModify () {
-        // !this.warnFlag && (this.$emit('modifyDevName', this.inputValue))
-        const val = this.$refs.input.value.trim()
-        this.warnFlag = val.length === 0 || val.length > 64
-        this.warnFlag2 = regEn.test(val)
-        if (!this.warnFlag && !this.warnFlag2) {
+        const val = this.$refs.input.value
+        if (val.length === 0 || val.length > 64) {
+          this.warnValue = 1;
+        } else if (regEn.test(val)){
+          this.warnValue = 2;
+        } else if (regAllSpace.test(val)) {
+          this.warnValue = 3;
+        } else {
+          this.warnValue = 0;
+        }
+        console.log('warnValue', this.warnValue)
+        if (!this.warnValue) {
           window.hilink.modifyDeviceNameByDevId(
             this.devId,
             this.inputValue,
@@ -155,8 +163,7 @@
         }
       },
       handleInput () {
-        this.warnFlag = false
-        this.warnFlag2 = false
+        this.warnValue = 0;
       },
       // 确定删除
       confirmDel () {
@@ -172,8 +179,7 @@
       cancelModify () {
         this.inputValue = this.devName
         this.modifyFlag = false
-        this.warnFlag = false
-        this.warnFlag2= false
+        this.warnValue= 0;
       },
       showInput () {
         this.modifyFlag = true
