@@ -237,6 +237,7 @@ export default new Vuex.Store({
         }
         window.getBrandResultCallback = res => {
           let data = parseHilinkData(res)
+          console.log('获取设备品牌', data.result.slice(0, 10))
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getBrandResultCallback')

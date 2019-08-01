@@ -68,7 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['statusBarHg', 'brandScrollPos', 'tid']),
+    ...mapState(['statusBarHg', 'brandScrollPos', 'tid', 'lang']),
     ...mapGetters(['screenRem']),
     styObj () {
       return {
@@ -123,8 +123,9 @@ export default {
         })
       }
       this.listData.com = this.originalList.filter(item => item.common === 1)
+      console.log('lang', this.lang)
       this.letterArr.forEach(key => {
-        this.listData[key] = this.originalList.filter(item => item.en.slice(0, 1).toUpperCase() === key)
+        this.listData[key] = this.originalList.filter(item => this.lang === 'en'? item.en.slice(0, 1).toUpperCase() === key : item.sort_index.toUpperCase() === key)
       })
       for (let key in this.listData) {
         if (this.listData[key].length === 0) {
