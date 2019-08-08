@@ -48,6 +48,8 @@ export default {
       span
         font-size $fontBigSize
       p
+        width: 18rem;
+        setEllipsisOne()
         font-size $fontSmallSize
         margin-top .2rem
 </style>

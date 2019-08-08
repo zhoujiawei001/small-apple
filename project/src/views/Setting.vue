@@ -232,8 +232,11 @@
           setFont($fontMiddleSize)
 
         .right
+          width 18rem;
+          setEllipsisOne()
           setFont($fontSmallSize, rgba(0,0,0,.4))
           margin-right 1.3rem
+          text-align right
 
         .arrow-right
           border 1px solid #c8c8cd
