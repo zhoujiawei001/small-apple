@@ -364,7 +364,7 @@ export default {
         }
       })
     },
-    /** 注册虚拟设备到九宫格 **/
+    /** 引用蓝牙注册方式注册虚拟设备到九宫格 **/
     registerVirtualDev () {
       return new Promise(resolve => {
         let body = {

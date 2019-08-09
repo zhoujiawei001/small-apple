@@ -51,7 +51,7 @@ const en = {
   },
   setting: {
     set: 'Set',
-    control_name: 'Remote control name',
+    control_name: 'Control name',
     remove_dev: 'Remove remote control',
     learn: 'Learning',
     remove_tips: 'This will erase all data for this device from the remote control and cloud.You will need to add the device again to continue using it.',

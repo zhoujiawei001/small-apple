@@ -95,7 +95,7 @@ export const viewsMixin = {
   created () {
     if (this.rc.pageType === 'matchPage') {
       this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
-        this.cmds = data.rc_command
+        this.cmds = JSON.parse(JSON.stringify(data.rc_command))
         this.cmdObj = data
         this.typeName = data.rmodel
         this.defineRc(data)

@@ -247,3 +247,9 @@ export function matchTimeoutSendOrder () {
   }
   sendBodyToDev(body)
 }
+
+/** 判断是Android还是iOS手机 **/
+export function isAndroid() {
+  let u = navigator.userAgent;
+  return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+}
