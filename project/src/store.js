@@ -50,8 +50,9 @@ export default new Vuex.Store({
     proIndex: 18, // 省的位置
     citiesIndex: 14, // 市的位置
     operatorIndex: 0, // 运营商的位置
-    lang: window.navigator.language.split('-')[0] || 'zh'
+    lang: window.navigator.language.split('-')[0] || 'zh',
     // lang: 'en'
+    domain: 'http://hwapi.yaokantv.com'
   },
   getters: {
     screenRem (state) { // 当前手机屏幕下1rem为多少px
@@ -192,7 +193,7 @@ export default new Vuex.Store({
       }
     },
     /** 获取设备类型数据 **/
-    getDevTypeList ({ commit, getters}) {
+    getDevTypeList ({ commit, getters, state}) {
       if (getters.typeList.length > 0) return
       // $http.get('/huawei/l.php', {
       //   params: {
@@ -205,7 +206,7 @@ export default new Vuex.Store({
       // })
 
       let reqParams = {
-        domain: 'http://hwh5.yaokantv.com',
+        domain: state.domain,
         path: '/huawei/l.php',
         method: 'GET',
         param: {
@@ -226,7 +227,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: `/huawei/l.php?m=live&c=fname_list&rc_type=${state.tid}`,
           method: 'POST',
           param: {
@@ -261,7 +262,7 @@ export default new Vuex.Store({
         let reqParams = {}
         if (state.tid === 7) {
           reqParams = {
-            domain: 'http://hwapi.yaokantv.com',
+            domain: state.domain,
             path: `/huawei/l.php?c=area_fname&rc_type=7&bid=${bid}&zip=1&lang=${state.lang}`,
             method: 'POST',
             param: {
@@ -274,7 +275,7 @@ export default new Vuex.Store({
           }
         } else {
           reqParams = {
-            domain: 'http://hwapi.yaokantv.com',
+            domain: state.domain,
             path: `/huawei/l.php?c=matching1&bid=${bid}&be_rc_type=${state.tid}&zip=1&vl=1`,
             method: 'POST',
             param: {
@@ -322,7 +323,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: `/huawei/l.php?c=matching2&bid=${state.bid}&be_rc_type=${state.tid}&group_id=${groupId}&zip=1&vl=1`,
           method: 'POST',
           param: {
@@ -354,7 +355,7 @@ export default new Vuex.Store({
 
         let $params = state.tid === 1? {c: 'remote_details_stb', rid: rid, lang: state.lang} : {c: 'remote_details', rid: rid, zip: 1, real_key: 1, lang: state.lang}
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: $url,
           method: 'POST',
           param: $params
@@ -385,7 +386,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: `/huawei/l.php?c=areas&area_id=${area_id}`,
           method: 'POST',
           param: {
@@ -414,7 +415,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: `/huawei/l.php?c=providers_area_id&area_id=${area_id}`,
           method: 'POST',
           param: {
@@ -444,7 +445,7 @@ export default new Vuex.Store({
         // })
 
         let reqParams = {
-          domain: 'http://hwapi.yaokantv.com',
+          domain: state.domain,
           path: `/huawei/l.php?c=remote_props&rid=${rid}`,
           method: 'POST',
           param: {
