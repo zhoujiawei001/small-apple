@@ -79,7 +79,7 @@
         setPosUseFlexInit(row, center, center, wrap)
         i
           display inline-block
-          width 6.4rem
+          width 7.2rem
           height 3.6rem
           line-height 3.6rem
           setEllipsisOne()

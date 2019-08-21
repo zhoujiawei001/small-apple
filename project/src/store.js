@@ -335,8 +335,10 @@ export default new Vuex.Store({
             vl: 1
           }
         }
+        console.log('getSecondLevelMatchData_body', reqParams)
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
+          console.log('getSecondLevelMatchData_result', data)
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
