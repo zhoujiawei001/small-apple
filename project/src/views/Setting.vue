@@ -143,6 +143,9 @@
               window.hilink.toast('2', this.$t('component.delete_failed'))
             }
           })
+        } else {
+          this.loadingFlag = false
+          window.hilink.toast('2', this.$t('component.delete_failed'))
         }
       }
     },

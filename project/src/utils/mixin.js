@@ -1,5 +1,5 @@
 import { mapActions, mapState } from 'vuex'
-import { sendBodyToDev, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk, matchTimeoutSendOrder } from './pub'
+import { sendBodyToDev, getKeyInKeyValue, sendBodyToDev2, watchVirtualKey, RC, assembleTS, parseHilinkData, postExtendToServe, removeRegisteredVirtualDevYk, matchTimeoutSendOrder } from './pub'
 
 export const viewsMixin = {
   data () {
@@ -41,7 +41,7 @@ export const viewsMixin = {
         } else if (newVal === 3) {
           this.learnBoxText = this.$t('component.learn_txt4')
           this.learnStage = 0
-          window.hilink.toast('2', this.$t('component.failed'))
+          window.hilink.toast('2', this.$t('component.learn_failed'))
         }
         this.isLearn = false
         clearInterval(this.learnTimeoutTimer)
@@ -64,6 +64,9 @@ export const viewsMixin = {
                     if (data3.errcode === 0) {
                       let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
                       cloneList.push(this.rc2)
+                      console.log('roomName', this.roomName)
+                      console.log('devID', this.rc2.devId)
+                      window.hilink.modifyDeviceRoomNameByDeviceId(this.rc2.devId, this.roomName, 'app.modifyRoomCallback')
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
@@ -107,6 +110,7 @@ export const viewsMixin = {
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
+          console.log('re_command', JSON.parse(JSON.stringify(data.rc_command)));
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
@@ -135,7 +139,7 @@ export const viewsMixin = {
     })
   },
   computed: {
-    ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId']),
+    ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId', 'roomName']),
     typesName () {
       let obj = {
         1: 'set_box',
@@ -146,6 +150,15 @@ export const viewsMixin = {
         10: 'tv_box'
       }
       return obj[this.tid]
+    },
+    cmdsKey2 () { // 专门做按键的显示隐藏
+      if (this.rc.pageType === 'matchPage') {
+        console.log('getKeyInKey_match', getKeyInKeyValue(this.cmds, 'key_alias'))
+        return getKeyInKeyValue(this.cmds, 'key_alias')
+      } else {
+        console.log('getKeyInKey', getKeyInKeyValue(this.cmds, 'key_alias'))
+        return this._.union(getKeyInKeyValue(this.cmds, 'key_alias'), this.hasLearnCodes)
+      }
     },
     cmdsKey () {
       if (this.rc.pageType === 'matchPage') {

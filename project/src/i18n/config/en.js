@@ -32,7 +32,7 @@ const en = {
     boot: 'Boot'
   },
   dev_fan: {
-    speed: 'Speed',
+    fanspeed: 'Speed',
     mode: 'Mode',
     timer: 'Timer',
     oscillation: 'Oscillation'

@@ -44,7 +44,7 @@ export default new Vuex.Store({
     ],
     controlKey: {
       feedKey: 0
-    }, // 学习返回码 0-学习失败/超时， 1-开始学习，2-学习成功
+    }, // 学习返回码：2-学习成功, 3-学习失败/超时。 学习发送码：0-结束学习， 1-开始学习，
     secondListTotal: '--', // 二级匹配总数
     secondList: [],// 二级匹配rid集合
     proIndex: 18, // 省的位置
@@ -152,7 +152,7 @@ export default new Vuex.Store({
           let data = parseHilinkData(res)
           state.appDevId = data.devId
           commit('setDevName', data.devName)
-          commit('setRoomName', `(${data.roomName})`)
+          commit('setRoomName', data.roomName)
           console.log('状态全集', data)
           data.services.forEach(item => {
             window.app.changeSerData(item)
@@ -189,6 +189,10 @@ export default new Vuex.Store({
         getRCTypeResultCallback (res) {
           let data = parseHilinkData(res)
           commit('setTypeData', data.result)
+        },
+        /** 修改房间名 **/
+        modifyRoomCallback (res) {
+          console.log('modifyRoomCallback', res)
         }
       }
     },

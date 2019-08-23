@@ -253,3 +253,12 @@ export function isAndroid() {
   let u = navigator.userAgent;
   return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
 }
+
+/** 获取对象中某个属性下的value值 **/
+export function getKeyInKeyValue (obj, key) {
+  let arr = []
+  for (let i in obj) {
+    arr.push(obj[i][key])
+  }
+  return arr
+}

@@ -32,7 +32,7 @@ const zh = {
     boot: '主页'
   },
   dev_fan: {
-    speed: '风速',
+    fanspeed: '风速',
     mode: '模式',
     timer: '定时',
     oscillation: '摇头'

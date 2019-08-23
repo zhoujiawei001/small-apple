@@ -106,7 +106,7 @@
         fnList: [
           {
             text: '风速',
-            value: 'speed'
+            value: 'fanspeed'
           },
           {
             text: '模式',
