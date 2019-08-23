@@ -110,7 +110,6 @@ export const viewsMixin = {
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
-          console.log('re_command', JSON.parse(JSON.stringify(data.rc_command)));
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
@@ -481,12 +480,10 @@ export const viewsMixin = {
     pubFun () {
       let $rid = this.secondList[this.curNum - 1].rid
       this.getDevCodeLibAndInfo($rid).then(data => {
-        this.cmds = data.rc_command
-        this.cmdObj = data
+        this.cmds = JSON.parse(JSON.stringify(data.rc_command))
+        this.cmdObj = JSON.parse(JSON.stringify(data))
         this.isHasR = false
         this.typeName = data.rmodel
-        console.log('cmdObj', this.cmdObj)
-        console.log('cmds', this.cmds)
         this.defineRc(data)
         this.isHasRFn(Object.keys(this.cmds))
       })
