@@ -12,7 +12,7 @@ export function parseHilinkData (resData) {
 }
 
 export function sendBodyToDev (body) {
-  console.log('body', body)
+  console.log('body', JSON.parse(JSON.stringify(body)))
   if (vibration()) {
     navigator.vibrate(100)
   }

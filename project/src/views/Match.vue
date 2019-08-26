@@ -134,7 +134,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tid','appDevId', 'addedDevList', 'loadRes', 'lang','roomName']),
+    ...mapState(['tid','appDevId', 'addedDevList', 'loadRes', 'lang','roomName', 'domain']),
     typeName () {
       let obj = {
         1: 'set_box',
@@ -349,7 +349,7 @@ export default {
           },
           cmdList: {
             url: {
-              domain: 'http://hwapi.yaokantv.com',
+              domain: this.domain,
               path: '/huawei/l.php',
               param: {
                 m: 'live',

@@ -64,8 +64,6 @@ export const viewsMixin = {
                     if (data3.errcode === 0) {
                       let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
                       cloneList.push(this.rc2)
-                      console.log('roomName', this.roomName)
-                      console.log('devID', this.rc2.devId)
                       window.hilink.modifyDeviceRoomNameByDeviceId(this.rc2.devId, this.roomName, 'app.modifyRoomCallback')
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
@@ -98,7 +96,7 @@ export const viewsMixin = {
   created () {
     if (this.rc.pageType === 'matchPage') {
       this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
-        this.cmds = JSON.parse(JSON.stringify(data.rc_command))
+        this.cmds = data.rc_command
         this.cmdObj = data
         this.typeName = data.rmodel
         this.defineRc(data)
@@ -107,9 +105,11 @@ export const viewsMixin = {
     } else {
       if (this.cmdList.hasOwnProperty(this.rc.rid)) {
         this.cmds = this.cmdList[this.rc.rid]
+        console.log('rc_command', JSON.parse(JSON.stringify(this.cmds)))
       } else {
         this.getDevCodeLibAndInfo(this.rc.rid).then(data => {
           this.cmds = data.rc_command
+          console.log('rc_command', JSON.parse(JSON.stringify(data.rc_command)))
           this.$store.commit('updateCmdList', {
             [this.rc.rid]: data.rc_command
           })
@@ -138,7 +138,7 @@ export const viewsMixin = {
     })
   },
   computed: {
-    ...mapState(['tid', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId', 'roomName']),
+    ...mapState(['tid', 'domain', 'addedDevList', 'cmdList', 'statusBarHg', 'controlKey', 'secondListTotal', 'secondList', 'loadRes', 'appDevId', 'roomName']),
     typesName () {
       let obj = {
         1: 'set_box',
@@ -513,7 +513,7 @@ export const viewsMixin = {
           },
           cmdList: {
             url: {
-              domain: 'http://hwh5.yaokantv.com',
+              domain: this.domain,
               path: '/huawei/l.php',
               param: $params
             }
