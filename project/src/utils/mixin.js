@@ -64,7 +64,13 @@ export const viewsMixin = {
                     if (data3.errcode === 0) {
                       let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
                       cloneList.push(this.rc2)
-                      window.hilink.modifyDeviceRoomNameByDeviceId(this.rc2.devId, this.roomName, 'app.modifyRoomCallback')
+                      console.log('devId', this.rc2.devId);
+                      console.log('roomName', this.roomName);
+                      try {
+                        window.hilink.modifyDeviceRoomNameByDeviceId(this.rc2.devId, this.roomName, 'app.modifyRoomCallback')
+                      } catch (e) {
+                        console.log(e)
+                      }
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
