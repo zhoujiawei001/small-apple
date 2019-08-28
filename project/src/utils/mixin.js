@@ -71,6 +71,11 @@ export const viewsMixin = {
                       } catch (e) {
                         console.log(e)
                       }
+                      window.hilink.modifyDeviceNameByDevId(
+                        this.rc2.devId,
+                        this.$t(`pub.${this.typesName}`),
+                        'app.modifyDeviceNameByDevIdCallback2'
+                      )
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
@@ -498,7 +503,7 @@ export const viewsMixin = {
     defineRc (data) {
       this.rc2 = new RC(
         data.rid,
-        data.name + ' ' + this.$t(`pub.${this.typesName}`),
+        this.$t(`pub.${this.typesName}`),
         this.rc.index,
         data.rc_command.power.src,
         data.be_rmodel,

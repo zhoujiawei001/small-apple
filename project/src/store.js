@@ -193,6 +193,10 @@ export default new Vuex.Store({
         /** 修改房间名 **/
         modifyRoomCallback (res) {
           console.log('modifyRoomCallback', res)
+        },
+        /** 修改名称回调 **/
+        modifyDeviceNameByDevIdCallback2 (res) {
+          console.log('modifyDeviceNameByDevIdCallback2', res)
         }
       }
     },

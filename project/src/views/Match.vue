@@ -109,6 +109,11 @@ export default {
                       } catch (e) {
                         console.log(e)
                       }
+                      window.hilink.modifyDeviceNameByDevId(
+                        this.rc.devId,
+                        this.$t(`pub.${this.typeName}`),
+                        'app.modifyDeviceNameByDevIdCallback2'
+                      )
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       this.$router.push('/')
@@ -328,7 +333,7 @@ export default {
           .then(data => {
             this.rc = new RC(
               data.rid,
-              data.name + ' ' + this.$t(`pub.${this.typeName}`),
+              this.$t(`pub.${this.typeName}`),
               this.allowIndexArr[0],
               this.currentCode,
               data.be_rmodel,
