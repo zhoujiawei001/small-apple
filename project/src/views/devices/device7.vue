@@ -228,7 +228,8 @@
             name: this.title,
             hid: this.rc.hid,
             devId: this.rc.devId,
-            tid: this.rc.tid
+            tid: this.rc.tid,
+            index: this.rc.index
           }
         })
       },
