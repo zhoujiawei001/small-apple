@@ -102,8 +102,6 @@ export default {
                     if (data3.errcode === 0) {
                       let cloneList = JSON.parse(JSON.stringify(this.addedDevList))
                       cloneList.push(this.rc)
-                      console.log('roomName', this.roomName)
-                      console.log('devID', this.rc.devId)
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
                       setTimeout(() => {
@@ -113,8 +111,8 @@ export default {
                           console.log(e)
                         }
                         window.hilink.modifyDeviceNameByDevId(
-                          this.rc2.devId,
-                          this.$t(`pub.${this.typesName}`),
+                          this.rc.devId,
+                          this.$t(`pub.${this.typeName}`),
                           'app.modifyDeviceNameByDevIdCallback2'
                         )
                         this.$router.push('/')

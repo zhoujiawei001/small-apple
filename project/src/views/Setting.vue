@@ -138,8 +138,10 @@
                 this.delLocalData()
                 this.loadingFlag = false
                 let $body = {
-                  controlKey: {
-                    delIdx: this.index
+                  batch: {
+                    controlKey: {
+                      delIdx: this.index
+                    }
                   }
                 };
                 console.log($body);
