@@ -104,19 +104,21 @@ export default {
                       cloneList.push(this.rc)
                       console.log('roomName', this.roomName)
                       console.log('devID', this.rc.devId)
-                      try {
-                        window.hilink.modifyDeviceRoomNameByDeviceId(this.rc.devId, this.roomName, 'app.modifyRoomCallback')
-                      } catch (e) {
-                        console.log(e)
-                      }
-                      window.hilink.modifyDeviceNameByDevId(
-                        this.rc.devId,
-                        this.$t(`pub.${this.typeName}`),
-                        'app.modifyDeviceNameByDevIdCallback2'
-                      )
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
-                      this.$router.push('/')
+                      setTimeout(() => {
+                        try {
+                          window.hilink.modifyDeviceRoomName(this.roomName, 'app.modifyRoomCallback')
+                        } catch (e) {
+                          console.log(e)
+                        }
+                        window.hilink.modifyDeviceNameByDevId(
+                          this.rc2.devId,
+                          this.$t(`pub.${this.typesName}`),
+                          'app.modifyDeviceNameByDevIdCallback2'
+                        )
+                        this.$router.push('/')
+                      }, 2000)
                     } else {
                       window.hilink.toast('2', this.$t('component.added_failed'))
                       removeRegisteredVirtualDevYk(this.rc.devId)

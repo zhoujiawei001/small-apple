@@ -82,7 +82,7 @@
   import appLoading from '@/components/appLoading'
   import appHeader2 from '@/components/appHeader2'
   import { mapState,mapGetters } from 'vuex'
-  import { modifyDevName, getExtendToServe, delAddedDev, isAndroid } from '@/utils/pub'
+  import { modifyDevName, getExtendToServe, delAddedDev, isAndroid, sendBodyToDev } from '@/utils/pub'
   const regEn = /[/""{}\\]/;
   const regAllSpace = /^[ ]+$/;
   export default {
@@ -101,7 +101,8 @@
         warnValue: 0, // 0-输入字符格式正确，1-请输入1-64位字符，2-遥控器名称不能包含特殊字符，3-遥控器名称不能全为空格
         loadingFlag: false,
         devId: this.$route.query.devId,
-        hid: this.$route.query.hid
+        hid: this.$route.query.hid,
+        index: this.$route.query.index
       }
     },
     created () {
@@ -136,6 +137,13 @@
                 this.$store.commit('setAddedDevList', data)
                 this.delLocalData()
                 this.loadingFlag = false
+                let $body = {
+                  controlKey: {
+                    delIdx: this.index
+                  }
+                };
+                console.log($body);
+                sendBodyToDev($body);
                 this.$router.push('/')
               })
             } else {

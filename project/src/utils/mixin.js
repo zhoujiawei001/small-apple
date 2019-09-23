@@ -66,19 +66,21 @@ export const viewsMixin = {
                       cloneList.push(this.rc2)
                       console.log('devId', this.rc2.devId);
                       console.log('roomName', this.roomName);
-                      try {
-                        window.hilink.modifyDeviceRoomNameByDeviceId(this.rc2.devId, this.roomName, 'app.modifyRoomCallback')
-                      } catch (e) {
-                        console.log(e)
-                      }
-                      window.hilink.modifyDeviceNameByDevId(
-                        this.rc2.devId,
-                        this.$t(`pub.${this.typesName}`),
-                        'app.modifyDeviceNameByDevIdCallback2'
-                      )
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
-                      this.$router.push('/')
+                      setTimeout(() => {
+                        try {
+                          window.hilink.modifyDeviceRoomName(this.roomName, 'app.modifyRoomCallback')
+                        } catch (e) {
+                          console.log(e)
+                        }
+                        window.hilink.modifyDeviceNameByDevId(
+                          this.rc2.devId,
+                          this.$t(`pub.${this.typesName}`),
+                          'app.modifyDeviceNameByDevIdCallback2'
+                        )
+                        this.$router.push('/')
+                      }, 2000)
                     } else {
                       window.hilink.toast('2', this.$t('component.added_failed'))
                       removeRegisteredVirtualDevYk(this.rc2.devId)
@@ -351,7 +353,8 @@ export const viewsMixin = {
           name: this.title,
           hid: this.rc.hid,
           devId: this.rc.devId,
-          tid: this.rc.tid
+          tid: this.rc.tid,
+          index: this.rc.index
         }
       })
     },
