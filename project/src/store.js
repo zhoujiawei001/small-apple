@@ -138,8 +138,7 @@ export default new Vuex.Store({
   actions: {
     initFun ({ commit, state }) {
       window.onResume = () =>{
-        // window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
-        console.warn('onResume')
+        window.hilink.getDevCacheAll('0', '', 'app.getDevInfoAllCallback')
       }
       window.deviceEventCallback = res => {
         let data = parseHilinkData(res)

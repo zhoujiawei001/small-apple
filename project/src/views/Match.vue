@@ -104,6 +104,7 @@ export default {
                       cloneList.push(this.rc)
                       this.$store.commit('setAddedDevList', cloneList)
                       this.$store.commit('setBrandScrollPos', 0) // 成功之后设置品牌页面滚动距离为O
+                      console.log('roomName', this.roomName);
                       setTimeout(() => {
                         try {
                           window.hilink.modifyDeviceRoomName(this.roomName, 'app.modifyRoomCallback')
