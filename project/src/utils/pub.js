@@ -93,7 +93,7 @@ export function getExtendToServe() {
   return new Promise(resolve => {
     try {
       window.getDeviceExtendDataCallback = res => {
-        console.log('getExtendToServe_result', parseHilinkData(res))
+        // console.log('getExtendToServe_result', parseHilinkData(res))
         let data = parseHilinkData(res)
         if (JSON.stringify(data) === '{}') {
           resolve([])

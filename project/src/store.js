@@ -307,7 +307,7 @@ export default new Vuex.Store({
         console.log('getDevModeList_body', reqParams)
         window.getMatchResultCallback = res => {
           let data = parseHilinkData(res)
-          console.log('getDevModeList_result', data)
+          console.log('getDevModeList_result', JSON.parse(JSON.stringify(data)))
           resolve(data.result)
         }
         window.hilink.requestThirdPartConfig(JSON.stringify(reqParams), 'getMatchResultCallback')
