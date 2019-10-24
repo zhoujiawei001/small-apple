@@ -587,7 +587,7 @@
           this.clickTimes = 24 * 3600
         }
         this.clickCounts++
-        if (this.clickTimes)
+        // if (this.clickTimes)
         if (this.clickCounts > 2) {
           this.clickCounts = 2
         }
