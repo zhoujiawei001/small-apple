@@ -580,7 +580,11 @@ export const viewsMixin = {
           console.log('register_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
-        window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
+        try {
+          window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
+        } catch {
+          window.hilink.regsiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
+        }
       })
     },
     selectRightProdId (tid) {

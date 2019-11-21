@@ -49,16 +49,16 @@
     align-items center
     color #fff
     .left
-      width 24%
+      width 22%
       height 100%
       object-fit: contain;
       /*background: url("../assets/learn-apple_1.png") no-repeat center*/
       /*background-size: contain*/
     .middle
-      width 52%
-      padding 0 1.2rem
+      width 56%
+      padding 0 1rem
     .right
-      width 24%
+      width 22%
       display: flex
       justify-content left
       align-items center

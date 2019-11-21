@@ -399,7 +399,11 @@ export default {
           console.log('register_result', parseHilinkData(res))
           resolve(parseHilinkData(res))
         }
-        window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+        try {
+          window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+        } catch {
+          window.hilink.regsiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+        }
       })
     },
     selectRightProdId (tid) {

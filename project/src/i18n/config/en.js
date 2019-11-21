@@ -66,7 +66,7 @@ const en = {
     end: 'Cancel',
     learn_txt1: 'Long press the button to learn, this key will flash, waiting to learn',
     learn_txt2: 'Aim the remote control at the little apple within 1 meter, wait for the study to be completed.',
-    learn_txt3: 'Learning successful, you can click the button to test whether it is correct, and if not, you can learn again.',
+    learn_txt3: 'Successful, click the button to test whether it is correct, and if not, you can learn again.',
     learn_txt4: 'Learning failure, please press the button you want to learn again, re-learn.',
     beginDelay: 'Delay Started',
     cancelDelay: 'Delay cancelled',

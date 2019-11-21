@@ -83,7 +83,7 @@
   import appHeader2 from '@/components/appHeader2'
   import { mapState,mapGetters } from 'vuex'
   import { modifyDevName, getExtendToServe, delAddedDev, isAndroid, sendBodyToDev } from '@/utils/pub'
-  const regEn = /[\/""{}''\[\]]/;
+  const regEn = /[\/\\""{}''\[\]]/;
   const regAllSpace = /^[ ]+$/;
   export default {
     name: 'Setting',

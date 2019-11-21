@@ -37,7 +37,7 @@ export default {
       line-height 4.2rem
       font-size $fontMiddleSize
       padding-left .8rem
-      width calc(100 - .8rem)
+      width calc(100% - 0.8rem)
       setEllipsisOne()
       setBorderBot()
     .selectCls

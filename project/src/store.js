@@ -143,7 +143,7 @@ export default new Vuex.Store({
       window.deviceEventCallback = res => {
         let data = parseHilinkData(res)
         window.app.changeSerData(data)
-        console.log('设备上报', data)
+        console.log('设备上报', JSON.parse(JSON.stringify(data)))
         console.log('123')
       }
       window.app = {
