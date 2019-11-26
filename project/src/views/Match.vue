@@ -402,7 +402,7 @@ export default {
         try {
           window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
         } catch {
-          window.hilink.regsiterInfraredHubDevice(JSON.stringify(body), 'registerCallback')
+          window.hilink.registerInfraredHubDevice(JSON.stringify(body), 'registerCallback')
         }
       })
     },
