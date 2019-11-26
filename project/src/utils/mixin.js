@@ -578,12 +578,13 @@ export const viewsMixin = {
         console.log('register_body', body)
         window.registerCallback2 = res => {
           console.log('register_result', parseHilinkData(res))
-          resolve(parseHilinkData(res))
+          let data = parseHilinkData(res)
+          resolve(data);
         }
         try {
           window.hilink.regiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
         } catch {
-          window.hilink.regsiterInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
+          window.hilink.registerInfraredHubDevice(JSON.stringify(body), 'registerCallback2')
         }
       })
     },
