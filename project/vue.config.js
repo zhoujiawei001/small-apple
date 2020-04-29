@@ -1,3 +1,4 @@
+const Webpack = require('webpack')
 module.exports = {
   publicPath: './',
   outputDir: 'dist/h5_001',
@@ -13,5 +14,9 @@ module.exports = {
       }
 
     }
-  }
+  },
+  plugins: [
+    new Webpack.optimize.CommonsChunkPlugin({}),
+    new ExtractTextPlugin({})
+  ]
 }

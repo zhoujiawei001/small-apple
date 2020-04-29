@@ -122,7 +122,12 @@ export default {
           return item
         })
       }
-      this.listData.com = this.originalList.filter(item => item.common === 1)
+      let comList = this.originalList.filter(item => item.common === 1);
+      if (comList.length > 0) {
+          this.listData.com = comList;
+      } else {
+          this.listData.com = this.originalList.slice(0, 7);
+      }
       console.log('lang', this.lang)
       this.letterArr.forEach(key => {
         this.listData[key] = this.originalList.filter(item => this.lang === 'en'? item.en.slice(0, 1).toUpperCase() === key : item.sort_index.toUpperCase() === key)
